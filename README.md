@@ -9,7 +9,7 @@
 2. Deschide terminalul, CMD la calea aceea. (ex. C:/Desktop/Proiect>)
 3. Se executa comanda: `git clone https://github.com/xsuve/ulbs10.git`
 4. Intra in proiect cu comanda: `cd ulbs10`
-5. Se verifica branch-ul pe care lucrezi. Implicit va fi `master`.
+5. Se verifica branch-ul pe care lucrezi. Implicit va fi `master`. (ex. C:/Desktop/Proiect git:(master)>)
 6. Daca exista deja branch-ul pe care urmeaza sa lucrezi, te vei muta pe acesta cu: `git checkout <nume_branch>`. In caz contrar, se creeaza un nou branch cu comanda: `git checkout -b <nume_branch>`.
 
 ### GitHub Desktop
