@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+
+    <jsp:directive.page contentType="text/html" pageEncoding="UTF-8"/>
+    <jsp:include page="./../components/head.html" />
+
+    <jsp:body>
+        <form action="signup" method="post">
+            <div class="mb-3">
+                <label class="form-label">Nume</label>
+                <input type="text" name="firstName" class="form-control" placeholder="Nume" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Prenume</label>
+                <input type="text" name="lastName" class="form-control" placeholder="Prenume" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" name="email" class="form-control" placeholder="Adresa de email" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Parola</label>
+                <input type="password" name="password" class="form-control" placeholder="Parola" />
+            </div>
+            
+            <button type="submit" class="btn btn-primary" name="submit_signup">Inregistrare</button>
+        </form>
+    </jsp:body>
+
+</jsp:root>
+        
