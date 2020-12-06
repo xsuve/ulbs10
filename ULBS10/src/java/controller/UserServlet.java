@@ -20,8 +20,8 @@ import sun.rmi.server.Dispatcher;
  *
  * @author Razvan
  */
-@WebServlet(name = "SignupServlet", urlPatterns = {"/signup"})
-public class SignupServlet extends HttpServlet {
+@WebServlet(name = "SignupServlet", urlPatterns = {"/user"})
+public class UserServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,20 +33,30 @@ public class SignupServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     int id = 1;
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            String email = request.getParameter("email");
-            String password = request.getParameter("password");
-            String firstName = request.getParameter("firstName");
-            String lastName = request.getParameter("lastName");
-            String statut = request.getParameter("statut");
-            User u = new User(id++, email,password,firstName,lastName,statut); 
-            request.setAttribute("user", u);
-            
-            response.sendRedirect("./login/login.jspx");
+            String action = request.getParameter("action");
+            if ("signup".equals(action)) {
+                String email = request.getParameter("email");
+                String password = request.getParameter("password");
+                String firstName = request.getParameter("firstName");
+                String lastName = request.getParameter("lastName");
+                String statut = request.getParameter("statut");
+                User u = new User(id++, email, password, firstName, lastName, statut);
+                request.setAttribute("user", u);
+
+                response.sendRedirect("./login/login.jspx");
+            }
+            else if ("login".equals(action)) {
+                String email = request.getParameter("email");
+                String password = request.getParameter("password");
+                //todo
+                //response.sendRedirect("./login/signup.jspx");
+            }
             //RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("login/login.jspx");
             //dispatcher.forward(request, response);
         }
