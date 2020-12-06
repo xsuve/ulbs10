@@ -6,7 +6,7 @@
     <jsp:include page="./../components/head.html" />
 
     <jsp:body>
-        <form action="signup" method="post">
+        <form action="./../signup" method="post">
             <div class="mb-3">
                 <label class="form-label">Nume</label>
                 <input type="text" name="firstName" class="form-control" placeholder="Nume" />
