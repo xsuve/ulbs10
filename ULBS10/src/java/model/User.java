@@ -25,13 +25,27 @@ public class User {
        lastName="";
        statut="";
     }
-    public User(int i_id,String s_email, String s_pass, String s_firstName, String s_lastName, String s_statut) {
+
+    /**
+     *
+     * @param i_id
+     * @param s_email
+     * @param s_pass
+     * @param s_firstName
+     * @param s_lastName
+     * @param s_statut
+     */
+    public User(int i_id, String s_email, String s_pass, String s_firstName, String s_lastName, String s_statut) {
         id=i_id;
         email = s_email;
         password = s_pass;
         firstName = s_firstName;
         lastName = s_lastName;
         statut = s_statut;     
+    }
+
+    public User(String stEmail, String stPassword, String stFirstName, String stLastName, String stStatut) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     public int getId(){
         return id;

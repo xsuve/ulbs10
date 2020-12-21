@@ -5,12 +5,25 @@
  */
 package services;
 
+import entity.Users;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
+import java.util.logging.Logger;
+import javax.ejb.EJBException;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import model.User;
 /**
  *
  * @author Razvan
  */
 public class UserService {
+    private static final Logger logger = Logger.getLogger(
+                "ULBS10.services.UserService");
+    @PersistenceContext
+    private EntityManager em;
+    
     public User getId(int id) {
         switch (id) {
             case 0:
@@ -20,13 +33,29 @@ public class UserService {
             case 2:
                 return new User(2, "george.baba@ulbsibiu.ro", "java", "Baba", "George", "recruiter");
             case 3:
-                return new User(3, "alexandru.cocan@ulbsibiu.ro", "java", "Cocan", "Alexandru", "hr");
+                return new User(3, "alexandru.cocan@ulbsibiu.ro", "java", "Cocan", "Alexandru", "humanResources");
             case 4:
-                return new User(4, "robert.osan@ulbsibiu.ro", "java", "Osan", "Robert", "dd");
+                return new User(4, "robert.osan@ulbsibiu.ro", "java", "Osan", "Robert", "directorDepartament");
             case 5:
-                return new User(5, "eliza.matei@ulbsibiu.ro", "java", "Matei", "Eliza", "gd");
+                return new User(5, "eliza.matei@ulbsibiu.ro", "java", "Matei", "Eliza", "generalDirector");
             default:
                 return new User(-1,"","","","","");
         }
+    }
+    public void AddUser(int inId, String stEmail, String stPassword, String stFirstName, String stLastName, String stStatut){ 
+        //add in database
+        logger.info("createUser");
+
+        try {
+            Users user = new Users(inId, stEmail, stPassword, stFirstName, stLastName, stStatut);
+            em.persist(user);
+        } catch (Exception ex) {
+            throw new EJBException(ex);
+        }
+        
+//                Connection conn = DriverManager.getConnection("jdbc:derby://localhost:1527/ULBS10", "ulbs10", "ulbs10");
+//        Statement stmt = conn.createStatement();
+//        stmt.execute("INSERT INTO USERS (ID, EMAIL, PASSWORD, FIRSTNAME, LASTNAME, STATUT) VALUES ('" +inId+"', '" +stEmail+ "', '" +stPassword+ "', '"  +stFirstName+ "', '" +stLastName +
+//                "', '" +stStatut+ "')" );
     }
 }
