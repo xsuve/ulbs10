@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import javax.ejb.EJBException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import model.User;
 /**
  *
@@ -42,6 +43,7 @@ public class UserService {
                 return new User(-1,"","","","","");
         }
     }
+    @Transactional
     public void AddUser(int inId, String stEmail, String stPassword, String stFirstName, String stLastName, String stStatut){ 
         //add in database
         logger.info("createUser");
