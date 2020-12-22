@@ -4,7 +4,51 @@ body {
     font-family: 'Poppins', sans-serif;
     padding: 0px;
     margin: 0px;
+    background-color: #151515 !important;
 }
 a {
     text-decoration: none !important;
+}
+.vm {
+    display: block;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.btn {
+    font-size: 14px;
+    padding: 0.575rem 0.75rem;
+}
+
+/* Forms */
+.form {
+    height: 100vh;
+}
+.form .form-row {
+    height: 100%;
+}
+.form-label {
+    color: #fff;
+    font-size: 14px;
+}
+.form-control {
+    background-color: transparent;
+    color: #fff;
+    border: 1px solid #3c3f43;
+    font-size: 14px;
+    padding: 0.575rem 0.75rem;
+}
+.form-control:hover, .form-control:focus {
+    background-color: transparent;
+    color: #fff;
+}
+.form h1 {
+    font-weight: 800;
+    color: #fff;
+    font-size: 72px;
+    line-height: 120px;
+}
+.form .form-text {
+    color: #fff;
+    font-size: 13px;
 }

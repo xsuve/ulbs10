@@ -3,21 +3,36 @@
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
 
     <jsp:directive.page contentType="text/html" pageEncoding="UTF-8"/>
-    <jsp:include page="./../components/head.html" />
+    <jsp:include page="./../components/head.jspx" />
 
     <jsp:body>
-        <form action="./../user?action=login" method="post">
-            <div class="mb-lg-3">
-                <label class="form-label">Email</label>
-                <input type="email" name="email" class="form-control" placeholder="Adresa de email" />
+        <div class="container-fluid form">
+            <div class="row form-row">
+                <div class="col-lg-4">
+                    <div class="vm p-lg-5">
+                        <form action="./../user?action=login" method="post">
+                            <div class="mb-lg-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" name="email" class="form-control" placeholder="Adresa de email" />
+                            </div>
+                            <div class="mb-lg-4">
+                                <label class="form-label">Parola</label>
+                                <input type="password" name="password" class="form-control" placeholder="Parola" />
+                            </div>
+
+                            <button type="submit" class="btn btn-primary" name="submit_login">Autentificare</button>
+                            
+                            <div class="form-text mt-lg-5">Nu ai un cont in platforma? <a href="signup.jspx">Inregistreaza-te</a></div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="vm p-lg-5">
+                        <h1>ULBS10<br />CEL MAI POWER<br />SISTEM DE RECRUTARE<br />EVER.</h1>
+                    </div>
+                </div>
             </div>
-            <div class="mb-lg-3">
-                <label class="form-label">Parola</label>
-                <input type="password" name="password" class="form-control" placeholder="Parola" />
-            </div>
-            
-            <button type="submit" class="btn btn-primary" name="submit_login">Autentificare</button>
-        </form>
+        </div>
     </jsp:body>
 
 </jsp:root>
