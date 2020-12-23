@@ -57,6 +57,7 @@ UserService service;
                 //service.AddUser(id++, email,password,firstName,lastName,statut);
                 service.AddUser(id++, email,password,firstName, lastName, statut);
                 
+                
                 response.sendRedirect("./login/login.jspx");
             }
             else if ("login".equals(action)) {

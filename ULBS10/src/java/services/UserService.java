@@ -8,6 +8,8 @@ package services;
 import entity.Users;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Logger;
 import javax.ejb.EJBException;
@@ -53,11 +55,13 @@ public class UserService {
             em.persist(user);
         } catch (Exception ex) {
             throw new EJBException(ex);
-        }
-        
+        }            
 //                Connection conn = DriverManager.getConnection("jdbc:derby://localhost:1527/ULBS10", "ulbs10", "ulbs10");
 //        Statement stmt = conn.createStatement();
 //        stmt.execute("INSERT INTO USERS (ID, EMAIL, PASSWORD, FIRSTNAME, LASTNAME, STATUT) VALUES ('" +inId+"', '" +stEmail+ "', '" +stPassword+ "', '"  +stFirstName+ "', '" +stLastName +
 //                "', '" +stStatut+ "')" );
     }
+    
+  
+    
 }
