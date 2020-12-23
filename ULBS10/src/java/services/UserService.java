@@ -8,7 +8,13 @@ package services;
 import entity.Users;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJBException;
 import javax.persistence.EntityManager;
@@ -44,20 +50,53 @@ public class UserService {
         }
     }
     @Transactional
-    public void AddUser(int inId, String stEmail, String stPassword, String stFirstName, String stLastName, String stStatut){ 
+    public void AddUser(int inID, String stEmail, String stPassword, String stFirstName, String stLastName, String stStatut){ 
         //add in database
         logger.info("createUser");
 
         try {
-            Users user = new Users(inId, stEmail, stPassword, stFirstName, stLastName, stStatut);
+            Users user = new Users(inID, stEmail, stPassword, stFirstName, stLastName, stStatut);
             em.persist(user);
         } catch (Exception ex) {
             throw new EJBException(ex);
-        }
-        
+        }            
 //                Connection conn = DriverManager.getConnection("jdbc:derby://localhost:1527/ULBS10", "ulbs10", "ulbs10");
 //        Statement stmt = conn.createStatement();
 //        stmt.execute("INSERT INTO USERS (ID, EMAIL, PASSWORD, FIRSTNAME, LASTNAME, STATUT) VALUES ('" +inId+"', '" +stEmail+ "', '" +stPassword+ "', '"  +stFirstName+ "', '" +stLastName +
 //                "', '" +stStatut+ "')" );
     }
+    
+    @SuppressWarnings("unchecked")
+    public List<Users> getAllPlayers() {
+        logger.info("getAllPlayers");
+
+        List<Users> players = null;
+
+        try {
+            players = (List<Users>) em.createNamedQuery("Users.findAll").getResultList();
+            return players;
+        } catch (Exception ex) {
+            throw new EJBException(ex);
+        }
+    }
+    
+    private List<Users> copyPlayersToDetails(List<Users> players) {
+         List<Users> detailsList = new ArrayList<Users>();
+        Iterator<Users> i = players.iterator();
+
+        while (i.hasNext()) {
+            Users users = (Users) i.next();
+            Users usersDetails = new Users(
+                        users.getId(),
+                        users.getEmail(),
+                        users.getPassword(),
+                        users.getFirstname(),
+                        users.getLastname(),
+                        users.getStatut());
+            detailsList.add(usersDetails);
+        }
+
+        return detailsList;
+    }
+
 }

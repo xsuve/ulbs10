@@ -9,6 +9,7 @@ import entity.Users;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Inject;
@@ -27,8 +28,8 @@ import services.UserService;
 @WebServlet(name = "SignupServlet", urlPatterns = {"/user"})
 public class UserServlet extends HttpServlet {
 
-@Inject
-UserService service;
+    @Inject
+    UserService service;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -38,7 +39,7 @@ UserService service;
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    int id = 1;
+    int lastID;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
@@ -55,11 +56,39 @@ UserService service;
                 //User u = new User(id++, email, password, firstName, lastName, statut);
                 //request.setAttribute("user", u);
                 //service.AddUser(id++, email,password,firstName,lastName,statut);
-                service.AddUser(id++, email,password,firstName, lastName, statut);
+                List<Users> users;
+                users = service.getAllPlayers();
                 
-                response.sendRedirect("./login/login.jspx");
-            }
-            else if ("login".equals(action)) {
+                //Preluare din baza de date a ultimului id
+                if (users.isEmpty()) {
+                    lastID = 0;
+                } else {
+                    lastID = users.get(users.size() - 1).getId();
+                }
+                
+                //Verificare daca exista deja in baza de date dupa email
+                boolean existInDB = false;
+
+                for (int i = 0; i < users.size(); i++) {
+                    if (users.get(i).getEmail() == email) {
+                        existInDB = true;
+                    }
+                }
+                
+                String alerta;
+                if (!existInDB) {
+                    service.AddUser(++lastID, email, password, firstName, lastName, statut);
+                    alerta = "Te-ai inregistrat cu succes!";
+                    response.sendRedirect("./login/login.jspx");
+                    
+                } else {
+                    alerta = "Emailul deja exista in baza de date!";
+                    response.sendRedirect("./login/signup.jspx");
+                }
+                                      
+                
+
+            } else if ("login".equals(action)) {
                 String email = request.getParameter("email");
                 String password = request.getParameter("password");
                 //todo
@@ -81,11 +110,11 @@ UserService service;
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    try {
-        processRequest(request, response);
-    } catch (SQLException ex) {
-        Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
-    }
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -99,11 +128,11 @@ UserService service;
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    try {
-        processRequest(request, response);
-    } catch (SQLException ex) {
-        Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
-    }
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

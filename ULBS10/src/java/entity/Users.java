@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -56,11 +57,19 @@ public class Users implements Serializable {
     @Size(max = 30)
     @Column(name = "STATUT")
     private String statut;
+    private Collection<Users> users;
 
     public Users() {
     }
-    public Users(int inId, String stEmail, String stPassword, String stFirstName, String stLastName, String stStatut){
-    id=inId;
+    public Users(String stEmail, String stPassword, String stFirstName, String stLastName, String stStatut){
+    email=stEmail;
+    password=stPassword;
+    firstname=stFirstName;
+    lastname=stLastName;
+    statut=stStatut;
+    }
+    public Users(int inID, String stEmail, String stPassword, String stFirstName, String stLastName, String stStatut){
+    id = inID;
     email=stEmail;
     password=stPassword;
     firstname=stFirstName;
@@ -142,6 +151,10 @@ public class Users implements Serializable {
     @Override
     public String toString() {
         return "entity.Users[ id=" + id + " ]";
+    }
+    
+    public Collection<Users> getUsers(){
+        return users;
     }
     
 }
