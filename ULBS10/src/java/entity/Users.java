@@ -6,7 +6,6 @@
 package entity;
 
 import java.io.Serializable;
-import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -57,7 +56,6 @@ public class Users implements Serializable {
     @Size(max = 30)
     @Column(name = "STATUT")
     private String statut;
-    private Collection<Users> users;
 
     public Users() {
     }
@@ -152,9 +150,6 @@ public class Users implements Serializable {
     public String toString() {
         return "entity.Users[ id=" + id + " ]";
     }
-    
-    public Collection<Users> getUsers(){
-        return users;
-    }
-    
+
+
 }
