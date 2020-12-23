@@ -66,18 +66,15 @@ public class UserService {
 //                "', '" +stStatut+ "')" );
     }
     
-        @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     public List<Users> getAllPlayers() {
         logger.info("getAllPlayers");
 
         List<Users> players = null;
 
         try {
-            players = (List<Users>) em.createNamedQuery(
-                        "Users.findAll")
-                                       .getResultList();
-
-            return copyPlayersToDetails(players);
+            players = (List<Users>) em.createNamedQuery("Users.findAll").getResultList();
+            return players;
         } catch (Exception ex) {
             throw new EJBException(ex);
         }
