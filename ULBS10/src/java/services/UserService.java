@@ -6,13 +6,7 @@
 package services;
 
 import entity.Users;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
@@ -99,6 +93,7 @@ public class UserService {
         return detailsList;
     }
 
+    @Transactional
     public void AddUser(Users userData) {
          //add in database
         logger.info("createUser");

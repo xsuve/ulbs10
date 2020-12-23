@@ -15,9 +15,7 @@ import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
 import java.util.Base64;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -33,6 +31,8 @@ public class Processing {
     private HttpServletResponse response;
     private List<Users> users;
     private Users user;
+    String[] alert = new String[2];
+    private String salt = "ksdf@#$#T3fsd";
     
     private static final Random RANDOM = new SecureRandom();
     private static final String ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -45,20 +45,21 @@ public class Processing {
         this.users = users;
     }
     
-    public void processLogin() throws ServletException, IOException{
+    public void processLogin() throws ServletException, IOException, InvalidKeySpecException{
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
          //Verificare daca logarea este corecta
         boolean logare = false;
         for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getEmail().equals(email)  && users.get(i).getPassword().equals(password)) {
+            if (users.get(i).getEmail().equals(email)  && verifyUserPassword(password, users.get(i).getPassword(), salt)) {
                logare = true;
             }
         }
 
         if(!logare){
-            String[] alert = {"Email sau parola incorecta!","alert alert-danger"}; 
+            alert[0] = "Email sau parola incorecta!";
+            alert[1] = "alert alert-danger"; 
             request.setAttribute("alert", alert);                 
             dispatcher = request.getServletContext().getRequestDispatcher("/login/login.jspx");
             dispatcher.forward(request, response);
@@ -79,7 +80,6 @@ public class Processing {
         String lastName = request.getParameter("lastName");
         String statut = request.getParameter("statut");
         int lastID;
-        String salt = getSalt(50);
         String securedPassword = generateSecurePassword(password, salt);
         password = securedPassword;
         //Preluare din baza de date a ultimului id
@@ -98,22 +98,26 @@ public class Processing {
             }
         }
         if(email.isEmpty() || password.isEmpty() || firstName.isEmpty() || lastName.isEmpty() ){
-            String[] alert = {"Va rugam sa complectati toate campurile.","alert alert-danger"}; 
+            alert[0] = "Va rugam sa complectati toate campurile.";
+            alert[1] = "alert alert-danger"; 
             request.setAttribute("alert", alert);
             dispatcher = request.getServletContext().getRequestDispatcher("/login/signup.jspx");
             dispatcher.forward(request, response);
-                return false;          
+            return false;   
+            
         } else {
             if (!existInDB) {   
-                String[] alert = {"Te-ai inregistrat cu succes!","alert alert-success"}; 
+                alert[0] = "Te-ai inregistrat cu succes!";
+                alert[1] = "alert alert-success"; 
                 request.setAttribute("alert", alert);
                 dispatcher = request.getServletContext().getRequestDispatcher("/login/login.jspx");
                 dispatcher.forward(request, response);
-                user = new Users(lastID, email, password, firstName, lastName, statut);
+                user = new Users(++lastID, email, password, firstName, lastName, statut);
                 return true;
 
             } else {
-                String[] alert = {"Emailul deja exista in baza de date!","alert alert-danger"}; 
+                alert[0] = "Emailul deja exista in baza de date!";
+                alert[1]="alert alert-danger"; 
                 request.setAttribute("alert", alert);
                 dispatcher = request.getServletContext().getRequestDispatcher("/login/signup.jspx");
                 dispatcher.forward(request, response);
@@ -121,13 +125,12 @@ public class Processing {
             }
         }    
     }
-    public static String getSalt(int length) {
-        StringBuilder returnValue = new StringBuilder(length);
-        for (int i = 0; i < length; i++) {
-            returnValue.append(ALPHABET.charAt(RANDOM.nextInt(ALPHABET.length())));
-        }
-        return new String(returnValue);
+    
+    public String getSalt() {
+       
+        return salt;
     }
+    
     public static byte[] hash(char[] password, byte[] salt) throws InvalidKeySpecException {
         PBEKeySpec spec = new PBEKeySpec(password, salt, ITERATIONS, KEY_LENGTH);
         Arrays.fill(password, Character.MIN_VALUE);
@@ -140,6 +143,7 @@ public class Processing {
             spec.clearPassword();
         }
     }
+    
     public static String generateSecurePassword(String password, String salt) throws InvalidKeySpecException {
         String returnValue = null;
         byte[] securePassword = hash(password.toCharArray(), salt.getBytes());
