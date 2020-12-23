@@ -22,6 +22,8 @@
 
                             <button type="submit" class="btn btn-primary" name="submit_login">Autentificare</button>
                             
+                            <div class="alert">${alert}</div>
+                            
                             <div class="form-text mt-lg-5">Nu ai un cont in platforma? <a href="signup.jspx">Inregistreaza-te</a></div>
                         </form>
                     </div>
