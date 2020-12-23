@@ -15,7 +15,9 @@ import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -56,8 +58,8 @@ public class Processing {
         }
 
         if(!logare){
-            String alerta = "Email sau parola incorecta!";
-            request.setAttribute("alert", alerta);                 
+            String[] alert = {"Email sau parola incorecta!","alert alert-danger"}; 
+            request.setAttribute("alert", alert);                 
             dispatcher = request.getServletContext().getRequestDispatcher("/login/login.jspx");
             dispatcher.forward(request, response);
 
@@ -77,7 +79,6 @@ public class Processing {
         String lastName = request.getParameter("lastName");
         String statut = request.getParameter("statut");
         int lastID;
-        String alerta; 
         String salt = getSalt(50);
         String securedPassword = generateSecurePassword(password, salt);
         password = securedPassword;
@@ -96,25 +97,31 @@ public class Processing {
                 existInDB = true;
             }
         }
-
-        if (!existInDB) {           
-            alerta = "Te-ai inregistrat cu succes!";
-            request.setAttribute("alert", alerta);
-            dispatcher = request.getServletContext().getRequestDispatcher("/login/login.jspx");
-            dispatcher.forward(request, response);
-            user = new Users(lastID, email, password, firstName, lastName, statut);
-            return true;
-
-        } else {
-            alerta = "Emailul deja exista in baza de date!";
-            request.setAttribute("alert", alerta);
+        if(email.isEmpty() || password.isEmpty() || firstName.isEmpty() || lastName.isEmpty() ){
+            String[] alert = {"Va rugam sa complectati toate campurile.","alert alert-danger"}; 
+            request.setAttribute("alert", alert);
             dispatcher = request.getServletContext().getRequestDispatcher("/login/signup.jspx");
             dispatcher.forward(request, response);
-            return false;
-        }
+                return false;          
+        } else {
+            if (!existInDB) {   
+                String[] alert = {"Te-ai inregistrat cu succes!","alert alert-success"}; 
+                request.setAttribute("alert", alert);
+                dispatcher = request.getServletContext().getRequestDispatcher("/login/login.jspx");
+                dispatcher.forward(request, response);
+                user = new Users(lastID, email, password, firstName, lastName, statut);
+                return true;
+
+            } else {
+                String[] alert = {"Emailul deja exista in baza de date!","alert alert-danger"}; 
+                request.setAttribute("alert", alert);
+                dispatcher = request.getServletContext().getRequestDispatcher("/login/signup.jspx");
+                dispatcher.forward(request, response);
+                return false;
+            }
+        }    
     }
-    
-     public static String getSalt(int length) {
+    public static String getSalt(int length) {
         StringBuilder returnValue = new StringBuilder(length);
         for (int i = 0; i < length; i++) {
             returnValue.append(ALPHABET.charAt(RANDOM.nextInt(ALPHABET.length())));
