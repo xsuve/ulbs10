@@ -9,6 +9,7 @@ import entity.Users;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Inject;
@@ -38,7 +39,7 @@ UserService service;
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    int id = 1;
+    int lastID;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
@@ -55,8 +56,15 @@ UserService service;
                 //User u = new User(id++, email, password, firstName, lastName, statut);
                 //request.setAttribute("user", u);
                 //service.AddUser(id++, email,password,firstName,lastName,statut);
-                service.AddUser(id++, email,password,firstName, lastName, statut);
+                List<Users> ceva;                
+                ceva = service.getAllPlayers();
+                if(ceva.isEmpty()){
+                    lastID=0;
+                }else{                    
+                    lastID = ceva.get(ceva.size()-1).getId();
+                }
                 
+                service.AddUser(++lastID, email,password,firstName, lastName, statut);
                 response.sendRedirect("./login/login.jspx");
             }
             else if ("login".equals(action)) {
