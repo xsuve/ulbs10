@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Inject;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -70,20 +71,29 @@ public class UserServlet extends HttpServlet {
                 boolean existInDB = false;
 
                 for (int i = 0; i < users.size(); i++) {
-                    if (users.get(i).getEmail() == email) {
+                    if (users.get(i).getEmail().equals(email)) {
                         existInDB = true;
                     }
                 }
                 
                 String alerta;
+                RequestDispatcher dispatcher = null;
+            
                 if (!existInDB) {
                     service.AddUser(++lastID, email, password, firstName, lastName, statut);
+                    
                     alerta = "Te-ai inregistrat cu succes!";
-                    response.sendRedirect("./login/login.jspx");
+                    request.setAttribute("alert", alerta);
+                    request.getServletContext().getRequestDispatcher("/../../web/login/login.jspx");
+                    dispatcher.forward(request, response);
+                    //response.sendRedirect("./login/login.jspx");
                     
                 } else {
                     alerta = "Emailul deja exista in baza de date!";
-                    response.sendRedirect("./login/signup.jspx");
+                    request.setAttribute("alert", alerta);
+                    request.getServletContext().getRequestDispatcher("/../../web/login/signup.jspx");
+                    dispatcher.forward(request, response);
+                    //response.sendRedirect("./login/signup.jspx");
                 }
                                       
                 
