@@ -6,7 +6,6 @@
     <jsp:include page="./components/head.jspx" />
 
     <jsp:body>
-        Pagina de start
         <a href="./login/login.jspx">Logheaza-te</a>
     </jsp:body>
 
