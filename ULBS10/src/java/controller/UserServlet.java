@@ -19,14 +19,16 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import model.User;
 import services.UserService;
+import utility.Processing;
 
 /**
  *
  * @author Razvan
  */
-@WebServlet(name = "SignupServlet", urlPatterns = {"/user"})
+@WebServlet(name = "SignupServlet", urlPatterns = {"/login/user"})
 public class UserServlet extends HttpServlet {
 
     @Inject
@@ -41,6 +43,10 @@ public class UserServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     int lastID;
+    List<Users> users;
+    String alerta;
+    RequestDispatcher dispatcher = null;
+    Processing processing ;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
@@ -48,64 +54,20 @@ public class UserServlet extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             String action = request.getParameter("action");
-            if ("signup".equals(action)) {
-                String email = request.getParameter("email");
-                String password = request.getParameter("password");
-                String firstName = request.getParameter("firstName");
-                String lastName = request.getParameter("lastName");
-                String statut = request.getParameter("statut");
-                //User u = new User(id++, email, password, firstName, lastName, statut);
-                //request.setAttribute("user", u);
-                //service.AddUser(id++, email,password,firstName,lastName,statut);
-                List<Users> users;
-                users = service.getAllPlayers();
-                
-                //Preluare din baza de date a ultimului id
-                if (users.isEmpty()) {
-                    lastID = 0;
-                } else {
-                    lastID = users.get(users.size() - 1).getId();
-                }
-                
-                //Verificare daca exista deja in baza de date dupa email
-                boolean existInDB = false;
-
-                for (int i = 0; i < users.size(); i++) {
-                    if (users.get(i).getEmail().equals(email)) {
-                        existInDB = true;
-                    }
-                }
-                
-                String alerta;
-                RequestDispatcher dispatcher = null;
             
-                if (!existInDB) {
-                    service.AddUser(++lastID, email, password, firstName, lastName, statut);
-                    
-                    alerta = "Te-ai inregistrat cu succes!";
-                    request.setAttribute("alert", alerta);
-                    dispatcher = request.getServletContext().getRequestDispatcher("/login/login.jspx");
-                    dispatcher.forward(request, response);
-                    //response.sendRedirect("./login/login.jspx");
-                    
-                } else {
-                    alerta = "Emailul deja exista in baza de date!";
-                    request.setAttribute("alert", alerta);
-                    dispatcher = request.getServletContext().getRequestDispatcher("/login/signup.jspx");
-                    dispatcher.forward(request, response);
-                    //response.sendRedirect("./login/signup.jspx");
-                }
-                                      
-                
+            users = service.getAllPlayers();
+            processing = new Processing(request, response, users);
+                        
+            if ("signup".equals(action)) {        
+                if(processing.processSignup()){
+                  service.AddUser(++lastID, request.getParameter("email"), request.getParameter("password"), 
+                          request.getParameter("firstName"), request.getParameter("lastName"), request.getParameter("statut"));
+                }                                      
+            }   
 
-            } else if ("login".equals(action)) {
-                String email = request.getParameter("email");
-                String password = request.getParameter("password");
-                //todo
-                //response.sendRedirect("./login/signup.jspx");
+            if ("login".equals(action)) {
+                processing.processLogin();
             }
-            //RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("login/login.jspx");
-            //dispatcher.forward(request, response);
         }
     }
 
