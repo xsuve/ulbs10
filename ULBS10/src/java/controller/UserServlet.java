@@ -84,14 +84,14 @@ public class UserServlet extends HttpServlet {
                     
                     alerta = "Te-ai inregistrat cu succes!";
                     request.setAttribute("alert", alerta);
-                    request.getServletContext().getRequestDispatcher("/../../web/login/login.jspx");
+                    dispatcher = request.getServletContext().getRequestDispatcher("/login/login.jspx");
                     dispatcher.forward(request, response);
                     //response.sendRedirect("./login/login.jspx");
                     
                 } else {
                     alerta = "Emailul deja exista in baza de date!";
                     request.setAttribute("alert", alerta);
-                    request.getServletContext().getRequestDispatcher("/../../web/login/signup.jspx");
+                    dispatcher = request.getServletContext().getRequestDispatcher("/login/signup.jspx");
                     dispatcher.forward(request, response);
                     //response.sendRedirect("./login/signup.jspx");
                 }
