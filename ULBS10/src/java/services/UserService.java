@@ -99,4 +99,16 @@ public class UserService {
         return detailsList;
     }
 
+    public void AddUser(Users userData) {
+         //add in database
+        logger.info("createUser");
+
+        try {
+            Users user = userData;
+            em.persist(user);
+        } catch (Exception ex) {
+            throw new EJBException(ex);
+        }            
+    }
+
 }

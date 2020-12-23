@@ -5,28 +5,37 @@
  */
 package utility;
 
-import static entity.Users_.users;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import entity.Users;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
+import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
-import javax.inject.Inject;
+import java.util.Random;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import services.UserService;
 /**
  *
  * @author DxGod
  */
 public class Processing {
-
-    RequestDispatcher dispatcher = null; 
-    HttpServletRequest request; 
-    HttpServletResponse response;
-    List<Users> users;
-
+    private RequestDispatcher dispatcher = null; 
+    private HttpServletRequest request; 
+    private HttpServletResponse response;
+    private List<Users> users;
+    private Users user;
+    
+    private static final Random RANDOM = new SecureRandom();
+    private static final String ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    private static final int ITERATIONS = 10000;
+    private static final int KEY_LENGTH = 256;
     
     public Processing( HttpServletRequest request, HttpServletResponse response, List<Users> users){       
         this.request = request;
@@ -61,15 +70,17 @@ public class Processing {
     
     }
     
-    public boolean processSignup() throws ServletException, IOException{
+    public boolean processSignup() throws ServletException, IOException, InvalidKeySpecException{
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String firstName = request.getParameter("firstName");
         String lastName = request.getParameter("lastName");
         String statut = request.getParameter("statut");
         int lastID;
-        String alerta;
-
+        String alerta; 
+        String salt = getSalt(50);
+        String securedPassword = generateSecurePassword(password, salt);
+        password = securedPassword;
         //Preluare din baza de date a ultimului id
         if (users.isEmpty()) {
             lastID = 0;
@@ -91,6 +102,7 @@ public class Processing {
             request.setAttribute("alert", alerta);
             dispatcher = request.getServletContext().getRequestDispatcher("/login/login.jspx");
             dispatcher.forward(request, response);
+            user = new Users(lastID, email, password, firstName, lastName, statut);
             return true;
 
         } else {
@@ -100,5 +112,51 @@ public class Processing {
             dispatcher.forward(request, response);
             return false;
         }
+    }
+    
+     public static String getSalt(int length) {
+        StringBuilder returnValue = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            returnValue.append(ALPHABET.charAt(RANDOM.nextInt(ALPHABET.length())));
+        }
+        return new String(returnValue);
+    }
+    public static byte[] hash(char[] password, byte[] salt) throws InvalidKeySpecException {
+        PBEKeySpec spec = new PBEKeySpec(password, salt, ITERATIONS, KEY_LENGTH);
+        Arrays.fill(password, Character.MIN_VALUE);
+        try {
+            SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            return skf.generateSecret(spec).getEncoded();
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            throw new AssertionError("Error while hashing a password: " + e.getMessage(), e);
+        } finally {
+            spec.clearPassword();
+        }
+    }
+    public static String generateSecurePassword(String password, String salt) throws InvalidKeySpecException {
+        String returnValue = null;
+        byte[] securePassword = hash(password.toCharArray(), salt.getBytes());
+ 
+        returnValue = Base64.getEncoder().encodeToString(securePassword);
+ 
+        return returnValue;
+    }
+    
+    public static boolean verifyUserPassword(String providedPassword,
+            String securedPassword, String salt) throws InvalidKeySpecException
+    {
+        boolean returnValue = false;
+        
+        // Generate New secure password with the same salt
+        String newSecurePassword = generateSecurePassword(providedPassword, salt);
+        
+        // Check if two passwords are equal
+        returnValue = newSecurePassword.equalsIgnoreCase(securedPassword);
+        
+        return returnValue;
+    }
+    
+    public Users getUserData(){
+        return user;
     }
 }
