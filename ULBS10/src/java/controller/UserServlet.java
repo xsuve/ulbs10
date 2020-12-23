@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Inject;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -28,8 +29,8 @@ import services.UserService;
 @WebServlet(name = "SignupServlet", urlPatterns = {"/user"})
 public class UserServlet extends HttpServlet {
 
-@Inject
-UserService service;
+    @Inject
+    UserService service;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -56,18 +57,48 @@ UserService service;
                 //User u = new User(id++, email, password, firstName, lastName, statut);
                 //request.setAttribute("user", u);
                 //service.AddUser(id++, email,password,firstName,lastName,statut);
-                List<Users> ceva;                
-                ceva = service.getAllPlayers();
-                if(ceva.isEmpty()){
-                    lastID=0;
-                }else{                    
-                    lastID = ceva.get(ceva.size()-1).getId();
+                List<Users> users;
+                users = service.getAllPlayers();
+                
+                //Preluare din baza de date a ultimului id
+                if (users.isEmpty()) {
+                    lastID = 0;
+                } else {
+                    lastID = users.get(users.size() - 1).getId();
                 }
                 
-                service.AddUser(++lastID, email,password,firstName, lastName, statut);
-                response.sendRedirect("./login/login.jspx");
-            }
-            else if ("login".equals(action)) {
+                //Verificare daca exista deja in baza de date dupa email
+                boolean existInDB = false;
+
+                for (int i = 0; i < users.size(); i++) {
+                    if (users.get(i).getEmail().equals(email)) {
+                        existInDB = true;
+                    }
+                }
+                
+                String alerta;
+                RequestDispatcher dispatcher = null;
+            
+                if (!existInDB) {
+                    service.AddUser(++lastID, email, password, firstName, lastName, statut);
+                    
+                    alerta = "Te-ai inregistrat cu succes!";
+                    request.setAttribute("alert", alerta);
+                    request.getServletContext().getRequestDispatcher("/../../web/login/login.jspx");
+                    dispatcher.forward(request, response);
+                    //response.sendRedirect("./login/login.jspx");
+                    
+                } else {
+                    alerta = "Emailul deja exista in baza de date!";
+                    request.setAttribute("alert", alerta);
+                    request.getServletContext().getRequestDispatcher("/../../web/login/signup.jspx");
+                    dispatcher.forward(request, response);
+                    //response.sendRedirect("./login/signup.jspx");
+                }
+                                      
+                
+
+            } else if ("login".equals(action)) {
                 String email = request.getParameter("email");
                 String password = request.getParameter("password");
                 //todo
@@ -89,11 +120,11 @@ UserService service;
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    try {
-        processRequest(request, response);
-    } catch (SQLException ex) {
-        Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
-    }
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -107,11 +138,11 @@ UserService service;
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    try {
-        processRequest(request, response);
-    } catch (SQLException ex) {
-        Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
-    }
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
