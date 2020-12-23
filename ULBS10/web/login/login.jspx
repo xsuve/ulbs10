@@ -10,7 +10,7 @@
             <div class="row form-row">
                 <div class="col-lg-4">
                     <div class="vm p-lg-5">
-                        <form action="./../user?action=login" method="post">
+                        <form action="./../login/user?action=login" method="post">
                             <div class="mb-lg-3">
                                 <label class="form-label">Email</label>
                                 <input type="email" name="email" class="form-control" placeholder="Adresa de email" />

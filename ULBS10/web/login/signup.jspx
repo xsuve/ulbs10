@@ -10,7 +10,7 @@
             <div class="row form-row">
                 <div class="col-lg-4">
                     <div class="vm p-lg-5">
-                        <form action="./../user?action=signup" method="post">
+                        <form action="./../login/user?action=signup" method="post">
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="mb-lg-3">
