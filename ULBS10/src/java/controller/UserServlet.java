@@ -8,6 +8,7 @@ package controller;
 import entity.Users;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.spec.InvalidKeySpecException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
@@ -49,7 +50,7 @@ public class UserServlet extends HttpServlet {
     Processing processing ;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, SQLException {
+            throws ServletException, IOException, SQLException, InvalidKeySpecException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
@@ -60,8 +61,7 @@ public class UserServlet extends HttpServlet {
                         
             if ("signup".equals(action)) {        
                 if(processing.processSignup()){
-                  service.AddUser(++lastID, request.getParameter("email"), request.getParameter("password"), 
-                          request.getParameter("firstName"), request.getParameter("lastName"), request.getParameter("statut"));
+                  service.AddUser(processing.getUserData());
                 }                                      
             }   
 
@@ -86,6 +86,8 @@ public class UserServlet extends HttpServlet {
             processRequest(request, response);
         } catch (SQLException ex) {
             Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidKeySpecException ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -103,6 +105,8 @@ public class UserServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidKeySpecException ex) {
             Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
