@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+<jsp:root
+    xmlns:jsp="http://java.sun.com/JSP/Page"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    version="2.0">
 
     <jsp:directive.page contentType="text/html" pageEncoding="UTF-8"/>
     <jsp:include page="./../components/head.jspx" />
@@ -36,7 +39,9 @@
 
                             <button type="submit" class="btn btn-primary" name="submit_signup">Inregistrare</button>
                             
-                            <div class="alert">${alert}</div>
+                            <c:if test="${alert != null}">
+                                <div class="${alert[1]} mt-lg-5">${alert[0]}</div>
+                            </c:if>
                             
                             <div class="form-text mt-lg-5">Ai deja un cont in platforma? <a href="login.jspx">Logheaza-te</a></div>
                         </form>
