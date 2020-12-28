@@ -64,8 +64,16 @@ public class Posturi implements Serializable {
     @JoinColumn(name = "DESCHIS_DE", referencedColumnName = "ID")
     @ManyToOne
     private Users deschisDe;
-
-    public Posturi() {
+    
+    public Posturi(){
+    }
+    
+    public Posturi(int id, String denumire, String cerinteMinime, String cerinteOptionale, Date dataLimAplic) {
+        this.id = id;
+        this.denumire = denumire;
+        this.cerinteMinime = cerinteMinime;
+        this.cerinteOptionale = cerinteOptionale;
+        this.dataLimAplic = dataLimAplic;    
     }
 
     public Posturi(Integer id) {
