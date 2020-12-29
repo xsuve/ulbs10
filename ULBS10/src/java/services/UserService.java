@@ -5,6 +5,7 @@
  */
 package services;
 
+import entity.Posturi;
 import entity.Users;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -105,5 +106,19 @@ public class UserService {
             throw new EJBException(ex);
         }            
     }
+    
+    @SuppressWarnings("unchecked")
+    public List<Posturi> getAllPosts() {
+        logger.info("getAllPosts");
+
+        List<Posturi> posturi = null;
+
+        try {
+            posturi = (List<Posturi>) em.createNamedQuery("Posturi.findAll").getResultList();
+            return posturi;
+        } catch (Exception ex) {
+            throw new EJBException(ex);
+        }
+    }   
 
 }
