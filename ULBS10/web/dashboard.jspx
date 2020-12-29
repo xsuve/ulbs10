@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
-    Document   : dashboard
-    Created on : Dec 23, 2020, 7:35:15 PM
-    Author     : DxGod
--->
-<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+
+<jsp:root
+    xmlns:jsp="http://java.sun.com/JSP/Page"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    version="2.0">
+    
+    <c:if test="${user.getId() == null}">
+        <c:redirect url="./login/login.jspx" />
+    </c:if>
 
     <jsp:directive.page contentType="text/html" pageEncoding="UTF-8"/>
 
@@ -12,6 +15,9 @@
     <jsp:element name="text">
         <jsp:attribute name="lang">EN</jsp:attribute>
         <jsp:body>${user.getFirstname()}</jsp:body>
+        <form action="${pageContext.request.contextPath}/login/user?action=logout" method="post">
+            <button type="submit" class="btn btn-primary">Log out</button>
+        </form>
         
     </jsp:element>
 

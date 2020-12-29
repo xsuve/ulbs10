@@ -66,6 +66,10 @@ public class UserServlet extends HttpServlet {
             if ("login".equals(action)) {
                 processing.processLogin();
             }
+            
+            if ("logout".equals(action)) {
+                processing.processLogout();
+            }
         }
     }
 

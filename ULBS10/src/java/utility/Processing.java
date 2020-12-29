@@ -67,8 +67,9 @@ public class Processing {
         }else{
              HttpSession sesiune = request.getSession();
              sesiune.setAttribute("user", users.get(0));
-             dispatcher = request.getServletContext().getRequestDispatcher("/dashboard.jspx");
-             dispatcher.forward(request, response);    
+             //dispatcher = request.getServletContext().getRequestDispatcher("/dashboard.jspx");
+             //dispatcher.forward(request, response);
+             response.sendRedirect(request.getContextPath() + "/dashboard.jspx");
         }  
     
     }
@@ -124,6 +125,14 @@ public class Processing {
                 return false;
             }
         }    
+    }
+    
+    public void processLogout() throws ServletException, IOException {
+        HttpSession sesiune = request.getSession();
+        sesiune.invalidate();
+        //dispatcher = request.getServletContext().getRequestDispatcher("/index.jspx");
+        //dispatcher.forward(request, response);
+        response.sendRedirect(request.getContextPath() + "/index.jspx");
     }
     
     public String getSalt() {
