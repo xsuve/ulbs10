@@ -65,7 +65,6 @@ public class UserServlet extends HttpServlet {
             }
             
             if ("login".equals(action)) {
-                request.setAttribute("posturi", service.getAllPosts());
                 processing.processLogin();
             }
 

@@ -105,19 +105,5 @@ public class UserService {
         } catch (Exception ex) {
             throw new EJBException(ex);
         }            
-    }
-    
-    @SuppressWarnings("unchecked")
-    public List<Posturi> getAllPosts() {
-        logger.info("getAllPosts");
-
-        List<Posturi> posturi = null;
-
-        try {
-            posturi = (List<Posturi>) em.createNamedQuery("Posturi.findAll").getResultList();
-            return posturi;
-        } catch (Exception ex) {
-            throw new EJBException(ex);
-        }
-    }   
+    }       
 }
