@@ -5,6 +5,7 @@
  */
 package controller;
 
+import entity.Posturi;
 import entity.Users;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -45,7 +46,7 @@ public class UserServlet extends HttpServlet {
     List<Users> users;
     String alerta;
     RequestDispatcher dispatcher = null;
-    Processing processing ;
+    Processing processing;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException, InvalidKeySpecException {
@@ -53,20 +54,21 @@ public class UserServlet extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             String action = request.getParameter("action");
-            
+
             users = service.getAllPlayers();
             processing = new Processing(request, response, users);
-                        
-            if ("signup".equals(action)) {        
-                if(processing.processSignup()){
-                  service.AddUser(processing.getUserData());
-                }                                      
-            }   
 
-            if ("login".equals(action)) {
-                processing.processLogin();
+            if ("signup".equals(action)) {
+                if (processing.processSignup()) {
+                    service.AddUser(processing.getUserData());
+                }
             }
             
+            if ("login".equals(action)) {
+                request.setAttribute("posturi", service.getAllPosts());
+                processing.processLogin();
+            }
+
             if ("logout".equals(action)) {
                 processing.processLogout();
             }
@@ -86,9 +88,7 @@ public class UserServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             processRequest(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvalidKeySpecException ex) {
+        } catch (SQLException | InvalidKeySpecException ex) {
             Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -106,9 +106,7 @@ public class UserServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             processRequest(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvalidKeySpecException ex) {
+        } catch (SQLException | InvalidKeySpecException ex) {
             Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

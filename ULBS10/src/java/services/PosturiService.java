@@ -43,6 +43,10 @@ public class PosturiService {
 //                "', '" +stStatut+ "')" );
     }
     
+    /**
+     *
+     * @return
+     */
     @SuppressWarnings("unchecked")
     public List<Posturi> getAllPosts() {
         logger.info("getAllPosts");
@@ -62,7 +66,6 @@ public class PosturiService {
     public void AddPost(Posturi postData) {
          //add in database
         logger.info("createPost");
-
         try {
             Posturi post = postData;
             em.persist(post);

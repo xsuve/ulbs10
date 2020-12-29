@@ -21,8 +21,6 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import model.User;
-import org.apache.jasper.tagplugins.jstl.ForEach;
 /**
  *
  * @author DxGod
@@ -69,8 +67,6 @@ public class Processing {
             dispatcher = request.getServletContext().getRequestDispatcher("/login/login.jspx");
             dispatcher.forward(request, response);
         }else{
-             HttpSession sesiune = request.getSession();
-             sesiune.setAttribute("user", users.get(0));
              //dispatcher = request.getServletContext().getRequestDispatcher("/dashboard.jspx");
              //dispatcher.forward(request, response);
              response.sendRedirect(request.getContextPath() + "/dashboard.jspx");

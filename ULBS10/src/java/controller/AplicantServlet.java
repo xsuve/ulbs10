@@ -10,9 +10,9 @@ import entity.Posturi;
 import entity.Users;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -25,19 +25,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import model.User;
-import services.PosturiService;
+import services.AplicantService;
 import utility.Processing;
 
 /**
  *
- * @author DxGod
+ * @author Razvan
  */
-@WebServlet(name = "PostServlet", urlPatterns = {"/PostServlet"})
-public class PostServlet extends HttpServlet {
+@WebServlet(name = "AplicantServlet", urlPatterns = {"/AplicantServlet"})
+public class AplicantServlet extends HttpServlet {
 
     @Inject
-    PosturiService service;
+    AplicantService service;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -45,41 +44,42 @@ public class PostServlet extends HttpServlet {
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs    
+     * @throws IOException if an I/O error occurs
      */
+
     int lastID;
-    List<Posturi> posturi;
-    Posturi post = null;
+    List<Aplicanti> aplicanti;
+    Aplicanti aplicant = null;
     String alerta;
     RequestDispatcher dispatcher = null;
-    Processing processing ;
-    
+    Processing processing;
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, ParseException {
+            throws ServletException, IOException{
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-          
             String action = request.getParameter("action");
-            posturi = service.getAllPosts();
-            Date date1 = new SimpleDateFormat("yyyy-mm-dd").parse(request.getParameter("dataLimita"));
-            
-            if ("newpost".equals(action)) {   
-              if (posturi.isEmpty()) {
+            aplicanti = service.getAllAplicants();
+            Date date1 = new SimpleDateFormat("yyyy-mm-dd").parse(request.getParameter("dataAplicarii"));
+            Serializable s = request.getParameter("cv");
+
+            if ("newpost".equals(action)) {
+                if (aplicanti.isEmpty()) {
                     lastID = 0;
                 } else {
-                    lastID = posturi.get(posturi.size() - 1).getId();
+                    lastID = aplicanti.get(aplicanti.size() - 1).getIdUser();
                 }
-            
-            HttpSession sesiune = request.getSession();
-            Users u = (Users) sesiune.getAttribute("user");
-            request.setAttribute("posturi", posturi);
-            post = new Posturi(++lastID, request.getParameter("denumire"), request.getParameter("cerinteMinime"), request.getParameter("cerinteOptionale"), date1, u);
-            service.AddPost(post);
-            
-            dispatcher = request.getServletContext().getRequestDispatcher("/dashboard.jspx");
-            dispatcher.forward(request, response);
+
+                HttpSession sesiune = request.getSession();
+                Users u = (Users) sesiune.getAttribute("user");
+                aplicant = new Aplicanti(++lastID, s, date1, request.getParameter("obs"), u.getId());
+                service.AddAplicant(aplicant);
+
+                dispatcher = request.getServletContext().getRequestDispatcher("/newpost.jspx");//todo
+                dispatcher.forward(request, response);
             }
-            
+        } catch (ParseException ex) {
+            Logger.getLogger(AplicantServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -95,11 +95,7 @@ public class PostServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (ParseException ex) {
-            Logger.getLogger(PostServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**
@@ -113,11 +109,7 @@ public class PostServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (ParseException ex) {
-            Logger.getLogger(PostServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**

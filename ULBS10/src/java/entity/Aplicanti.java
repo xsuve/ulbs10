@@ -70,6 +70,14 @@ public class Aplicanti implements Serializable {
         this.idUser = idUser;
     }
 
+    public Aplicanti(int id, Serializable cv, Date data_Aplic, String obs, int id_Obs) {
+        idUser=id;
+        this.cv=cv;
+        dataAplicarii=data_Aplic;
+        observatii=obs;
+        idObservator=id_Obs;
+    }
+
     public Integer getIdUser() {
         return idUser;
     }
