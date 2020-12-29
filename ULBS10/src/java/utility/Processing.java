@@ -21,6 +21,8 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import model.User;
+import org.apache.jasper.tagplugins.jstl.ForEach;
 /**
  *
  * @author DxGod
@@ -52,22 +54,22 @@ public class Processing {
          //Verificare daca logarea este corecta
         boolean logare = false;
         for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getEmail().equals(email)  && verifyUserPassword(password, users.get(i).getPassword(), salt)) {
-               logare = true;
+            if (users.get(i).getEmail().equals(email) && verifyUserPassword(password, users.get(i).getPassword(), salt)) {
+                HttpSession sesiune = request.getSession();
+                sesiune.setAttribute("user", users.get(i));
+                logare = true;
+                break;
             }
         }
-
+        
         if(!logare){
             alert[0] = "Email sau parola incorecta!";
             alert[1] = "alert alert-danger"; 
             request.setAttribute("alert", alert);                 
             dispatcher = request.getServletContext().getRequestDispatcher("/login/login.jspx");
             dispatcher.forward(request, response);
-
         }else{
-             HttpSession sesiune = request.getSession();
-             sesiune.setAttribute("user", users.get(0));
-             dispatcher = request.getServletContext().getRequestDispatcher("/dashboard.jspx");
+             dispatcher = request.getServletContext().getRequestDispatcher("/newpost.jspx");
              dispatcher.forward(request, response);    
         }  
     

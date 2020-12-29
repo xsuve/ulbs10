@@ -6,6 +6,7 @@
 package services;
 
 import entity.Posturi;
+import entity.Users;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
@@ -26,12 +27,12 @@ public class PosturiService {
     private EntityManager em;
     
     @Transactional
-    public void AddPost(int id, String denumire, String cerinteMinime, String cerinteOptionale, Date dataLimAplic, int dechisDe){ 
+    public void AddPost(int id, String denumire, String cerinteMinime, String cerinteOptionale, Date dataLimAplic, Users user){ 
         //add in database
         logger.info("createPost");
 
         try {
-            Posturi post = new Posturi(id, denumire, cerinteMinime, cerinteOptionale, dataLimAplic);
+            Posturi post = new Posturi(id, denumire, cerinteMinime, cerinteOptionale, dataLimAplic, user);
             em.persist(post);
         } catch (Exception ex) {
             throw new EJBException(ex);

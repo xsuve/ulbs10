@@ -68,12 +68,20 @@ public class Posturi implements Serializable {
     public Posturi(){
     }
     
-    public Posturi(int id, String denumire, String cerinteMinime, String cerinteOptionale, Date dataLimAplic) {
+    public Posturi(int id, String denumire, String cerinteMinime, String cerinteOptionale, Date dataLimAplic, Users user) {
         this.id = id;
         this.denumire = denumire;
         this.cerinteMinime = cerinteMinime;
         this.cerinteOptionale = cerinteOptionale;
         this.dataLimAplic = dataLimAplic;    
+        deschisDe = user;
+    }
+    public Posturi( String denumire, String cerinteMinime, String cerinteOptionale, Date dataLimAplic, Users user) {
+        this.denumire = denumire;
+        this.cerinteMinime = cerinteMinime;
+        this.cerinteOptionale = cerinteOptionale;
+        this.dataLimAplic = dataLimAplic;    
+        deschisDe = user;
     }
 
     public Posturi(Integer id) {

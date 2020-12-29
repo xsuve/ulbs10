@@ -5,12 +5,14 @@
  */
 package controller;
 
+import entity.Aplicanti;
 import entity.Posturi;
 import entity.Users;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -22,6 +24,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import model.User;
 import services.PosturiService;
 import utility.Processing;
 
@@ -65,11 +69,14 @@ public class PostServlet extends HttpServlet {
                 } else {
                     lastID = posturi.get(posturi.size() - 1).getId();
                 }
-              
-            dispatcher = request.getServletContext().getRequestDispatcher("/login/login.jspx");
-            dispatcher.forward(request, response);
-            post = new Posturi(++lastID, request.getParameter("denumire"), request.getParameter("cerinteMinime"), request.getParameter("cerinteOptionale"), date1);
+            
+            HttpSession sesiune = request.getSession();
+            Users u = (Users) sesiune.getAttribute("user");
+            post = new Posturi(++lastID, request.getParameter("denumire"), request.getParameter("cerinteMinime"), request.getParameter("cerinteOptionale"), date1, u);
             service.AddPost(post);
+            
+            dispatcher = request.getServletContext().getRequestDispatcher("/newpost.jspx");
+            dispatcher.forward(request, response);
             }
             
         }
