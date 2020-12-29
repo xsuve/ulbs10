@@ -5,6 +5,7 @@
  */
 package utility;
 
+import entity.Posturi;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -45,7 +46,7 @@ public class Processing {
         this.users = users;
     }
 
-    public void processLogin() throws ServletException, IOException, InvalidKeySpecException{
+    public void processLogin(List<Posturi> allPosts) throws ServletException, IOException, InvalidKeySpecException{
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
@@ -67,9 +68,11 @@ public class Processing {
             dispatcher = request.getServletContext().getRequestDispatcher("/login/login.jspx");
             dispatcher.forward(request, response);
         }else{
-             //dispatcher = request.getServletContext().getRequestDispatcher("/dashboard.jspx");
-             //dispatcher.forward(request, response);
-             response.sendRedirect(request.getContextPath() + "/dashboard.jspx");
+             request.setAttribute("posts", allPosts);
+             dispatcher = request.getServletContext().getRequestDispatcher("/dashboard.jspx");
+             dispatcher.forward(request, response);
+             
+             //response.sendRedirect(request.getContextPath() + "/dashboard.jspx");
         }
 
     }
