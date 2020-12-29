@@ -55,7 +55,7 @@ public class UserServlet extends HttpServlet {
             /* TODO output your page here. You may use following sample code. */
             String action = request.getParameter("action");
 
-            users = service.getAllPlayers();
+            users = service.getAllUsers();
             processing = new Processing(request, response, users);
 
             if ("signup".equals(action)) {
@@ -67,6 +67,7 @@ public class UserServlet extends HttpServlet {
             if ("login".equals(action)) {
                 List<Posturi> allPosts = service.getAllPosts();
                 processing.processLogin(allPosts);
+                
             }
 
             if ("logout".equals(action)) {

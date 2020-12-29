@@ -69,10 +69,10 @@ public class Processing {
             dispatcher.forward(request, response);
         }else{
              request.setAttribute("posts", allPosts);
-             dispatcher = request.getServletContext().getRequestDispatcher("/dashboard.jspx");
+             
+             dispatcher = request.getServletContext().getRequestDispatcher("/dashboars.jspx");
              dispatcher.forward(request, response);
              
-             //response.sendRedirect(request.getContextPath() + "/dashboard.jspx");
         }
 
     }

@@ -62,8 +62,8 @@ public class UserService {
     }
 
     @SuppressWarnings("unchecked")
-    public List<Users> getAllPlayers() {
-        logger.info("getAllPlayers");
+    public List<Users> getAllUsers() {
+        logger.info("getAllUsers");
 
         List<Users> players = null;
 
