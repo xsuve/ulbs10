@@ -25,7 +25,7 @@ public class UserService {
                 "ULBS10.services.UserService");
     @PersistenceContext
     private EntityManager em;
-    
+
     public User getId(int id) {
         switch (id) {
             case 0:
@@ -45,7 +45,7 @@ public class UserService {
         }
     }
     @Transactional
-    public void AddUser(int inID, String stEmail, String stPassword, String stFirstName, String stLastName, String stStatut){ 
+    public void AddUser(int inID, String stEmail, String stPassword, String stFirstName, String stLastName, String stStatut){
         //add in database
         logger.info("createUser");
 
@@ -54,13 +54,13 @@ public class UserService {
             em.persist(user);
         } catch (Exception ex) {
             throw new EJBException(ex);
-        }            
+        }
 //                Connection conn = DriverManager.getConnection("jdbc:derby://localhost:1527/ULBS10", "ulbs10", "ulbs10");
 //        Statement stmt = conn.createStatement();
 //        stmt.execute("INSERT INTO USERS (ID, EMAIL, PASSWORD, FIRSTNAME, LASTNAME, STATUT) VALUES ('" +inId+"', '" +stEmail+ "', '" +stPassword+ "', '"  +stFirstName+ "', '" +stLastName +
 //                "', '" +stStatut+ "')" );
     }
-    
+
     @SuppressWarnings("unchecked")
     public List<Users> getAllPlayers() {
         logger.info("getAllPlayers");
@@ -74,7 +74,7 @@ public class UserService {
             throw new EJBException(ex);
         }
     }
-    
+
     private List<Users> copyPlayersToDetails(List<Users> players) {
          List<Users> detailsList = new ArrayList<Users>();
         Iterator<Users> i = players.iterator();
@@ -104,6 +104,21 @@ public class UserService {
             em.persist(user);
         } catch (Exception ex) {
             throw new EJBException(ex);
-        }            
-    }       
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<Posturi> getAllPosts() {
+        logger.info("getAllPosts");
+
+        List<Posturi> posturi = null;
+
+        try {
+            posturi = (List<Posturi>) em.createNamedQuery("Posturi.findAll").getResultList();
+            return posturi;
+        } catch (Exception ex) {
+            throw new EJBException(ex);
+        }
+    }
+
 }
