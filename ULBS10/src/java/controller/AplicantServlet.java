@@ -6,7 +6,6 @@
 package controller;
 
 import entity.Aplicanti;
-import entity.Posturi;
 import entity.Users;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -73,7 +72,7 @@ public class AplicantServlet extends HttpServlet {
                 HttpSession sesiune = request.getSession();
                 Users u = (Users) sesiune.getAttribute("user");
                 aplicant = new Aplicanti(++lastID, s, date1, request.getParameter("obs"), u.getId());
-                service.AddAplicant(aplicant);
+                service.addAplicant(aplicant);
 
                 dispatcher = request.getServletContext().getRequestDispatcher("/newpost.jspx");//todo
                 dispatcher.forward(request, response);

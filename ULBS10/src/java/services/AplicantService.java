@@ -6,7 +6,6 @@
 package services;
 
 import entity.Aplicanti;
-import entity.Posturi;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -26,8 +25,16 @@ public class AplicantService {
     @PersistenceContext
     private EntityManager em;
     
+    /**
+     * Creeaza un aplicant cu parametrii primiti si il adauga in baza de date
+     * @param id
+     * @param cv
+     * @param data_Aplic
+     * @param obs
+     * @param id_Obs
+     */
     @Transactional
-    public void AddAplicant(int id, Serializable cv, Date data_Aplic, String obs, int id_Obs){ 
+    public void addAplicant(int id, Serializable cv, Date data_Aplic, String obs, int id_Obs){ 
         //add in database
         logger.info("createPost");
 
@@ -39,26 +46,29 @@ public class AplicantService {
         }  
     }
     
-    
-        @SuppressWarnings("unchecked")
+    /**
+     * Returneaza o lista cu toti aplicantii din baza de date
+     * @return Aplicantii din baza de date
+     */
+    @SuppressWarnings("unchecked")
     public List<Aplicanti> getAllAplicants() {
         logger.info("getAllPosts");
-
-        List<Aplicanti> aplicanti = null;
-
         try {
-            aplicanti = (List<Aplicanti>) em.createNamedQuery("Aplicanti.findAll").getResultList();
+            List<Aplicanti> aplicanti = (List<Aplicanti>) em.createNamedQuery("Aplicanti.findAll").getResultList();
             return aplicanti;
         } catch (Exception ex) {
             throw new EJBException(ex);
         }
     }
     
-        @Transactional
-    public void AddAplicant(Aplicanti aplicantData) {
+    /**
+     * Adauga un aplicant dat ca parametru in baza de date
+     * @param aplicantData
+     */
+    @Transactional
+    public void addAplicant(Aplicanti aplicantData) {
          //add in database
         logger.info("createPost");
-
         try {
             Aplicanti aplicant = aplicantData;
             em.persist(aplicant);

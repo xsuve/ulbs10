@@ -72,7 +72,7 @@ public class PostServlet extends HttpServlet {
                 }
                 request.setAttribute("posturi", posturi);
                 post = new Posturi(++lastID, request.getParameter("denumire"), request.getParameter("cerinteMinime"), request.getParameter("cerinteOptionale"), date1, u);
-                service.AddPost(post);
+                service.addPost(post);
                 sesiune.setAttribute("posts", service.getAllPosts());
                 
                 response.sendRedirect(request.getServletContext() + "/../dashboard.jspx#posturi");

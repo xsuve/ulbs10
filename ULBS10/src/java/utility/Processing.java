@@ -14,20 +14,14 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
-import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
-import javax.json.JsonArray;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import services.PosturiService;
 
 /**
  *
@@ -48,12 +42,27 @@ public class Processing {
     private static final int ITERATIONS = 10000;
     private static final int KEY_LENGTH = 256;
 
+    /**
+     * Constructor cu parametrii
+     * @param request
+     * @param response
+     * @param users
+     */
     public Processing(HttpServletRequest request, HttpServletResponse response, List<Users> users) {
         this.request = request;
         this.response = response;
         this.users = users;
     }
 
+    /**
+     * Procesul de autentificare a unui utilizator din UserServlet s-a mutat aici pentru curatarea codului.
+     * Se verifica adresele de email si parolele din baza de date pentru a gasi persoana in baza de date, daca aceasta exista, daca nu
+     * se trimit catre jspx mesaje sugestive
+     * @param allPosts
+     * @throws ServletException
+     * @throws IOException
+     * @throws InvalidKeySpecException
+     */
     public void processLogin(List<Posturi> allPosts) throws ServletException, IOException, InvalidKeySpecException {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
@@ -78,6 +87,7 @@ public class Processing {
         } else {
             HttpSession sesiune = request.getSession();
             sesiune.setAttribute("posts", allPosts);
+            sesiune.setAttribute("users", users);
             response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx");
             //dispatcher = request.getServletContext().getRequestDispatcher("/dashboard.jspx");
             //dispatcher.forward(request, response);
@@ -85,6 +95,16 @@ public class Processing {
 
     }
 
+    /**
+     * Procesul de inregistrare a unui utilizator din UserServlet s-a mutat aici pentru curatarea codului.
+     * Se verifica daca adresa de email exista in baza de date si se continua cu inregistrarea daca nu exista, daca aceasta exista se trimite
+     * catre jsps un mesaj sugestiv
+     * Se verifica daca campurile sunt goale, iar daca sunt se trimite catre jspx un mesaj sugestiv
+     * @return
+     * @throws ServletException
+     * @throws IOException
+     * @throws InvalidKeySpecException
+     */
     public boolean processSignup() throws ServletException, IOException, InvalidKeySpecException {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
@@ -138,6 +158,12 @@ public class Processing {
         }
     }
 
+    /**
+     * Se invalideaza sesiunea utilizatorului si se redirectioneaza catre index
+     * @see HttpSession
+     * @throws ServletException
+     * @throws IOException
+     */
     public void processLogout() throws ServletException, IOException {
         HttpSession sesiune = request.getSession();
         sesiune.invalidate();
@@ -146,11 +172,13 @@ public class Processing {
         response.sendRedirect(request.getContextPath() + "/index.jspx");
     }
 
-    public String getSalt() {
-
-        return salt;
-    }
-
+    /**
+     * Cripteaza parola cu o cheie salt
+     * @param password
+     * @param salt
+     * @return Sir binar ce contine parola criptata
+     * @throws InvalidKeySpecException
+     */
     public static byte[] hash(char[] password, byte[] salt) throws InvalidKeySpecException {
         PBEKeySpec spec = new PBEKeySpec(password, salt, ITERATIONS, KEY_LENGTH);
         Arrays.fill(password, Character.MIN_VALUE);
@@ -164,28 +192,43 @@ public class Processing {
         }
     }
 
+    /**
+     * Converteste sirul de biti criptat al parolei intr-un string pentru a putea fi stocat in baza de date
+     * @param password
+     * @param salt
+     * @return Parola care se v-a salva in baza de date
+     * @throws InvalidKeySpecException
+     */
     public static String generateSecurePassword(String password, String salt) throws InvalidKeySpecException {
-        String returnValue = null;
-        byte[] securePassword = hash(password.toCharArray(), salt.getBytes());
-
-        returnValue = Base64.getEncoder().encodeToString(securePassword);
-
+        byte[] securePassword = hash(password.toCharArray(), salt.getBytes());        
+        String returnValue = Base64.getEncoder().encodeToString(securePassword);
         return returnValue;
     }
 
+    /**
+     * Cripteaza parola din formular si o verifica cu cea din baza de date
+     * @param providedPassword
+     * @param securedPassword
+     * @param salt
+     * @return true/false
+     * @throws InvalidKeySpecException
+     */
     public static boolean verifyUserPassword(String providedPassword,
             String securedPassword, String salt) throws InvalidKeySpecException {
-        boolean returnValue = false;
 
         // Generate New secure password with the same salt
         String newSecurePassword = generateSecurePassword(providedPassword, salt);
 
-        // Check if two passwords are equal
-        returnValue = newSecurePassword.equalsIgnoreCase(securedPassword);
+        // Check if two passwords are equal        
+        boolean returnValue = newSecurePassword.equalsIgnoreCase(securedPassword);
 
         return returnValue;
     }
 
+    /**
+     * Returneaza utilizatorul care v-a fi adaugat in baza de date
+     * @return user
+     */
     public Users getUserData() {
         return user;
     }

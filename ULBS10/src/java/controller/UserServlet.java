@@ -5,7 +5,6 @@
  */
 package controller;
 
-import entity.Posturi;
 import entity.Users;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -60,13 +59,12 @@ public class UserServlet extends HttpServlet {
 
             if ("signup".equals(action)) {
                 if (processing.processSignup()) {
-                    service.AddUser(processing.getUserData());
+                    service.addUser(processing.getUserData());
                 }
             }
             
             if ("login".equals(action)) {
-                List<Posturi> allPosts = service.getAllPosts();
-                processing.processLogin(allPosts);
+                processing.processLogin(service.getAllPosts());
                 
             }
 
