@@ -78,13 +78,13 @@
                                     <div class="col-lg-1">
                                         <div class="post-id">ID</div>
                                     </div>
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-5">
                                         <h6 class="mb-lg-0 mt-lg-0 post-title">Denumire</h6>
                                     </div>
                                     <div class="col-lg-3">
                                         <div class="post-date">Data limita</div>
                                     </div>
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-3">
                                         <div class="post-actions">Actiuni</div>
                                     </div>
                                 </div>
@@ -94,7 +94,7 @@
                                         <div class="col-lg-1">
                                             <div class="post-id">${post.getId()}</div>
                                         </div>
-                                        <div class="col-lg-4">
+                                        <div class="col-lg-5">
                                             <h6 class="mb-lg-0 mt-lg-0 post-title">${post.getDenumire()}</h6>
                                         </div>
                                         <div class="col-lg-3">
@@ -103,13 +103,13 @@
                                                 <fmt:formatDate value="${post.getDataLimAplic()}" pattern="dd MMMM, yyyy" />
                                             </div>
                                         </div>
-                                        <div class="col-lg-4">
+                                        <div class="col-lg-3">
                                             <div class="post-actions">
-                                                <a href="#">Aplica</a>
+                                                <a href="./post?action=apply&amp;id=${post.getId()}">Aplica</a>
                                                 |
-                                                <a href="#">Editeaza</a>
+                                                <a href="./post?action=editpost&amp;id=${post.getId()}">Editeaza</a>
                                                 |
-                                                <a href="#">Sterge</a>
+                                                <a href="./post?action=deletepost&amp;id=${post.getId()}">Sterge</a>
                                             </div>
                                         </div>
                                     </div>
