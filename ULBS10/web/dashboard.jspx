@@ -105,11 +105,11 @@
                                         </div>
                                         <div class="col-lg-3">
                                             <div class="post-actions">
-                                                <a href="#">Aplica</a>
+                                                <a href="./post?action=apply&amp;id=${post.getId()}">Aplica</a>
                                                 |
-                                                <a href="#">Editeaza</a>
+                                                <a href="./post?action=editpost&amp;id=${post.getId()}">Editeaza</a>
                                                 |
-                                                <a href="#">Sterge</a>
+                                                <a href="./post?action=deletepost&amp;id=${post.getId()}">Sterge</a>
                                             </div>
                                         </div>
                                     </div>
