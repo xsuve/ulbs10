@@ -184,8 +184,4 @@ public class Processing {
     public Users getUserData(){
         return user;
     }
-
-    public List<Posturi> getAllPosts(List<Posturi> allPosts) throws ServletException, IOException {
-        return allPosts;
-    }
 }

@@ -14,9 +14,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.EJBException;
 import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -45,41 +47,49 @@ public class PostServlet extends HttpServlet {
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs    
+     * @throws IOException if an I/O error occurs
      */
     int lastID;
     List<Posturi> posturi;
     Posturi post = null;
     String alerta;
     RequestDispatcher dispatcher = null;
-    Processing processing ;
-    
+    Processing processing;
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, ParseException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-          
+
             String action = request.getParameter("action");
             posturi = service.getAllPosts();
-            Date date1 = new SimpleDateFormat("yyyy-mm-dd").parse(request.getParameter("dataLimita"));
-            
-            if ("newpost".equals(action)) {   
-              if (posturi.isEmpty()) {
+            if ("newpost".equals(action)) {
+                Date date1 = new SimpleDateFormat("yyyy-mm-dd").parse(request.getParameter("dataLimita"));
+
+                if (posturi.isEmpty()) {
                     lastID = 0;
                 } else {
                     lastID = posturi.get(posturi.size() - 1).getId();
                 }
-            
-            HttpSession sesiune = request.getSession();
-            Users u = (Users) sesiune.getAttribute("user");
-            request.setAttribute("posturi", posturi);
-            post = new Posturi(++lastID, request.getParameter("denumire"), request.getParameter("cerinteMinime"), request.getParameter("cerinteOptionale"), date1, u);
-            service.AddPost(post);
-            
-            dispatcher = request.getServletContext().getRequestDispatcher("/dashboard.jspx");
-            dispatcher.forward(request, response);
+
+                HttpSession sesiune = request.getSession();
+                Users u = (Users) sesiune.getAttribute("user");
+                request.setAttribute("posturi", posturi);
+                post = new Posturi(++lastID, request.getParameter("denumire"), request.getParameter("cerinteMinime"), request.getParameter("cerinteOptionale"), date1, u);
+                service.AddPost(post);
+
+                sesiune.setAttribute("posts", service.getAllPosts());
+                response.sendRedirect(request.getServletContext() + "/../dashboard.jspx#posturi");
+                //dispatcher = request.getServletContext().getRequestDispatcher("/dashboard.jspx");
+                //dispatcher.forward(request, response);
             }
-            
+            if ("deletepost".equals(action)) {
+                int id = Integer.parseInt(request.getParameter("id"));
+                service.removePost(id);
+                HttpSession sesiune = request.getSession();
+                sesiune.setAttribute("posts", service.getAllPosts());
+                response.sendRedirect(request.getServletContext() + "/../dashboard.jspx#posturi");
+            }
         }
     }
 

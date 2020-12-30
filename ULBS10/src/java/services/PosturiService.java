@@ -7,7 +7,9 @@ package services;
 
 import entity.Posturi;
 import entity.Users;
+import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.EJBException;
@@ -15,19 +17,19 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
-
 /**
  *
  * @author DxGod
  */
 public class PosturiService {
-     private static final Logger logger = Logger.getLogger(
-                "ULBS10.services.PosturiService");
+
+    private static final Logger logger = Logger.getLogger(
+            "ULBS10.services.PosturiService");
     @PersistenceContext
     private EntityManager em;
-    
+
     @Transactional
-    public void AddPost(int id, String denumire, String cerinteMinime, String cerinteOptionale, Date dataLimAplic, Users user){ 
+    public void AddPost(int id, String denumire, String cerinteMinime, String cerinteOptionale, Date dataLimAplic, Users user) {
         //add in database
         logger.info("createPost");
 
@@ -36,13 +38,13 @@ public class PosturiService {
             em.persist(post);
         } catch (Exception ex) {
             throw new EJBException(ex);
-        }            
+        }
 //                Connection conn = DriverManager.getConnection("jdbc:derby://localhost:1527/ULBS10", "ulbs10", "ulbs10");
 //        Statement stmt = conn.createStatement();
 //        stmt.execute("INSERT INTO USERS (ID, EMAIL, PASSWORD, FIRSTNAME, LASTNAME, STATUT) VALUES ('" +inId+"', '" +stEmail+ "', '" +stPassword+ "', '"  +stFirstName+ "', '" +stLastName +
 //                "', '" +stStatut+ "')" );
     }
-    
+
     /**
      *
      * @return
@@ -60,18 +62,28 @@ public class PosturiService {
             throw new EJBException(ex);
         }
     }
-    
 
     @Transactional
     public void AddPost(Posturi postData) {
-         //add in database
+        //add in database
         logger.info("createPost");
         try {
             Posturi post = postData;
             em.persist(post);
         } catch (Exception ex) {
             throw new EJBException(ex);
-        }            
+        }
     }
-    
+
+    @Transactional
+    public void removePost(int id) {
+        logger.info("removePost");
+
+        try {
+            Posturi post = em.find(Posturi.class, id);
+            em.remove(post);
+        } catch (Exception ex) {
+            throw new EJBException(ex);
+        }
+    }
 }
