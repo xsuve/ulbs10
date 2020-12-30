@@ -14,12 +14,14 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 import java.util.Random;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+import javax.json.JsonArray;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 /**
@@ -68,11 +70,11 @@ public class Processing {
             dispatcher = request.getServletContext().getRequestDispatcher("/login/login.jspx");
             dispatcher.forward(request, response);
         }else{
-             request.setAttribute("posts", allPosts);
-             
-             dispatcher = request.getServletContext().getRequestDispatcher("/dashboars.jspx");
-             dispatcher.forward(request, response);
-             
+            HttpSession sesiune = request.getSession();
+            sesiune.setAttribute("posts", allPosts);
+            response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx");
+            //dispatcher = request.getServletContext().getRequestDispatcher("/dashboard.jspx");
+            //dispatcher.forward(request, response);
         }
 
     }
@@ -181,5 +183,9 @@ public class Processing {
 
     public Users getUserData(){
         return user;
+    }
+
+    public List<Posturi> getAllPosts(List<Posturi> allPosts) throws ServletException, IOException {
+        return allPosts;
     }
 }

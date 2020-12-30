@@ -121,7 +121,7 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <h2 class="content-title mb-lg-5">Adauga un nou post</h2>
-                                    <form action="./PostServlet?action=newpost" method="post">
+                                    <form action="./post?action=newpost" method="post">
                                         <div class="mb-lg-3">
                                             <label class="form-label">Denumire</label>
                                             <input type="text" name="denumire" class="form-control" placeholder="Denumire" />
@@ -172,7 +172,8 @@
                 var href = $(this).attr("href");
                 var tab = href.substr(1, href.length);
                 toggleSection(tab);
-            });
+            }); 
+            
         </script>
     </jsp:body>
 

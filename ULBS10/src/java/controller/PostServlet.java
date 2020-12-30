@@ -33,7 +33,7 @@ import utility.Processing;
  *
  * @author DxGod
  */
-@WebServlet(name = "PostServlet", urlPatterns = {"/PostServlet"})
+@WebServlet(name = "PostServlet", urlPatterns = {"/post"})
 public class PostServlet extends HttpServlet {
 
     @Inject
