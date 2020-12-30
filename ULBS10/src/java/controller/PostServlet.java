@@ -9,6 +9,7 @@ import entity.Posturi;
 import entity.Users;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -89,8 +90,12 @@ public class PostServlet extends HttpServlet {
 
             if ("editpost".equals(action)) {
                 int id = Integer.parseInt(request.getParameter("id"));
-                Date date1 = new SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("dataLimAplic"));
+                DateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd");
+                DateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy");
+                Date date1 = originalFormat.parse(request.getParameter("dataLimita"));
                 service.editPost(id, request.getParameter("denumire"), request.getParameter("cerinteMinime"), request.getParameter("cerinteOptionale"), date1);
+                sesiune.setAttribute("posts", service.getAllPosts());
+                response.sendRedirect(request.getServletContext() + "/../dashboard.jspx#posturi");
             }
         }
     }
