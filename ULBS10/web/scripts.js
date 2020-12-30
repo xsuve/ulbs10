@@ -39,7 +39,7 @@ $(document).ready(function() {
             postCerinteOptionale = $(this).data("post-cerinte-optionale"),
             postDataLimita = $(this).data("post-data-limita");
 
-        $(".edit-post-form").prop("action", "./post?action=editpost&amp;id=" + postID);
+        $(".edit-post-form").prop("action", "./post?action=editpost&id=" + postID);
         $(".edit-post-form-denumire").val(postDenumire);
         $(".edit-post-form-cerinte-minime").val(postCerinteMinime);
         $(".edit-post-form-cerinte-optionale").val(postCerinteOptionale);

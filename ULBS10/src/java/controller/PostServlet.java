@@ -72,9 +72,9 @@ public class PostServlet extends HttpServlet {
                 }
                 request.setAttribute("posturi", posturi);
 
-                String cerinteMinime = request.getParameter("cerinteMinime").toString();
+                String cerinteMinime = request.getParameter("cerinteMinime");
                 cerinteMinime = cerinteMinime.replaceAll("\n","<br />");
-                String cerinteOptionale = request.getParameter("cerinteOptionale").toString();
+                String cerinteOptionale = request.getParameter("cerinteOptionale");
                 cerinteOptionale = cerinteOptionale.replaceAll("\n","<br />");
 
                 post = new Posturi(++lastID, request.getParameter("denumire"), cerinteMinime, cerinteOptionale, date1, u);
@@ -99,9 +99,9 @@ public class PostServlet extends HttpServlet {
                 DateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd");
                 Date date1 = originalFormat.parse(request.getParameter("dataLimita"));
 
-                String cerinteMinime = request.getParameter("cerinteMinime").toString();
+                String cerinteMinime = request.getParameter("cerinteMinime");
                 cerinteMinime = cerinteMinime.replaceAll("\n","<br />");
-                String cerinteOptionale = request.getParameter("cerinteOptionale").toString();
+                String cerinteOptionale = request.getParameter("cerinteOptionale");
                 cerinteOptionale = cerinteOptionale.replaceAll("\n","<br />");
 
                 service.editPost(id, request.getParameter("denumire"), cerinteMinime, cerinteOptionale, date1);
