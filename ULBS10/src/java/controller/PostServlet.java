@@ -58,10 +58,10 @@ public class PostServlet extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
 
             HttpSession sesiune = request.getSession();
-            Users u = (Users) sesiune.getAttribute("user");            
-            String action = request.getParameter("action");            
+            Users u = (Users) sesiune.getAttribute("user");
+            String action = request.getParameter("action");
             posturi = service.getAllPosts();
-            
+
             if ("newpost".equals(action)) {
                 Date date1 = new SimpleDateFormat("yyyy-mm-dd").parse(request.getParameter("dataLimita"));
 
@@ -71,16 +71,22 @@ public class PostServlet extends HttpServlet {
                     lastID = posturi.get(posturi.size() - 1).getId();
                 }
                 request.setAttribute("posturi", posturi);
-                post = new Posturi(++lastID, request.getParameter("denumire"), request.getParameter("cerinteMinime"), request.getParameter("cerinteOptionale"), date1, u);
-                service.addPost(post);
+
+                String cerinteMinime = request.getParameter("cerinteMinime").toString();
+                cerinteMinime = cerinteMinime.replaceAll("\n","<br />");
+                String cerinteOptionale = request.getParameter("cerinteOptionale").toString();
+                cerinteOptionale = cerinteOptionale.replaceAll("\n","<br />");
+
+                post = new Posturi(++lastID, request.getParameter("denumire"), cerinteMinime, cerinteOptionale, date1, u);
+                service.AddPost(post);
                 sesiune.setAttribute("posts", service.getAllPosts());
-                
+
                 response.sendRedirect(request.getServletContext() + "/../dashboard.jspx#posturi");
                 //dispatcher = request.getServletContext().getRequestDispatcher("/dashboard.jspx");
                 //dispatcher.forward(request, response);
-                
+
             }
-            
+
             if ("deletepost".equals(action)) {
                 int id = Integer.parseInt(request.getParameter("id"));
                 service.removePost(id);
@@ -91,9 +97,14 @@ public class PostServlet extends HttpServlet {
             if ("editpost".equals(action)) {
                 int id = Integer.parseInt(request.getParameter("id"));
                 DateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd");
-                DateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy");
                 Date date1 = originalFormat.parse(request.getParameter("dataLimita"));
-                service.editPost(id, request.getParameter("denumire"), request.getParameter("cerinteMinime"), request.getParameter("cerinteOptionale"), date1);
+
+                String cerinteMinime = request.getParameter("cerinteMinime").toString();
+                cerinteMinime = cerinteMinime.replaceAll("\n","<br />");
+                String cerinteOptionale = request.getParameter("cerinteOptionale").toString();
+                cerinteOptionale = cerinteOptionale.replaceAll("\n","<br />");
+
+                service.editPost(id, request.getParameter("denumire"), cerinteMinime, cerinteOptionale, date1);
                 sesiune.setAttribute("posts", service.getAllPosts());
                 response.sendRedirect(request.getServletContext() + "/../dashboard.jspx#posturi");
             }

@@ -123,10 +123,11 @@ a {
 
 /* Posts */
 .posts .post,
-.posts .post .post-title {
+.posts .post .post-title,
+.posts .post .post-title a {
     color: #fff;
     font-weight: 300;
-    font-size: 15px;
+    font-size: 14px;
 }
 .posts .post .post-actions {
     text-align: right;
