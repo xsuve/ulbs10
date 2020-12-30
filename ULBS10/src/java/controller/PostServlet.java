@@ -5,20 +5,16 @@
  */
 package controller;
 
-import entity.Aplicanti;
 import entity.Posturi;
 import entity.Users;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.EJBException;
 import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -27,7 +23,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import model.User;
 import services.PosturiService;
 import utility.Processing;
 
@@ -61,8 +56,11 @@ public class PostServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
 
-            String action = request.getParameter("action");
+            HttpSession sesiune = request.getSession();
+            Users u = (Users) sesiune.getAttribute("user");            
+            String action = request.getParameter("action");            
             posturi = service.getAllPosts();
+            
             if ("newpost".equals(action)) {
                 Date date1 = new SimpleDateFormat("yyyy-mm-dd").parse(request.getParameter("dataLimita"));
 
@@ -71,24 +69,28 @@ public class PostServlet extends HttpServlet {
                 } else {
                     lastID = posturi.get(posturi.size() - 1).getId();
                 }
-
-                HttpSession sesiune = request.getSession();
-                Users u = (Users) sesiune.getAttribute("user");
                 request.setAttribute("posturi", posturi);
                 post = new Posturi(++lastID, request.getParameter("denumire"), request.getParameter("cerinteMinime"), request.getParameter("cerinteOptionale"), date1, u);
                 service.AddPost(post);
-
                 sesiune.setAttribute("posts", service.getAllPosts());
+                
                 response.sendRedirect(request.getServletContext() + "/../dashboard.jspx#posturi");
                 //dispatcher = request.getServletContext().getRequestDispatcher("/dashboard.jspx");
                 //dispatcher.forward(request, response);
+                
             }
+            
             if ("deletepost".equals(action)) {
                 int id = Integer.parseInt(request.getParameter("id"));
                 service.removePost(id);
-                HttpSession sesiune = request.getSession();
                 sesiune.setAttribute("posts", service.getAllPosts());
                 response.sendRedirect(request.getServletContext() + "/../dashboard.jspx#posturi");
+            }
+
+            if ("editpost".equals(action)) {
+                int id = Integer.parseInt(request.getParameter("id"));
+                Date date1 = new SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("dataLimAplic"));
+                service.editPost(id, request.getParameter("denumire"), request.getParameter("cerinteMinime"), request.getParameter("cerinteOptionale"), date1);
             }
         }
     }

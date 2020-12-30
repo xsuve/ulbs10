@@ -86,4 +86,14 @@ public class PosturiService {
             throw new EJBException(ex);
         }
     }
+    
+    
+    @Transactional
+    public void editPost(int id, String denumire, String cerinteMinime, String cerinteOptionale, Date dataLimAplic){
+        Posturi post = em.find(Posturi.class, id);
+        post.setDenumire(denumire);
+        post.setCerinteMinime(cerinteMinime);
+        post.setCerinteOptionale(cerinteOptionale);
+        post.setDataLimAplic(dataLimAplic);
+    }
 }
