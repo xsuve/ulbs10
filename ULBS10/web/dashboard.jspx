@@ -78,10 +78,10 @@
                                     <div class="col-lg-1">
                                         <div class="post-id">ID</div>
                                     </div>
-                                    <div class="col-lg-5">
+                                    <div class="col-lg-6">
                                         <h6 class="mb-lg-0 mt-lg-0 post-title">Denumire</h6>
                                     </div>
-                                    <div class="col-lg-3">
+                                    <div class="col-lg-2">
                                         <div class="post-date">Data limita</div>
                                     </div>
                                     <div class="col-lg-3">
@@ -94,10 +94,10 @@
                                         <div class="col-lg-1">
                                             <div class="post-id">${post.getId()}</div>
                                         </div>
-                                        <div class="col-lg-5">
+                                        <div class="col-lg-6">
                                             <h6 class="mb-lg-0 mt-lg-0 post-title">${post.getDenumire()}</h6>
                                         </div>
-                                        <div class="col-lg-3">
+                                        <div class="col-lg-2">
                                             <div class="post-date">
                                                 <fmt:setLocale value="ro_RO" scope="session" />
                                                 <fmt:formatDate value="${post.getDataLimAplic()}" pattern="dd MMMM, yyyy" />
@@ -107,7 +107,8 @@
                                             <div class="post-actions">
                                                 <a href="./post?action=apply&amp;id=${post.getId()}">Aplica</a>
                                                 |
-                                                <a href="./post?action=editpost&amp;id=${post.getId()}">Editeaza</a>
+                                                <fmt:formatDate value="${post.getDataLimAplic()}" pattern="yyyy-MM-dd" var="dateFormatted" />
+                                                <a href="#edit-post" data-post-id="${post.getId()}" data-post-denumire="${post.getDenumire()}" data-post-cerinte-minime="${post.getCerinteMinime()}" data-post-cerinte-optionale="${post.getCerinteOptionale()}" data-post-data-limita="${dateFormatted}" class="edit-link">Editeaza</a>
                                                 |
                                                 <a href="./post?action=deletepost&amp;id=${post.getId()}">Sterge</a>
                                             </div>
@@ -143,7 +144,36 @@
                                             <input type="hidden" name="idUser" class="form-control" placeholder=" " />
                                         </div>
 
-                                        <button type="submit" class="btn btn-primary" name="submit_signup">Adauga post</button>
+                                        <button type="submit" class="btn btn-primary">Adauga post</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </section>
+                        
+                        <!-- Edit post -->
+                        <section data-tab="edit-post" class="content-section">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <h2 class="content-title mb-lg-5">Editeaza post</h2>
+                                    <form action="./post?action=editpost&amp;id=0" method="post" class="edit-post-form">
+                                        <div class="mb-lg-3">
+                                            <label class="form-label">Denumire</label>
+                                            <input type="text" name="denumire" class="form-control edit-post-form-denumire" placeholder="Denumire" />
+                                        </div>
+                                        <div class="mb-lg-3">
+                                            <label class="form-label">Cerinte minime</label>
+                                            <input type="text" name="cerinteMinime" class="form-control edit-post-form-cerinte-minime" placeholder="Cerinte minime" />
+                                        </div>
+                                        <div class="mb-lg-3">
+                                            <label class="form-label">Cerinte optionale</label>
+                                            <input type="text" name="cerinteOptionale" class="form-control edit-post-form-cerinte-optionale" placeholder="Cerinte optionale" />
+                                        </div>
+                                        <div class="mb-lg-3">
+                                            <label class="form-label">Data limita</label>
+                                            <input type="date" name="dataLimita" class="form-control edit-post-form-data-limita" placeholder="Data limita" />
+                                        </div>
+
+                                        <button type="submit" class="btn btn-primary">Edit post</button>
                                     </form>
                                 </div>
                             </div>
@@ -155,26 +185,56 @@
         </div>
 
         <script>
-            function toggleSection(section) {
-                $(".content-section").removeClass("active");
-                $(".content-section[data-tab='" + section + "']").addClass("active");
-            }
+            $(document).ready(function() {
+                function toggleSection(section) {
+                    $(".content-section").removeClass("active");
+                    $(".content-section[data-tab='" + section + "']").addClass("active");
+                    $(".sidebar-links a div").removeClass("active");
+                    $(".sidebar-links a[href='#" + section + "'] div").addClass("active");
+                }
+                
+                //
+                var currentURL = window.location.href;
+                var currentTab = currentURL.split("#")[1];
+                if(currentTab) {
+                    toggleSection(currentTab);
+                }
 
-            $(document).on("click", ".sidebar-links a div", function() {
-                $(".sidebar-links a div").removeClass("active");
-                $(this).addClass("active");
+                //
+                $(document).on("click", ".sidebar-links a div", function() {
+                    $(".sidebar-links a div").removeClass("active");
+                    $(this).addClass("active");
 
-                var href = $(this).parent().attr("href");
-                var tab = href.substr(1, href.length);
-                toggleSection(tab);
+                    var href = $(this).parent().attr("href");
+                    var tab = href.substr(1, href.length);
+                    toggleSection(tab);
+                });
+
+                $(document).on("click", ".dashboard-link", function() {
+                    var href = $(this).attr("href");
+                    var tab = href.substr(1, href.length);
+                    toggleSection(tab);
+                });
+                
+                //
+                $(".edit-link").on("click", function() {
+                    var postID = $(this).data("post-id"),
+                        postDenumire = $(this).data("post-denumire"),
+                        postCerinteMinime = $(this).data("post-cerinte-minime"),
+                        postCerinteOptionale = $(this).data("post-cerinte-optionale"),
+                        postDataLimita = $(this).data("post-data-limita");
+                        
+                    $(".edit-post-form").prop("action", "./post?action=editpost&amp;id=" + postID);
+                    $(".edit-post-form-denumire").val(postDenumire);
+                    $(".edit-post-form-cerinte-minime").val(postCerinteMinime);
+                    $(".edit-post-form-cerinte-optionale").val(postCerinteOptionale);
+                    $(".edit-post-form-data-limita").val(postDataLimita);
+                    
+                    toggleSection("edit-post");
+                    $(".sidebar-links a div").removeClass("active");
+                    $(".sidebar-links a[href='#posturi'] div").addClass("active");
+                });
             });
-
-            $(document).on("click", ".dashboard-link", function() {
-                var href = $(this).attr("href");
-                var tab = href.substr(1, href.length);
-                toggleSection(tab);
-            });
-
         </script>
     </jsp:body>
 
