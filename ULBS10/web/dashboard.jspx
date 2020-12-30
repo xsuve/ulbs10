@@ -17,33 +17,7 @@
         <div class="container-fluid px-lg-0">
             <div class="row g-lg-0">
                 <div class="col-lg-2">
-                    <div class="sidebar">
-                        <div class="row mb-lg-5 px-lg-4 py-lg-4">
-                            <div class="col-lg-10">
-                                <div class="sidebar-logo">
-                                    <a href="index.jspx">ULBS10</a>
-                                </div>
-                            </div>
-                            <div class="col-lg-2 text-end">
-                                <form class="sidebar-logout" action="${pageContext.request.contextPath}/login/user?action=logout" method="post">
-                                    <button type="submit">
-                                        <span class="material-icons">power_settings_new</span>
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                        <div class="sidebar-links">
-                            <a href="#acasa">
-                                <div class="px-lg-4 py-lg-3 active"><span class="material-icons">home</span> Acasa</div>
-                            </a>
-                            <a href="#utilizatori">
-                                <div class="px-lg-4 py-lg-3"><span class="material-icons">person</span> Utilizatori</div>
-                            </a>
-                            <a href="#posturi">
-                                <div class="px-lg-4 py-lg-3"><span class="material-icons">work</span> Posturi</div>
-                            </a>
-                        </div>
-                    </div>
+                    <jsp:include page="./components/sidebar.jspx" />
                 </div>
                 <div class="col-lg-10">
                     <div class="content p-lg-5">
@@ -66,7 +40,7 @@
                                 </div>
                                 <div class="col-lg-2">
                                     <div style="text-align: right;">
-                                        <a class="dashboard-link" href="#adauga-post">
+                                        <a class="add-link" href="#adauga-post">
                                            <button class="btn btn-primary"><span class="material-icons">add</span> Adauga post</button>
                                         </a>
                                     </div>
@@ -95,7 +69,9 @@
                                             <div class="post-id">${post.getId()}</div>
                                         </div>
                                         <div class="col-lg-6">
-                                            <h6 class="mb-lg-0 mt-lg-0 post-title">${post.getDenumire()}</h6>
+                                            <h6 class="mb-lg-0 mt-lg-0 post-title">
+                                                <a href="viewpost.jspx?id=${post.getId()}">${post.getDenumire()}</a>
+                                            </h6>
                                         </div>
                                         <div class="col-lg-2">
                                             <div class="post-date">
@@ -105,7 +81,7 @@
                                         </div>
                                         <div class="col-lg-3">
                                             <div class="post-actions">
-                                                <a href="./post?action=apply&amp;id=${post.getId()}">Aplica</a>
+                                                <a href="viewpost.jspx?id=${post.getId()}">Detalii</a>
                                                 |
                                                 <fmt:formatDate value="${post.getDataLimAplic()}" pattern="yyyy-MM-dd" var="dateFormatted" />
                                                 <a href="#edit-post" data-post-id="${post.getId()}" data-post-denumire="${post.getDenumire()}" data-post-cerinte-minime="${post.getCerinteMinime()}" data-post-cerinte-optionale="${post.getCerinteOptionale()}" data-post-data-limita="${dateFormatted}" class="edit-link">Editeaza</a>
@@ -130,11 +106,11 @@
                                         </div>
                                         <div class="mb-lg-3">
                                             <label class="form-label">Cerinte minime</label>
-                                            <input type="text" name="cerinteMinime" class="form-control" placeholder="Cerinte minime" />
+                                            <textarea name="cerinteMinime" class="form-control" placeholder="Cerinte minime" rows="5"><jsp:text /></textarea>
                                         </div>
                                         <div class="mb-lg-3">
                                             <label class="form-label">Cerinte optionale</label>
-                                            <input type="text" name="cerinteOptionale" class="form-control" placeholder="Cerinte optionale" />
+                                            <textarea name="cerinteOptionale" class="form-control" placeholder="Cerinte optionale" rows="5"><jsp:text /></textarea>
                                         </div>
                                         <div class="mb-lg-3">
                                             <label class="form-label">Data limita</label>
@@ -162,11 +138,11 @@
                                         </div>
                                         <div class="mb-lg-3">
                                             <label class="form-label">Cerinte minime</label>
-                                            <input type="text" name="cerinteMinime" class="form-control edit-post-form-cerinte-minime" placeholder="Cerinte minime" />
+                                            <textarea name="cerinteMinime" class="form-control edit-post-form-cerinte-minime" placeholder="Cerinte minime" rows="5"><jsp:text /></textarea>
                                         </div>
                                         <div class="mb-lg-3">
                                             <label class="form-label">Cerinte optionale</label>
-                                            <input type="text" name="cerinteOptionale" class="form-control edit-post-form-cerinte-optionale" placeholder="Cerinte optionale" />
+                                            <textarea name="cerinteOptionale" class="form-control edit-post-form-cerinte-optionale" placeholder="Cerinte optionale" rows="5"><jsp:text /></textarea>
                                         </div>
                                         <div class="mb-lg-3">
                                             <label class="form-label">Data limita</label>
@@ -183,59 +159,6 @@
                 </div>
             </div>
         </div>
-
-        <script>
-            $(document).ready(function() {
-                function toggleSection(section) {
-                    $(".content-section").removeClass("active");
-                    $(".content-section[data-tab='" + section + "']").addClass("active");
-                    $(".sidebar-links a div").removeClass("active");
-                    $(".sidebar-links a[href='#" + section + "'] div").addClass("active");
-                }
-                
-                //
-                var currentURL = window.location.href;
-                var currentTab = currentURL.split("#")[1];
-                if(currentTab) {
-                    toggleSection(currentTab);
-                }
-
-                //
-                $(document).on("click", ".sidebar-links a div", function() {
-                    $(".sidebar-links a div").removeClass("active");
-                    $(this).addClass("active");
-
-                    var href = $(this).parent().attr("href");
-                    var tab = href.substr(1, href.length);
-                    toggleSection(tab);
-                });
-
-                $(document).on("click", ".dashboard-link", function() {
-                    var href = $(this).attr("href");
-                    var tab = href.substr(1, href.length);
-                    toggleSection(tab);
-                });
-                
-                //
-                $(".edit-link").on("click", function() {
-                    var postID = $(this).data("post-id"),
-                        postDenumire = $(this).data("post-denumire"),
-                        postCerinteMinime = $(this).data("post-cerinte-minime"),
-                        postCerinteOptionale = $(this).data("post-cerinte-optionale"),
-                        postDataLimita = $(this).data("post-data-limita");
-                        
-                    $(".edit-post-form").prop("action", "./post?action=editpost&amp;id=" + postID);
-                    $(".edit-post-form-denumire").val(postDenumire);
-                    $(".edit-post-form-cerinte-minime").val(postCerinteMinime);
-                    $(".edit-post-form-cerinte-optionale").val(postCerinteOptionale);
-                    $(".edit-post-form-data-limita").val(postDataLimita);
-                    
-                    toggleSection("edit-post");
-                    $(".sidebar-links a div").removeClass("active");
-                    $(".sidebar-links a[href='#posturi'] div").addClass("active");
-                });
-            });
-        </script>
     </jsp:body>
 
 </jsp:root>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<jsp:root
+    xmlns:jsp="http://java.sun.com/JSP/Page"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    version="2.0">
+
+    <jsp:directive.page contentType="text/html" pageEncoding="UTF-8"/>
+    
+    <div class="sidebar">
+        <div class="row mb-lg-5 px-lg-4 py-lg-4">
+            <div class="col-lg-10">
+                <div class="sidebar-logo">
+                    <a href="index.jspx">ULBS10</a>
+                </div>
+            </div>
+            <div class="col-lg-2 text-end">
+                <form class="sidebar-logout" action="${pageContext.request.contextPath}/login/user?action=logout" method="post">
+                    <button type="submit">
+                        <span class="material-icons">power_settings_new</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div class="sidebar-links">
+            <a href="./dashboard.jspx#acasa" data-location="acasa">
+                <div class="px-lg-4 py-lg-3 active"><span class="material-icons">home</span> Acasa</div>
+            </a>
+            <a href="./dashboard.jspx#utilizatori" data-location="utilizatori">
+                <div class="px-lg-4 py-lg-3"><span class="material-icons">person</span> Utilizatori</div>
+            </a>
+            <a href="./dashboard.jspx#posturi" data-location="posturi">
+                <div class="px-lg-4 py-lg-3"><span class="material-icons">work</span> Posturi</div>
+            </a>
+        </div>
+    </div>
+                
+    <jsp:include page="./footer.jspx" />
+</jsp:root>
