@@ -6,21 +6,16 @@
 package entity;
 
 import java.io.Serializable;
-import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -38,11 +33,6 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Users.findByLastname", query = "SELECT u FROM Users u WHERE u.lastname = :lastname")
     , @NamedQuery(name = "Users.findByStatut", query = "SELECT u FROM Users u WHERE u.statut = :statut")})
 public class Users implements Serializable {
-
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "users")
-    private Aplicanti aplicanti;
-    @OneToMany(mappedBy = "deschisDe")
-    private Collection<Posturi> posturiCollection;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -70,8 +60,6 @@ public class Users implements Serializable {
     public Users() {
     }
     public Users(String stEmail, String stPassword, String stFirstName, String stLastName, String stStatut){
-    aplicanti = null;
-    posturiCollection = null;
     email=stEmail;
     password=stPassword;
     firstname=stFirstName;
@@ -79,8 +67,6 @@ public class Users implements Serializable {
     statut=stStatut;
     }
     public Users(int inID, String stEmail, String stPassword, String stFirstName, String stLastName, String stStatut){
-    aplicanti = null;
-    posturiCollection = null;
     id = inID;
     email=stEmail;
     password=stPassword;
@@ -164,23 +150,5 @@ public class Users implements Serializable {
     public String toString() {
         return "entity.Users[ id=" + id + " ]";
     }
-
-    public Aplicanti getAplicanti() {
-        return aplicanti;
-    }
-
-    public void setAplicanti(Aplicanti aplicanti) {
-        this.aplicanti = aplicanti;
-    }
-
-    @XmlTransient
-    public Collection<Posturi> getPosturiCollection() {
-        return posturiCollection;
-    }
-
-    public void setPosturiCollection(Collection<Posturi> posturiCollection) {
-        this.posturiCollection = posturiCollection;
-    }
-
-
+    
 }
