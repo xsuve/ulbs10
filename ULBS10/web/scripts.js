@@ -38,8 +38,11 @@ $(document).ready(function() {
             postCerinteMinime = $(this).data("post-cerinte-minime"),
             postCerinteOptionale = $(this).data("post-cerinte-optionale"),
             postDataLimita = $(this).data("post-data-limita");
+            
+            postCerinteMinime = postCerinteMinime.replaceAll("<br />", "");
+            postCerinteOptionale = postCerinteOptionale.replaceAll("<br />", "");
 
-        $(".edit-post-form").prop("action", "./post?action=editpost&amp;id=" + postID);
+        $(".edit-post-form").prop("action", "./post?action=editpost&id=" + postID);
         $(".edit-post-form-denumire").val(postDenumire);
         $(".edit-post-form-cerinte-minime").val(postCerinteMinime);
         $(".edit-post-form-cerinte-optionale").val(postCerinteOptionale);
