@@ -7,9 +7,9 @@ package utility;
 
 import java.util.Properties;
 import javax.mail.*;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.util.Date;
 
 /**
  *
@@ -20,20 +20,11 @@ public class gmailSendEmailSSL {
     private static final String USERNAME = "ulbs10.recrutari@gmail.com";
     private static final String PASSWORD = "Ulbs10#recrutari";
 
-    public static void main(String[] args) throws Exception {
-        // Email information such as from, to, subject and contents.
-        String mailFrom = "ulbs10.recrutari@gmail.com";
-        String mailTo = "elena.raicu@ulbsibiu.ro";
-        String mailSubject = "ULBS10";
-        String mailText = "O facuram si pe asta";
-
-        gmailSendEmailSSL gmail = new gmailSendEmailSSL();
-    }
-
     public void sendMail(String mailFrom, String mailTo, String mailSubject,
-            String mailText) throws Exception {
+            String mailText) throws AddressException, MessagingException {
         Properties props = System.getProperties();
         props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.starttls.enable", "true");// Must issue a STARTTLS command first
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.port", "465");
         props.put("mail.smtp.socketFactory.port", "587");

@@ -5,7 +5,6 @@
  */
 package utility;
 
-import static com.sun.org.glassfish.external.amx.AMXUtil.prop;
 import entity.Posturi;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,20 +17,12 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
-import java.util.Properties;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
-import javax.mail.Authenticator;
-import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.*;
-import javax.mail.internet.MimeMessage;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 
@@ -100,10 +91,9 @@ public class Processing {
             dispatcher.forward(request, response);
         } else {
             gmailSendEmailSSL mail = new gmailSendEmailSSL();
-
             try {
-                mail.sendMail("ulbs10.recrutari@gmail.com", "elena.raicu@ulbsibiu.ro", "ULBS10", "O facuram si pe asta");
-            } catch (Exception ex) {
+                mail.sendMail("ulbs10.recrutari@gmail.com", "elena.raicu@ulbsibiu.ro", "ULBS10", "O facuram si pe astaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            } catch (MessagingException ex) {
                 Logger.getLogger(Processing.class.getName()).log(Level.SEVERE, null, ex);
             }
 
