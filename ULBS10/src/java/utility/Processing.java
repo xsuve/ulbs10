@@ -90,12 +90,12 @@ public class Processing {
             dispatcher = request.getServletContext().getRequestDispatcher("/login/login.jspx");
             dispatcher.forward(request, response);
         } else {
-            gmailSendEmailSSL mail = new gmailSendEmailSSL();
-            try {
-                mail.sendMail("ulbs10.recrutari@gmail.com", "elena.raicu@ulbsibiu.ro", "ULBS10", "O facuram si pe astaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            } catch (MessagingException ex) {
-                Logger.getLogger(Processing.class.getName()).log(Level.SEVERE, null, ex);
-            }
+//            gmailSendEmailSSL mail = new gmailSendEmailSSL();
+//            try {
+//                mail.sendMail("ulbs10.recrutari@gmail.com", "elena.raicu@ulbsibiu.ro", "ULBS10", "O facuram si pe astaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+//            } catch (MessagingException ex) {
+//                Logger.getLogger(Processing.class.getName()).log(Level.SEVERE, null, ex);
+//            }
 
             HttpSession sesiune = request.getSession();
             sesiune.setAttribute("posts", allPosts);
