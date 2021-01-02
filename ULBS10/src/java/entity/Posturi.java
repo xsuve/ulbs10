@@ -6,7 +6,6 @@
 package entity;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -16,18 +15,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author elena
+ * @author Razvan
  */
 @Entity
 @Table(name = "POSTURI")
@@ -35,10 +32,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Posturi.findAll", query = "SELECT p FROM Posturi p")
     , @NamedQuery(name = "Posturi.findById", query = "SELECT p FROM Posturi p WHERE p.id = :id")
-    , @NamedQuery(name = "Posturi.findByDenumire", query = "SELECT p FROM Posturi p WHERE p.denumire = :denumire")
     , @NamedQuery(name = "Posturi.findByCerinteMinime", query = "SELECT p FROM Posturi p WHERE p.cerinteMinime = :cerinteMinime")
     , @NamedQuery(name = "Posturi.findByCerinteOptionale", query = "SELECT p FROM Posturi p WHERE p.cerinteOptionale = :cerinteOptionale")
-    , @NamedQuery(name = "Posturi.findByDataLimAplic", query = "SELECT p FROM Posturi p WHERE p.dataLimAplic = :dataLimAplic")})
+    , @NamedQuery(name = "Posturi.findByDataLimAplic", query = "SELECT p FROM Posturi p WHERE p.dataLimAplic = :dataLimAplic")
+    , @NamedQuery(name = "Posturi.findByDenumire", query = "SELECT p FROM Posturi p WHERE p.denumire = :denumire")})
 public class Posturi implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -47,23 +44,38 @@ public class Posturi implements Serializable {
     @NotNull
     @Column(name = "ID")
     private Integer id;
-    @Size(max = 45)
-    @Column(name = "DENUMIRE")
-    private String denumire;
-    @Size(max = 200)
+    @Size(max = 255)
     @Column(name = "CERINTE_MINIME")
     private String cerinteMinime;
-    @Size(max = 200)
+    @Size(max = 255)
     @Column(name = "CERINTE_OPTIONALE")
     private String cerinteOptionale;
     @Column(name = "DATA_LIM_APLIC")
     @Temporal(TemporalType.DATE)
     private Date dataLimAplic;
-    @OneToMany(mappedBy = "idPost")
-    private Collection<Aplicanti> aplicantiCollection;
+    @Size(max = 255)
+    @Column(name = "DENUMIRE")
+    private String denumire;
     @JoinColumn(name = "DESCHIS_DE", referencedColumnName = "ID")
     @ManyToOne
     private Users deschisDe;
+
+    public Posturi(int id, String denumire, String cerinteMinime, String cerinteOptionale, Date dataLimAplic, Users user) {
+        this.id = id;
+        this.denumire = denumire;
+        this.cerinteMinime = cerinteMinime;
+        this.cerinteOptionale = cerinteOptionale;
+        this.dataLimAplic = dataLimAplic;
+        deschisDe = user;
+    }
+
+    public Posturi(String denumire, String cerinteMinime, String cerinteOptionale, Date dataLimAplic, Users user) {
+        this.denumire = denumire;
+        this.cerinteMinime = cerinteMinime;
+        this.cerinteOptionale = cerinteOptionale;
+        this.dataLimAplic = dataLimAplic;
+        deschisDe = user;
+    }
 
     public Posturi() {
     }
@@ -78,14 +90,6 @@ public class Posturi implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getDenumire() {
-        return denumire;
-    }
-
-    public void setDenumire(String denumire) {
-        this.denumire = denumire;
     }
 
     public String getCerinteMinime() {
@@ -112,13 +116,12 @@ public class Posturi implements Serializable {
         this.dataLimAplic = dataLimAplic;
     }
 
-    @XmlTransient
-    public Collection<Aplicanti> getAplicantiCollection() {
-        return aplicantiCollection;
+    public String getDenumire() {
+        return denumire;
     }
 
-    public void setAplicantiCollection(Collection<Aplicanti> aplicantiCollection) {
-        this.aplicantiCollection = aplicantiCollection;
+    public void setDenumire(String denumire) {
+        this.denumire = denumire;
     }
 
     public Users getDeschisDe() {
@@ -153,5 +156,5 @@ public class Posturi implements Serializable {
     public String toString() {
         return "entity.Posturi[ id=" + id + " ]";
     }
-    
+
 }

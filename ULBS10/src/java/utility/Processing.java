@@ -34,24 +34,26 @@ import javax.mail.internet.*;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+
 /**
  *
  * @author DxGod
  */
 public class Processing {
-    private RequestDispatcher dispatcher = null; 
-    private HttpServletRequest request; 
+
+    private RequestDispatcher dispatcher = null;
+    private HttpServletRequest request;
     private HttpServletResponse response;
     private List<Users> users;
     private Users user;
     String[] alert = new String[2];
     private String salt = "ksdf@#$#T3fsd";
-    
+
     private static final Random RANDOM = new SecureRandom();
     private static final String ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     private static final int ITERATIONS = 10000;
     private static final int KEY_LENGTH = 256;
-    
+
 
     /**
      * Constructor cu parametrii
@@ -65,14 +67,11 @@ public class Processing {
         this.response = response;
         this.users = users;
     }
-    
- 
+
     /**
-     * Procesul de autentificare a unui utilizator din UserServlet s-a mutat
-     * aici pentru curatarea codului. Se verifica adresele de email si parolele
-     * din baza de date pentru a gasi persoana in baza de date, daca aceasta
-     * exista, daca nu se trimit catre jspx mesaje sugestive
-     *
+     * Procesul de autentificare a unui utilizator din UserServlet s-a mutat aici pentru curatarea codului.
+     * Se verifica adresele de email si parolele din baza de date pentru a gasi persoana in baza de date, daca aceasta exista, daca nu
+     * se trimit catre jspx mesaje sugestive
      * @param allPosts
      * @throws ServletException
      * @throws IOException
@@ -82,38 +81,41 @@ public class Processing {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-         //Verificare daca logarea este corecta
+        //Verificare daca logarea este corecta
         boolean logare = false;
         for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getEmail().equals(email)  && verifyUserPassword(password, users.get(i).getPassword(), salt)) {
-               logare = true;
+            if (users.get(i).getEmail().equals(email) && verifyUserPassword(password, users.get(i).getPassword(), salt)) {
+                HttpSession sesiune = request.getSession();
+                sesiune.setAttribute("user", users.get(i));
+                logare = true;
+                break;
             }
         }
 
-        if(!logare){
+        if (!logare) {
             alert[0] = "Email sau parola incorecta!";
-            alert[1] = "alert alert-danger"; 
-            request.setAttribute("alert", alert);                 
+            alert[1] = "alert alert-danger";
+            request.setAttribute("alert", alert);
             dispatcher = request.getServletContext().getRequestDispatcher("/login/login.jspx");
             dispatcher.forward(request, response);
-        } else {            
+        } else {
             gmailSendEmailSSL mail = new gmailSendEmailSSL();
-            
+
             try {
                 mail.sendMail("ulbs10.recrutari@gmail.com", "elena.raicu@ulbsibiu.ro", "ULBS10", "O facuram si pe asta");
             } catch (Exception ex) {
                 Logger.getLogger(Processing.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
             HttpSession sesiune = request.getSession();
             sesiune.setAttribute("posts", allPosts);
             sesiune.setAttribute("users", users);
             response.sendRedirect(request.getServletContext() + "./../../newjsp.jspx");
             //dispatcher = request.getServletContext().getRequestDispatcher("/dashboard.jspx");
             //dispatcher.forward(request, response);
-        }  
-    
-    }    
+        }
+
+    }
 
     /**
      * Procesul de inregistrare a unui utilizator din UserServlet s-a mutat aici
@@ -151,18 +153,18 @@ public class Processing {
                 existInDB = true;
             }
         }
-        if(email.isEmpty() || password.isEmpty() || firstName.isEmpty() || lastName.isEmpty() ){
+        if (email.isEmpty() || password.isEmpty() || firstName.isEmpty() || lastName.isEmpty()) {
             alert[0] = "Va rugam sa complectati toate campurile.";
-            alert[1] = "alert alert-danger"; 
+            alert[1] = "alert alert-danger";
             request.setAttribute("alert", alert);
             dispatcher = request.getServletContext().getRequestDispatcher("/login/signup.jspx");
             dispatcher.forward(request, response);
-            return false;   
-            
+            return false;
+
         } else {
-            if (!existInDB) {   
+            if (!existInDB) {
                 alert[0] = "Te-ai inregistrat cu succes!";
-                alert[1] = "alert alert-success"; 
+                alert[1] = "alert alert-success";
                 request.setAttribute("alert", alert);
                 dispatcher = request.getServletContext().getRequestDispatcher("/login/login.jspx");
                 dispatcher.forward(request, response);
@@ -171,24 +173,17 @@ public class Processing {
 
             } else {
                 alert[0] = "Emailul deja exista in baza de date!";
-                alert[1]="alert alert-danger"; 
+                alert[1] = "alert alert-danger";
                 request.setAttribute("alert", alert);
                 dispatcher = request.getServletContext().getRequestDispatcher("/login/signup.jspx");
                 dispatcher.forward(request, response);
                 return false;
             }
-        }    
-    }    
-    public String getSalt() {
-       
-        return salt;
+        }
     }
-    
-
 
     /**
      * Se invalideaza sesiunea utilizatorului si se redirectioneaza catre index
-     *
      * @see HttpSession
      * @throws ServletException
      * @throws IOException
@@ -203,7 +198,6 @@ public class Processing {
 
     /**
      * Cripteaza parola cu o cheie salt
-     *
      * @param password
      * @param salt
      * @return Sir binar ce contine parola criptata
@@ -247,16 +241,14 @@ public class Processing {
      * @throws InvalidKeySpecException
      */
     public static boolean verifyUserPassword(String providedPassword,
-            String securedPassword, String salt) throws InvalidKeySpecException
-    {
-        boolean returnValue = false;
-        
+            String securedPassword, String salt) throws InvalidKeySpecException {
+
         // Generate New secure password with the same salt
         String newSecurePassword = generateSecurePassword(providedPassword, salt);
-        
+
         // Check if two passwords are equal
-        returnValue = newSecurePassword.equalsIgnoreCase(securedPassword);
-        
+        boolean returnValue = newSecurePassword.equalsIgnoreCase(securedPassword);
+
         return returnValue;
     }
 
@@ -268,4 +260,5 @@ public class Processing {
     public Users getUserData() {
         return user;
     }
+
 }

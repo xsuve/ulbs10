@@ -5,43 +5,37 @@
  */
 package controller;
 
+import entity.Aplicanti;
 import entity.Users;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.security.spec.InvalidKeySpecException;
-import java.sql.SQLException;
+import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Inject;
-import javax.mail.MessagingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.Part;
-import services.UserService;
+import services.AplicantService;
 import utility.Processing;
 
 /**
  *
  * @author Razvan
  */
-@WebServlet(name = "SignupServlet", urlPatterns = {"/login/user"})
-@MultipartConfig(
-        fileSizeThreshold   = 1024 * 1024 * 1,  // 1 MB
-        maxFileSize         = 1024 * 1024 * 10, // 10 MB
-        maxRequestSize      = 1024 * 1024 * 15, // 15 MB
-        location            = "C:\\Users\\elena\\OneDrive\\Documente\\GitHub\\ulbs10\\ULBS10\\cv"
-)
-public class UserServlet extends HttpServlet {
+@WebServlet(name = "AplicantServlet", urlPatterns = {"/AplicantServlet"})
+public class AplicantServlet extends HttpServlet {
 
     @Inject
-    UserService service;
+    AplicantService service;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -51,46 +45,44 @@ public class UserServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+
     int lastID;
-    List<Users> users;
+    List<Aplicanti> aplicanti;
+    Aplicanti aplicant = null;
     String alerta;
     RequestDispatcher dispatcher = null;
     Processing processing;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, SQLException, InvalidKeySpecException {
+            throws ServletException, IOException{
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
             String action = request.getParameter("action");
+            aplicanti = service.getAllAplicants();
+            Date date1 = new SimpleDateFormat("yyyy-mm-dd").parse(request.getParameter("dataAplicarii"));
+            Serializable s = request.getParameter("cv");
 
-            users = service.getAllUsers();
-            processing = new Processing(request, response, users);
-
-            if ("signup".equals(action)) {
-                if (processing.processSignup()) {
-                    service.addUser(processing.getUserData());
+            if ("newpost".equals(action)) {
+                if (aplicanti.isEmpty()) {
+                    lastID = 0;
+                } else {
+                    lastID = aplicanti.get(aplicanti.size() - 1).getIdUser();
                 }
-            }
-            
-            if ("login".equals(action)) {
-                processing.processLogin(service.getAllPosts());
-                
-            }
 
-            if ("logout".equals(action)) {
-                processing.processLogout();
-            }
-            if("pdf".equals(action)){                           
-                
-                HttpSession session = request.getSession();
-                Users u = (Users) session.getAttribute("user");
-                Part o = request.getPart("cv");
-                //String name = o.getSubmittedFileName(); ia numele fisierului incarcat
-                o.write(u.getId().toString() + "_" + u.getFirstname() + ".pdf");
-            }
-        }    }
+                HttpSession sesiune = request.getSession();
+                Users u = (Users) sesiune.getAttribute("user");
+                aplicant = new Aplicanti(++lastID,1,1, date1);
+                service.addAplicant(aplicant);
 
+                dispatcher = request.getServletContext().getRequestDispatcher("/newpost.jspx");//todo
+                dispatcher.forward(request, response);
+            }
+        } catch (ParseException ex) {
+            Logger.getLogger(AplicantServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -101,12 +93,8 @@ public class UserServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {        
-        try {
-            processRequest(request, response);
-        } catch (SQLException | InvalidKeySpecException ex) {
-            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            throws ServletException, IOException {
+        processRequest(request, response);
     }
 
     /**
@@ -120,11 +108,7 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (SQLException | InvalidKeySpecException ex) {
-            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**
@@ -135,5 +119,6 @@ public class UserServlet extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }
+    }// </editor-fold>
+
 }

@@ -11,63 +11,62 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author elena
+ * @author Razvan
  */
 @Entity
 @Table(name = "APLICANTI")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Aplicanti.findAll", query = "SELECT a FROM Aplicanti a")
+    , @NamedQuery(name = "Aplicanti.findById", query = "SELECT a FROM Aplicanti a WHERE a.id = :id")
     , @NamedQuery(name = "Aplicanti.findByIdUser", query = "SELECT a FROM Aplicanti a WHERE a.idUser = :idUser")
-    , @NamedQuery(name = "Aplicanti.findByDataAplicarii", query = "SELECT a FROM Aplicanti a WHERE a.dataAplicarii = :dataAplicarii")
-    , @NamedQuery(name = "Aplicanti.findByObservatii", query = "SELECT a FROM Aplicanti a WHERE a.observatii = :observatii")
-    , @NamedQuery(name = "Aplicanti.findByIdObservator", query = "SELECT a FROM Aplicanti a WHERE a.idObservator = :idObservator")})
+    , @NamedQuery(name = "Aplicanti.findByIdPost", query = "SELECT a FROM Aplicanti a WHERE a.idPost = :idPost")
+    , @NamedQuery(name = "Aplicanti.findByDataAplicarii", query = "SELECT a FROM Aplicanti a WHERE a.dataAplicarii = :dataAplicarii")})
 public class Aplicanti implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
+    @Column(name = "ID")
+    private Integer id;
     @Column(name = "ID_USER")
     private Integer idUser;
-    @Lob
-    @Column(name = "CV")
-    private Serializable cv;
+    @Column(name = "ID_POST")
+    private Integer idPost;
     @Column(name = "DATA_APLICARII")
     @Temporal(TemporalType.DATE)
     private Date dataAplicarii;
-    @Size(max = 200)
-    @Column(name = "OBSERVATII")
-    private String observatii;
-    @Column(name = "ID_OBSERVATOR")
-    private Integer idObservator;
-    @JoinColumn(name = "ID_POST", referencedColumnName = "ID")
-    @ManyToOne
-    private Posturi idPost;
-    @JoinColumn(name = "ID_USER", referencedColumnName = "ID", insertable = false, updatable = false)
-    @OneToOne(optional = false)
-    private Users users;
 
     public Aplicanti() {
     }
 
-    public Aplicanti(Integer idUser) {
-        this.idUser = idUser;
+    public Aplicanti(Integer id) {
+        this.id = id;
+    }
+    public Aplicanti(int i, int i0, int i1, Date date1) {
+        id=i;
+        idUser=i0;
+        idPost=i1;
+        dataAplicarii=date1;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Integer getIdUser() {
@@ -78,12 +77,12 @@ public class Aplicanti implements Serializable {
         this.idUser = idUser;
     }
 
-    public Serializable getCv() {
-        return cv;
+    public Integer getIdPost() {
+        return idPost;
     }
 
-    public void setCv(Serializable cv) {
-        this.cv = cv;
+    public void setIdPost(Integer idPost) {
+        this.idPost = idPost;
     }
 
     public Date getDataAplicarii() {
@@ -94,42 +93,10 @@ public class Aplicanti implements Serializable {
         this.dataAplicarii = dataAplicarii;
     }
 
-    public String getObservatii() {
-        return observatii;
-    }
-
-    public void setObservatii(String observatii) {
-        this.observatii = observatii;
-    }
-
-    public Integer getIdObservator() {
-        return idObservator;
-    }
-
-    public void setIdObservator(Integer idObservator) {
-        this.idObservator = idObservator;
-    }
-
-    public Posturi getIdPost() {
-        return idPost;
-    }
-
-    public void setIdPost(Posturi idPost) {
-        this.idPost = idPost;
-    }
-
-    public Users getUsers() {
-        return users;
-    }
-
-    public void setUsers(Users users) {
-        this.users = users;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idUser != null ? idUser.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -140,7 +107,7 @@ public class Aplicanti implements Serializable {
             return false;
         }
         Aplicanti other = (Aplicanti) object;
-        if ((this.idUser == null && other.idUser != null) || (this.idUser != null && !this.idUser.equals(other.idUser))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -148,7 +115,7 @@ public class Aplicanti implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Aplicanti[ idUser=" + idUser + " ]";
+        return "controller.Aplicanti[ id=" + id + " ]";
     }
     
 }
