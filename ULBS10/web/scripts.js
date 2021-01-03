@@ -65,7 +65,7 @@ $(document).ready(function() {
             userEmail = $(this).data("user-email"),
             userStatut = $(this).data("user-statut");
 
-        $(".edit-user-form").prop("action", "./post?action=editpost&id=" + userID);
+        $(".edit-user-form").prop("action", "./login/user?action=edituser&id=" + userID);
         $(".edit-user-form-first-name").val(userFirstName);
         $(".edit-user-form-last-name").val(userLastName);
         $(".edit-user-form-email").val(userEmail);

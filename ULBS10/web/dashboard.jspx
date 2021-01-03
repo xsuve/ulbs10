@@ -106,9 +106,18 @@
                                             <input type="email" name="email" class="form-control" placeholder="Email" />
                                         </div>
                                         <div class="mb-lg-3">
+                                            <label class="form-label">Parola</label>
+                                            <input type="password" name="password" class="form-control" placeholder="Parola" />
+                                        </div>
+                                        <div class="mb-lg-3">
                                             <label class="form-label">Statut</label>
                                             <select name="statut" class="form-select">
+                                                <option value="generalDirector">General Director</option>
+                                                <option value="departamanetDirector">Departament Director</option>
+                                                <option value="humanResourcesDirector">Human Resources Director</option>
+                                                <option value="recruiter">Recruiter</option>
                                                 <option value="administrator">Administrator</option>
+                                                <option value="viewer">Viewer</option>
                                             </select>
                                         </div>
 
@@ -139,7 +148,12 @@
                                         <div class="mb-lg-3">
                                             <label class="form-label">Statut</label>
                                             <select name="statut" class="form-select edit-user-form-statut">
+                                                <option value="generalDirector">General Director</option>
+                                                <option value="departamanetDirector">Departament Director</option>
+                                                <option value="humanResourcesDirector">Human Resources Director</option>
+                                                <option value="recruiter">Recruiter</option>
                                                 <option value="administrator">Administrator</option>
+                                                <option value="viewer">Viewer</option>
                                             </select>
                                         </div>
 

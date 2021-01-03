@@ -42,7 +42,6 @@ public class Processing {
     private static final int ITERATIONS = 10000;
     private static final int KEY_LENGTH = 256;
 
-
     /**
      * Constructor cu parametrii
      *
@@ -57,15 +56,17 @@ public class Processing {
     }
 
     /**
-     * Procesul de autentificare a unui utilizator din UserServlet s-a mutat aici pentru curatarea codului.
-     * Se verifica adresele de email si parolele din baza de date pentru a gasi persoana in baza de date, daca aceasta exista, daca nu
-     * se trimit catre jspx mesaje sugestive
+     * Procesul de autentificare a unui utilizator din UserServlet s-a mutat
+     * aici pentru curatarea codului. Se verifica adresele de email si parolele
+     * din baza de date pentru a gasi persoana in baza de date, daca aceasta
+     * exista, daca nu se trimit catre jspx mesaje sugestive
+     *
      * @param allPosts
      * @throws ServletException
      * @throws IOException
      * @throws InvalidKeySpecException
      */
-    public void processLogin(List<Posturi> allPosts) throws ServletException, IOException, InvalidKeySpecException{
+    public void processLogin(List<Posturi> allPosts) throws ServletException, IOException, InvalidKeySpecException {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
@@ -114,7 +115,7 @@ public class Processing {
      * @throws IOException
      * @throws InvalidKeySpecException
      */
-    public boolean processSignup() throws ServletException, IOException, InvalidKeySpecException {
+    public boolean processSignup(String type) throws ServletException, IOException, InvalidKeySpecException {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String firstName = request.getParameter("firstName");
@@ -142,8 +143,12 @@ public class Processing {
             alert[0] = "Va rugam sa complectati toate campurile.";
             alert[1] = "alert alert-danger";
             request.setAttribute("alert", alert);
-            dispatcher = request.getServletContext().getRequestDispatcher("/login/signup.jspx");
+            if ("signup".equals(type)) {
+                dispatcher = request.getServletContext().getRequestDispatcher("/login/signup.jspx");
             dispatcher.forward(request, response);
+            } else {
+                dispatcher = request.getServletContext().getRequestDispatcher("/../../dashboard.jspx#utilizatori");
+            }
             return false;
 
         } else {
@@ -151,8 +156,12 @@ public class Processing {
                 alert[0] = "Te-ai inregistrat cu succes!";
                 alert[1] = "alert alert-success";
                 request.setAttribute("alert", alert);
+            if ("signup".equals(type)) {
                 dispatcher = request.getServletContext().getRequestDispatcher("/login/login.jspx");
                 dispatcher.forward(request, response);
+            } else {
+                response.sendRedirect(request.getServletContext() + "/../../dashboard.jspx#utilizatori");
+            }
                 user = new Users(++lastID, email, password, firstName, lastName, statut);
                 return true;
 
@@ -160,8 +169,12 @@ public class Processing {
                 alert[0] = "Emailul deja exista in baza de date!";
                 alert[1] = "alert alert-danger";
                 request.setAttribute("alert", alert);
+            if ("signup".equals(type)) {
                 dispatcher = request.getServletContext().getRequestDispatcher("/login/signup.jspx");
                 dispatcher.forward(request, response);
+            } else {
+                response.sendRedirect(request.getServletContext() + "/../../dashboard.jspx#utilizatori");
+            }
                 return false;
             }
         }
@@ -169,6 +182,7 @@ public class Processing {
 
     /**
      * Se invalideaza sesiunea utilizatorului si se redirectioneaza catre index
+     *
      * @see HttpSession
      * @throws ServletException
      * @throws IOException
@@ -183,6 +197,7 @@ public class Processing {
 
     /**
      * Cripteaza parola cu o cheie salt
+     *
      * @param password
      * @param salt
      * @return Sir binar ce contine parola criptata

@@ -13,18 +13,22 @@ import javax.ejb.EJBException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+
 /**
  *
  * @author Razvan
  */
 public class UserService {
+
     private static final Logger logger = Logger.getLogger(
-                "ULBS10.services.UserService");
+            "ULBS10.services.UserService");
     @PersistenceContext
     private EntityManager em;
 
     /**
-     * Creeaza un user nou cu ajutorul parametriilor si apoi il introduce in baza de date
+     * Creeaza un user nou cu ajutorul parametriilor si apoi il introduce in
+     * baza de date
+     *
      * @param inID
      * @param stEmail
      * @param stPassword
@@ -33,7 +37,7 @@ public class UserService {
      * @param stStatut
      */
     @Transactional
-    public void addUser(int inID, String stEmail, String stPassword, String stFirstName, String stLastName, String stStatut){
+    public void addUser(int inID, String stEmail, String stPassword, String stFirstName, String stLastName, String stStatut) {
         //add in database
         logger.info("createUser din parametrii");
         try {
@@ -46,6 +50,7 @@ public class UserService {
 
     /**
      * Returneaza o lista cu toti utilizatorii din baza de date
+     *
      * @return Utilizatorii din baza de date
      */
     @SuppressWarnings("unchecked")
@@ -60,7 +65,8 @@ public class UserService {
     }
 
     /**
-     * Adauga un user in baza de date cu EntityManager persist 
+     * Adauga un user in baza de date cu EntityManager persist
+     *
      * @param userData
      */
     @Transactional
@@ -76,6 +82,7 @@ public class UserService {
 
     /**
      * Returneaza o lista cu toate posturile din baza de date
+     *
      * @return Posturile din baza de date
      */
     @SuppressWarnings("unchecked")
@@ -84,6 +91,26 @@ public class UserService {
         try {
             List<Posturi> posturi = (List<Posturi>) em.createNamedQuery("Posturi.findAll").getResultList();
             return posturi;
+        } catch (Exception ex) {
+            throw new EJBException(ex);
+        }
+    }
+
+    @Transactional
+    public void editUser(int id, String email, String firstname, String lastname, String statut) {
+        Users user = em.find(Users.class, id);
+        user.setEmail(email);
+        user.setFirstname(firstname);
+        user.setLastname(lastname);
+        user.setStatut(statut);
+    }
+
+    @Transactional
+    public void removeUser(int id) {
+        logger.info("removeUser");
+        try {
+            Users user = em.find(Users.class, id);
+            em.remove(user);
         } catch (Exception ex) {
             throw new EJBException(ex);
         }

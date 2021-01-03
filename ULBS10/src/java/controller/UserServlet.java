@@ -36,7 +36,7 @@ import utility.Processing;
         fileSizeThreshold = 1024 * 1024 * 1, // 1 MB
         maxFileSize = 1024 * 1024 * 10, // 10 MB
         maxRequestSize = 1024 * 1024 * 15, // 15 MB
-        location = "C:\\Users\\elena\\OneDrive\\Documente\\GitHub\\ulbs10\\ULBS10\\cv"
+        location = "C:\\"
 )
 public class UserServlet extends HttpServlet {
 
@@ -68,7 +68,7 @@ public class UserServlet extends HttpServlet {
             processing = new Processing(request, response, users);
 
             if ("signup".equals(action)) {
-                if (processing.processSignup()) {
+                if (processing.processSignup("signup")) {
                     service.addUser(processing.getUserData());
                 }
             }
@@ -81,13 +81,55 @@ public class UserServlet extends HttpServlet {
             if ("logout".equals(action)) {
                 processing.processLogout();
             }
-
-            if ("cv".equals(action)) {
+            if ("pdf".equals(action)) {
                 HttpSession session = request.getSession();
                 Users u = (Users) session.getAttribute("user");
                 Part o = request.getPart("cv");
                 //String name = o.getSubmittedFileName(); ia numele fisierului incarcat
                 o.write(u.getId().toString() + "_" + u.getFirstname() + ".pdf");
+            }
+            if ("edituser".equals(action)) {
+                int id = Integer.parseInt(request.getParameter("id"));
+                String email = request.getParameter("email");
+                String firstname = request.getParameter("firstName");
+                String lastname = request.getParameter("lastName");
+                String statut = request.getParameter("statut");
+
+                service.editUser(id, email, firstname, lastname, statut);
+                HttpSession sesiune = request.getSession();
+                Users user = (Users) sesiune.getAttribute("user");
+                if (user.getId().equals(id)) {
+                    user.setEmail(email);
+                    user.setFirstname(firstname);
+                    user.setLastname(lastname);
+                    user.setStatut(statut);
+                    sesiune.setAttribute("user", user);
+                }
+                users = service.getAllUsers();
+                sesiune.setAttribute("users", users);
+                response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx#utilizatori");
+            }
+
+            if ("deleteuser".equals(action)) {
+                HttpSession sesiune = request.getSession();
+                Users user = (Users) sesiune.getAttribute("user");
+                int id = Integer.parseInt(request.getParameter("id"));
+                if (!user.getId().equals(id)) {
+                    service.removeUser(id);
+                    users = service.getAllUsers();
+                    sesiune.setAttribute("users", users);
+                    response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx#utilizatori");
+                } else {
+                    response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx#utilizatori");
+                }
+            }
+            if ("newuser".equals(action)) {
+                if (processing.processSignup(action)) {
+                    service.addUser(processing.getUserData());
+                    HttpSession session = request.getSession();
+                    List<Users> u = (List<Users>) service.getAllUsers();
+                    session.setAttribute("users", u);
+                }
             }
         }
     }
