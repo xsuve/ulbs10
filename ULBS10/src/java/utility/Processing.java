@@ -90,12 +90,10 @@ public class Processing {
             dispatcher = request.getServletContext().getRequestDispatcher("/login/login.jspx");
             dispatcher.forward(request, response);
         } else {
-<<<<<<< Updated upstream
 //            } catch (MessagingException ex) {
 //                Logger.getLogger(Processing.class.getName()).log(Level.SEVERE, null, ex);
 //            }
 
->>>>>>> Stashed changes
             HttpSession sesiune = request.getSession();
             sesiune.setAttribute("posts", allPosts);
             sesiune.setAttribute("users", users);

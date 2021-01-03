@@ -110,12 +110,11 @@ public class PostServlet extends HttpServlet {
             }
             
             if("getAllPosts".equals(action)){
-                HttpSession session = request.getSession();
-                session.setAttribute("posts", service.getAllPosts());
+                sesiune.setAttribute("posts", service.getAllPosts());
                 //request.setAttribute("posts", service.getAllPosts());
-                response.sendRedirect(request.getServletContext() + "/../index.jspx");
-                //dispatcher = request.getServletContext().getRequestDispatcher("/index.jspx");
-                //dispatcher.forward(request, response);
+                //response.sendRedirect(request.getServletContext() + "/newjsp.jspx");
+                dispatcher = request.getServletContext().getRequestDispatcher("/newjsp.jspx");
+                dispatcher.forward(request, response);
             }
         }
     }

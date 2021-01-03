@@ -33,10 +33,10 @@ import utility.Processing;
  */
 @WebServlet(name = "SignupServlet", urlPatterns = {"/login/user"})
 @MultipartConfig(
-        fileSizeThreshold   = 1024 * 1024 * 1,  // 1 MB
-        maxFileSize         = 1024 * 1024 * 10, // 10 MB
-        maxRequestSize      = 1024 * 1024 * 15, // 15 MB
-        location            = "C:\\Users\\elena\\OneDrive\\Documente\\GitHub\\ulbs10\\ULBS10\\cv"
+        fileSizeThreshold = 1024 * 1024 * 1, // 1 MB
+        maxFileSize = 1024 * 1024 * 10, // 10 MB
+        maxRequestSize = 1024 * 1024 * 15, // 15 MB
+        location = "C:\\Users\\elena\\OneDrive\\Documente\\GitHub\\ulbs10\\ULBS10\\cv"
 )
 public class UserServlet extends HttpServlet {
 
@@ -81,6 +81,8 @@ public class UserServlet extends HttpServlet {
             if ("logout".equals(action)) {
                 processing.processLogout();
             }
+
+            if ("cv".equals(action)) {
                 HttpSession session = request.getSession();
                 Users u = (Users) session.getAttribute("user");
                 Part o = request.getPart("cv");
