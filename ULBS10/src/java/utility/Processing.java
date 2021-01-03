@@ -18,11 +18,8 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
-import javax.mail.MessagingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 
@@ -111,6 +108,7 @@ public class Processing {
      * exista se trimite catre jsps un mesaj sugestiv Se verifica daca campurile
      * sunt goale, iar daca sunt se trimite catre jspx un mesaj sugestiv
      *
+     * @param type
      * @return
      * @throws ServletException
      * @throws IOException
