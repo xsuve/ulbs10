@@ -5,6 +5,7 @@
  */
 package services;
 
+import entity.Aplicanti;
 import entity.Posturi;
 import entity.Users;
 import java.util.List;
@@ -115,5 +116,13 @@ public class UserService {
             throw new EJBException(ex);
         }
     }
-
+    @Transactional
+    public List<Aplicanti> getAplicantsPost() {
+        try {
+            List<Aplicanti> aplicanti = (List<Aplicanti>) em.createNamedQuery("Aplicanti.findByIdPost").getResultList();
+            return aplicanti;
+        } catch (Exception ex) {
+            throw new EJBException(ex);
+        }
+    }
 }

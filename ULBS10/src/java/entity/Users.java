@@ -6,16 +6,19 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -33,6 +36,11 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Users.findByLastname", query = "SELECT u FROM Users u WHERE u.lastname = :lastname")
     , @NamedQuery(name = "Users.findByStatut", query = "SELECT u FROM Users u WHERE u.statut = :statut")})
 public class Users implements Serializable {
+
+    @OneToMany(mappedBy = "idUser")
+    private Collection<Aplicanti> aplicantiCollection;
+    @OneToMany(mappedBy = "deschisDe")
+    private Collection<Posturi> posturiCollection;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -149,6 +157,24 @@ public class Users implements Serializable {
     @Override
     public String toString() {
         return "entity.Users[ id=" + id + " ]";
+    }
+
+    @XmlTransient
+    public Collection<Aplicanti> getAplicantiCollection() {
+        return aplicantiCollection;
+    }
+
+    public void setAplicantiCollection(Collection<Aplicanti> aplicantiCollection) {
+        this.aplicantiCollection = aplicantiCollection;
+    }
+
+    @XmlTransient
+    public Collection<Posturi> getPosturiCollection() {
+        return posturiCollection;
+    }
+
+    public void setPosturiCollection(Collection<Posturi> posturiCollection) {
+        this.posturiCollection = posturiCollection;
     }
     
 }

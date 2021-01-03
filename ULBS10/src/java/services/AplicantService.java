@@ -6,7 +6,8 @@
 package services;
 
 import entity.Aplicanti;
-import java.io.Serializable;
+import entity.Posturi;
+import entity.Users;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
@@ -30,17 +31,17 @@ public class AplicantService {
      * Creeaza un aplicant cu parametrii primiti si il adauga in baza de date
      *
      * @param i
-     * @param i0
-     * @param i1
+     * @param u
+     * @param p
      * @param date1
      */
     @Transactional
-    public void addAplicant(int i, int i0, int i1, Date date1) {
+    public void addAplicant(int i, Users u, Posturi p, Date date1) {
         //add in database
         logger.info("createPost");
 
         try {
-            Aplicanti aplicant = new Aplicanti(i, i0, i1, date1);
+            Aplicanti aplicant = new Aplicanti(i, u, p, date1);
             em.persist(aplicant);
         } catch (Exception ex) {
             throw new EJBException(ex);
@@ -79,14 +80,5 @@ public class AplicantService {
         }
     }
 
-    @Transactional
-    public List<Aplicanti> getAplicantsPost(int id) {
-        try {
-            List<Aplicanti> aplicanti = (List<Aplicanti>) em.createNamedQuery("Aplicanti.findByIdPost").getResultList();
-            return aplicanti;
-        } catch (Exception ex) {
-            throw new EJBException(ex);
-        }
-    }
 
 }

@@ -158,5 +158,4 @@ public class Posturi implements Serializable {
     public String toString() {
         return "entity.Posturi[ id=" + id + " ]";
     }
-
 }

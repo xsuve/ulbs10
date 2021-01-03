@@ -22,6 +22,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import services.AplicantService;
 import utility.Processing;
 
@@ -61,8 +62,10 @@ public class AplicantServlet extends HttpServlet {
             Serializable s = request.getParameter("cv");
 
             if ("aplica".equals(action)) {
-                int id = Integer.parseInt(request.getParameter("id"));
-                aplicanti = service.getAplicantsPost(id);
+                HttpSession sesiune = request.getSession();
+                int id = (int) sesiune.getAttribute("id");
+                
+                
                 request.setAttribute("aplicanti", aplicanti);
                 
             }

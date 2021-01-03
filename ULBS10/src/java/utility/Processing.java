@@ -5,6 +5,7 @@
  */
 package utility;
 
+import entity.Aplicanti;
 import entity.Posturi;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -62,11 +63,12 @@ public class Processing {
      * exista, daca nu se trimit catre jspx mesaje sugestive
      *
      * @param allPosts
+     * @param allAplicants
      * @throws ServletException
      * @throws IOException
      * @throws InvalidKeySpecException
      */
-    public void processLogin(List<Posturi> allPosts) throws ServletException, IOException, InvalidKeySpecException {
+    public void processLogin(List<Posturi> allPosts, List<Aplicanti> allAplicants) throws ServletException, IOException, InvalidKeySpecException {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
@@ -95,6 +97,7 @@ public class Processing {
             HttpSession sesiune = request.getSession();
             sesiune.setAttribute("posts", allPosts);
             sesiune.setAttribute("users", users);
+            sesiune.setAttribute("aplicants", allAplicants);
             response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx");
             //dispatcher = request.getServletContext().getRequestDispatcher("/dashboard.jspx");
             //dispatcher.forward(request, response);

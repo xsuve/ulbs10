@@ -11,6 +11,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -34,16 +36,19 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Aplicanti.findByDataAplicarii", query = "SELECT a FROM Aplicanti a WHERE a.dataAplicarii = :dataAplicarii")})
 public class Aplicanti implements Serializable {
 
+    @JoinColumn(name = "ID_POST", referencedColumnName = "ID")
+    @ManyToOne
+    private Posturi idPost;
+    @JoinColumn(name = "ID_USER", referencedColumnName = "ID")
+    @ManyToOne
+    private Users idUser;
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
     @Column(name = "ID")
     private Integer id;
-    @Column(name = "ID_USER")
-    private Integer idUser;
-    @Column(name = "ID_POST")
-    private Integer idPost;
     @Column(name = "DATA_APLICARII")
     @Temporal(TemporalType.DATE)
     private Date dataAplicarii;
@@ -54,10 +59,10 @@ public class Aplicanti implements Serializable {
     public Aplicanti(Integer id) {
         this.id = id;
     }
-    public Aplicanti(int i, int i0, int i1, Date date1) {
+    public Aplicanti(int i, Users u, Posturi p, Date date1) {
         id=i;
-        idUser=i0;
-        idPost=i1;
+        idUser=u;
+        idPost=p;
         dataAplicarii=date1;
     }
 
@@ -69,19 +74,19 @@ public class Aplicanti implements Serializable {
         this.id = id;
     }
 
-    public Integer getIdUser() {
+    public Users getIdUser() {
         return idUser;
     }
 
-    public void setIdUser(Integer idUser) {
+    public void setIdUser(Users idUser) {
         this.idUser = idUser;
     }
 
-    public Integer getIdPost() {
+    public Posturi getIdPost() {
         return idPost;
     }
 
-    public void setIdPost(Integer idPost) {
+    public void setIdPost(Posturi idPost) {
         this.idPost = idPost;
     }
 
@@ -116,6 +121,5 @@ public class Aplicanti implements Serializable {
     @Override
     public String toString() {
         return "controller.Aplicanti[ id=" + id + " ]";
-    }
-    
+    }    
 }
