@@ -117,9 +117,9 @@ public class UserService {
         }
     }
     @Transactional
-    public List<Aplicanti> getAplicantsPost() {
+    public List<Aplicanti> getAllAplicants() {
         try {
-            List<Aplicanti> aplicanti = (List<Aplicanti>) em.createNamedQuery("Aplicanti.findByIdPost").getResultList();
+            List<Aplicanti> aplicanti = (List<Aplicanti>) em.createNamedQuery("Aplicanti.findAll").getResultList();
             return aplicanti;
         } catch (Exception ex) {
             throw new EJBException(ex);

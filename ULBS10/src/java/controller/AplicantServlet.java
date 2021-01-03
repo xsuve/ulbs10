@@ -30,7 +30,7 @@ import utility.Processing;
  *
  * @author Razvan
  */
-@WebServlet(name = "AplicantServlet", urlPatterns = {"/AplicantServlet"})
+@WebServlet(name = "AplicantServlet", urlPatterns = {"/aplicant"})
 public class AplicantServlet extends HttpServlet {
 
     @Inject
