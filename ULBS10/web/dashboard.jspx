@@ -154,6 +154,38 @@
                                 </div>
                             </div>
                         </section>
+                                        
+                        <!-- Profil -->
+                        <section data-tab="profil" class="content-section">
+                            <div class="row pb-lg-5">
+                                <div class="col-lg-10">
+                                    <h2 class="content-title mb-lg-5">${user.getFirstname()} ${user.getLastname()}</h2>
+                                </div>
+                                <div class="col-lg-2">
+                                    <div style="text-align: right;">
+                                        <a class="edit-profil-link" href="#edit-profil">
+                                           <button class="btn btn-primary"><span class="material-icons">edit</span> Editeaza profil</button>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <form method="POST" enctype="multipart/form-data" action="./login/user?action=pdf">
+                                        <div class="mb-lg-3">
+                                            <label class="form-label d-block mb-lg-3">Incarca CV</label>
+                                            <div class="upload-cv mb-lg-3">
+                                                <div class="text-center"><span class="material-icons vm">note_add</span></div>
+                                                <input type="file" name="cv" accept=".pdf" />
+                                            </div>
+                                        </div>
+                                        
+                                        <button type="submit" class="btn btn-primary">Incarca CV</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </section>
 
                     </div>
                 </div>

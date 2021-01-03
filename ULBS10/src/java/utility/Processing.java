@@ -100,7 +100,7 @@ public class Processing {
             HttpSession sesiune = request.getSession();
             sesiune.setAttribute("posts", allPosts);
             sesiune.setAttribute("users", users);
-            response.sendRedirect(request.getServletContext() + "./../../newjsp.jspx");
+            response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx");
             //dispatcher = request.getServletContext().getRequestDispatcher("/dashboard.jspx");
             //dispatcher.forward(request, response);
         }
