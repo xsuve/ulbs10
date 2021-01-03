@@ -36,7 +36,7 @@ import utility.Processing;
         fileSizeThreshold = 1024 * 1024 * 1, // 1 MB
         maxFileSize = 1024 * 1024 * 10, // 10 MB
         maxRequestSize = 1024 * 1024 * 15, // 15 MB
-        location = "C:\\Users\\elena\\OneDrive\\Documente\\GitHub\\ulbs10\\ULBS10\\cv"
+        location = "C:\\"
 )
 public class UserServlet extends HttpServlet {
 
@@ -68,7 +68,7 @@ public class UserServlet extends HttpServlet {
             processing = new Processing(request, response, users);
 
             if ("signup".equals(action)) {
-                if (processing.processSignup()) {
+                if (processing.processSignup("signup")) {
                     service.addUser(processing.getUserData());
                 }
             }
@@ -122,6 +122,14 @@ public class UserServlet extends HttpServlet {
                     response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx#utilizatori");
                 } else {
                     response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx#utilizatori");
+                }
+            }
+            if ("newuser".equals(action)) {
+                if (processing.processSignup(action)) {
+                    service.addUser(processing.getUserData());
+                    HttpSession session = request.getSession();
+                    List<Users> u = (List<Users>) service.getAllUsers();
+                    session.setAttribute("users", u);
                 }
             }
         }
