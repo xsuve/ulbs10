@@ -95,21 +95,34 @@ public class UserServlet extends HttpServlet {
                 String firstname = request.getParameter("firstName");
                 String lastname = request.getParameter("lastName");
                 String statut = request.getParameter("statut");
-                
+
                 service.editUser(id, email, firstname, lastname, statut);
                 HttpSession sesiune = request.getSession();
                 Users user = (Users) sesiune.getAttribute("user");
-                if(user.getId().equals(id)){
+                if (user.getId().equals(id)) {
                     user.setEmail(email);
                     user.setFirstname(firstname);
                     user.setLastname(lastname);
                     user.setStatut(statut);
-                    sesiune.setAttribute("user", user);                    
+                    sesiune.setAttribute("user", user);
                 }
                 users = service.getAllUsers();
                 sesiune.setAttribute("users", users);
                 response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx#utilizatori");
+            }
 
+            if ("deleteuser".equals(action)) {
+                HttpSession sesiune = request.getSession();
+                Users user = (Users) sesiune.getAttribute("user");
+                int id = Integer.parseInt(request.getParameter("id"));
+                if (!user.getId().equals(id)) {
+                    service.removeUser(id);
+                    users = service.getAllUsers();
+                    sesiune.setAttribute("users", users);
+                    response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx#utilizatori");
+                } else {
+                    response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx#utilizatori");
+                }
             }
         }
     }
