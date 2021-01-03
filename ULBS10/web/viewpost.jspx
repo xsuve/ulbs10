@@ -50,7 +50,7 @@
                                             </div>
                                         </div>
                                         <div class="col-lg-4">
-                                            <c:if test="${user.getStatut() != 'administrato'}">
+                                            <c:if test="${user.getStatut() != 'administrator'}">
                                                 <div style="text-align: right;">
                                                     <a href="#">
                                                        <button class="btn btn-success"><span class="material-icons">check_circle</span> Aplica pentru acest post</button>
@@ -63,7 +63,11 @@
                                     <div class="divider mt-lg-5"></div>
                                     
                                     <h2 class="content-title pt-lg-5 mb-lg-5">Aplicanti</h2>
-                                    <div class="row"></div>
+                                    <c:forEach items="${aplicants}" var="a" varStatus="loop">
+                                        <c:if test="${a.get(loop.index).getIdPost().getId() == p.getId()}">
+                                            ${a.get(loop.index).getIdUser().getFirstname()}
+                                        </c:if>
+                                    </c:forEach>
                                 </section>
                                 
                             </c:if>
