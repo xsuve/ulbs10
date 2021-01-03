@@ -22,11 +22,48 @@
                 <div class="col-lg-10">
                     <div class="content p-lg-5">
 
-                        <c:forEach items="${posts}" var="post">
-                            <c:if test="${post.getId() == param.id}">
+                        <c:forEach items="${posts}" var="p">
+                            <c:if test="${p.getId() == param.id}">
                                 
                                 <section class="content-section active">
-                                    <h2 class="content-title mb-lg-5">${post.getDenumire()}</h2>
+                                    <div class="row">
+                                        <div class="col-lg-8">
+                                            <h2 class="content-title mb-lg-5">${p.getDenumire()}</h2>
+                                            
+                                            <div class="mb-lg-5">
+                                                <h6 class="content-subtitle">Cerinte minime:</h6>
+                                                <p class="content-text">${p.getCerinteMinime()}</p>
+                                            </div>
+
+                                            <div class="mb-lg-5">
+                                                <h6 class="content-subtitle">Cerinte optionale:</h6>
+                                                <p class="content-text">${p.getCerinteOptionale()}</p>
+                                            </div>
+                                            
+                                            <div>
+                                                <c:forEach items="${users}" var="u">
+                                                    <c:if test="${p.getDeschisDe().getId() == u.getId()}">
+                                                        <h6 class="content-subtitle">Deschis de:</h6>
+                                                        <p class="content-text">${u.getFirstname()} ${u.getLastname()}</p>
+                                                    </c:if>
+                                                </c:forEach>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <c:if test="${user.getStatut() != 'administrato'}">
+                                                <div style="text-align: right;">
+                                                    <a href="#">
+                                                       <button class="btn btn-success"><span class="material-icons">check_circle</span> Aplica pentru acest post</button>
+                                                    </a>
+                                                </div>
+                                            </c:if>
+                                        </div>
+                                    </div>
+                                            
+                                    <div class="divider mt-lg-5"></div>
+                                    
+                                    <h2 class="content-title pt-lg-5 mb-lg-5">Aplicanti</h2>
+                                    <div class="row"></div>
                                 </section>
                                 
                             </c:if>
