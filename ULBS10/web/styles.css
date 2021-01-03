@@ -37,14 +37,17 @@ a {
     color: #fff;
     font-size: 14px;
 }
-.form-control {
+.form-control, .form-select {
     background-color: transparent;
     color: #fff;
     border: 1px solid #3c3f43;
     font-size: 14px;
     padding: 0.575rem 0.75rem;
 }
-.form-control:hover, .form-control:focus {
+.form-control:hover,
+.form-select:hover,
+.form-control:focus,
+.form-select:focus {
     background-color: transparent;
     color: #fff;
 }
