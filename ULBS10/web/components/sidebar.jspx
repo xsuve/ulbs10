@@ -27,10 +27,13 @@
                 <div class="px-lg-4 py-lg-3 active"><span class="material-icons">home</span> Acasa</div>
             </a>
             <a href="./dashboard.jspx#utilizatori" data-location="utilizatori">
-                <div class="px-lg-4 py-lg-3"><span class="material-icons">person</span> Utilizatori</div>
+                <div class="px-lg-4 py-lg-3"><span class="material-icons">group</span> Utilizatori</div>
             </a>
             <a href="./dashboard.jspx#posturi" data-location="posturi">
                 <div class="px-lg-4 py-lg-3"><span class="material-icons">work</span> Posturi</div>
+            </a>
+            <a href="./dashboard.jspx#profil" data-location="profil">
+                <div class="px-lg-4 py-lg-3"><span class="material-icons">account_circle</span> Profil</div>
             </a>
         </div>
     </div>
