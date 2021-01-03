@@ -33,10 +33,10 @@ import utility.Processing;
  */
 @WebServlet(name = "SignupServlet", urlPatterns = {"/login/user"})
 @MultipartConfig(
-        fileSizeThreshold   = 1024 * 1024 * 1,  // 1 MB
-        maxFileSize         = 1024 * 1024 * 10, // 10 MB
-        maxRequestSize      = 1024 * 1024 * 15, // 15 MB
-        location            = "C:\\Users\\elena\\OneDrive\\Documente\\GitHub\\ulbs10\\ULBS10\\cv"
+        fileSizeThreshold = 1024 * 1024 * 1, // 1 MB
+        maxFileSize = 1024 * 1024 * 10, // 10 MB
+        maxRequestSize = 1024 * 1024 * 15, // 15 MB
+        location = "C:\\Users\\elena\\OneDrive\\Documente\\GitHub\\ulbs10\\ULBS10\\cv"
 )
 public class UserServlet extends HttpServlet {
 
@@ -72,24 +72,47 @@ public class UserServlet extends HttpServlet {
                     service.addUser(processing.getUserData());
                 }
             }
-            
+
             if ("login".equals(action)) {
                 processing.processLogin(service.getAllPosts());
-                
+
             }
 
             if ("logout".equals(action)) {
                 processing.processLogout();
             }
-            if("pdf".equals(action)){                           
-                
+            if ("pdf".equals(action)) {
+
                 HttpSession session = request.getSession();
                 Users u = (Users) session.getAttribute("user");
                 Part o = request.getPart("cv");
                 //String name = o.getSubmittedFileName(); ia numele fisierului incarcat
                 o.write(u.getId().toString() + "_" + u.getFirstname() + ".pdf");
             }
-        }    }
+            if ("edituser".equals(action)) {
+                int id = Integer.parseInt(request.getParameter("id"));
+                String email = request.getParameter("email");
+                String firstname = request.getParameter("firstName");
+                String lastname = request.getParameter("lastName");
+                String statut = request.getParameter("statut");
+                
+                service.editUser(id, email, firstname, lastname, statut);
+                HttpSession sesiune = request.getSession();
+                Users user = (Users) sesiune.getAttribute("user");
+                if(user.getId().equals(id)){
+                    user.setEmail(email);
+                    user.setFirstname(firstname);
+                    user.setLastname(lastname);
+                    user.setStatut(statut);
+                    sesiune.setAttribute("user", user);                    
+                }
+                users = service.getAllUsers();
+                sesiune.setAttribute("users", users);
+                response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx#utilizatori");
+
+            }
+        }
+    }
 
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -101,7 +124,7 @@ public class UserServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {        
+            throws ServletException, IOException {
         try {
             processRequest(request, response);
         } catch (SQLException | InvalidKeySpecException ex) {

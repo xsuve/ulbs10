@@ -88,5 +88,13 @@ public class UserService {
             throw new EJBException(ex);
         }
     }
+   @Transactional
+    public void editUser(int id, String email, String firstname, String lastname, String statut) {      
+        Users user=em.find(Users.class,id);
+        user.setEmail(email);
+        user.setFirstname(firstname);
+        user.setLastname(lastname);
+        user.setStatut(statut);
+    }
 
 }
