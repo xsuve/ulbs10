@@ -6,7 +6,6 @@
 package controller;
 
 import entity.Aplicanti;
-import entity.Users;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
@@ -23,7 +22,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import services.AplicantService;
 import utility.Processing;
 
@@ -62,20 +60,11 @@ public class AplicantServlet extends HttpServlet {
             Date date1 = new SimpleDateFormat("yyyy-mm-dd").parse(request.getParameter("dataAplicarii"));
             Serializable s = request.getParameter("cv");
 
-            if ("newpost".equals(action)) {
-                if (aplicanti.isEmpty()) {
-                    lastID = 0;
-                } else {
-                    lastID = aplicanti.get(aplicanti.size() - 1).getIdUser();
-                }
-
-                HttpSession sesiune = request.getSession();
-                Users u = (Users) sesiune.getAttribute("user");
-                aplicant = new Aplicanti(++lastID,1,1, date1);
-                service.addAplicant(aplicant);
-
-                dispatcher = request.getServletContext().getRequestDispatcher("/newpost.jspx");//todo
-                dispatcher.forward(request, response);
+            if ("aplica".equals(action)) {
+                int id = Integer.parseInt(request.getParameter("id"));
+                aplicanti = service.getAplicantsPost(id);
+                request.setAttribute("aplicanti", aplicanti);
+                
             }
         } catch (ParseException ex) {
             Logger.getLogger(AplicantServlet.class.getName()).log(Level.SEVERE, null, ex);
