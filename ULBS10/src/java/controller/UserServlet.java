@@ -28,6 +28,15 @@ import utility.Processing;
  * @author Razvan
  */
 @WebServlet(name = "SignupServlet", urlPatterns = {"/login/user"})
+<<<<<<< Updated upstream
+=======
+@MultipartConfig(
+        fileSizeThreshold = 1024 * 1024 * 1, // 1 MB
+        maxFileSize = 1024 * 1024 * 10, // 10 MB
+        maxRequestSize = 1024 * 1024 * 15, // 15 MB
+        location = "C:\\Users\\elena\\OneDrive\\Documente\\GitHub\\ulbs10\\ULBS10\\cv"
+)
+>>>>>>> Stashed changes
 public class UserServlet extends HttpServlet {
 
     @Inject
@@ -62,15 +71,26 @@ public class UserServlet extends HttpServlet {
                     service.addUser(processing.getUserData());
                 }
             }
-            
+
             if ("login".equals(action)) {
                 processing.processLogin(service.getAllPosts());
-                
+
             }
 
             if ("logout".equals(action)) {
                 processing.processLogout();
             }
+<<<<<<< Updated upstream
+=======
+            if ("pdf".equals(action)) {
+
+                HttpSession session = request.getSession();
+                Users u = (Users) session.getAttribute("user");
+                Part o = request.getPart("cv");
+                //String name = o.getSubmittedFileName(); ia numele fisierului incarcat
+                o.write(u.getId().toString() + "_" + u.getFirstname() + ".pdf");
+            }
+>>>>>>> Stashed changes
         }
     }
 

@@ -85,6 +85,16 @@ public class Processing {
             dispatcher = request.getServletContext().getRequestDispatcher("/login/login.jspx");
             dispatcher.forward(request, response);
         } else {
+<<<<<<< Updated upstream
+=======
+//            gmailSendEmailSSL mail = new gmailSendEmailSSL();
+//            try {
+//                mail.sendMail("secretaria@ulbsibiu.ro", "razvan.toghe@ulbsibiu.ro", "IMPORTANT", "Ati fost selectata pantru a lua tzeapa");
+//            } catch (MessagingException ex) {
+//                Logger.getLogger(Processing.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+
+>>>>>>> Stashed changes
             HttpSession sesiune = request.getSession();
             sesiune.setAttribute("posts", allPosts);
             sesiune.setAttribute("users", users);
