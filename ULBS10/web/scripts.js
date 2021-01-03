@@ -3,12 +3,15 @@ $(document).ready(function() {
         $(".content-section").removeClass("active");
         $(".content-section[data-tab='" + section + "']").addClass("active");
         
-        if(section != "adauga-post" && section != "edit-post") {
-            $(".sidebar-links a div").removeClass("active");
-            $(".sidebar-links a[data-location='" + section + "'] div").addClass("active");
-        } else {
+        if(section == "adauga-post" || section == "edit-post") {
             $(".sidebar-links a div").removeClass("active");
             $(".sidebar-links a[data-location='posturi'] div").addClass("active");
+        } else if(section == "adauga-user" || section == "edit-user") {
+            $(".sidebar-links a div").removeClass("active");
+            $(".sidebar-links a[data-location='utilizatori'] div").addClass("active");
+        } else {
+            $(".sidebar-links a div").removeClass("active");
+            $(".sidebar-links a[data-location='" + section + "'] div").addClass("active");
         }
     }
 
@@ -27,12 +30,16 @@ $(document).ready(function() {
         toggleSection(tab);
     });
 
-    $(".add-link").on("click", function() {
+    //
+    $(".add-post-link").on("click", function() {
         toggleSection("adauga-post");
+    });
+    $(".add-user-link").on("click", function() {
+        toggleSection("adauga-user");
     });
 
     //
-    $(".edit-link").on("click", function() {
+    $(".edit-post-link").on("click", function() {
         var postID = $(this).data("post-id"),
             postDenumire = $(this).data("post-denumire"),
             postCerinteMinime = $(this).data("post-cerinte-minime"),
@@ -49,5 +56,21 @@ $(document).ready(function() {
         $(".edit-post-form-data-limita").val(postDataLimita);
 
         toggleSection("edit-post");
+    });
+    
+    $(".edit-user-link").on("click", function() {
+        var userID = $(this).data("user-id"),
+            userFirstName = $(this).data("user-first-name"),
+            userLastName = $(this).data("user-last-name"),
+            userEmail = $(this).data("user-email"),
+            userStatut = $(this).data("user-statut");
+
+        $(".edit-user-form").prop("action", "./post?action=editpost&id=" + userID);
+        $(".edit-user-form-first-name").val(userFirstName);
+        $(".edit-user-form-last-name").val(userLastName);
+        $(".edit-user-form-email").val(userEmail);
+        $(".edit-user-form-statut").val(userStatut);
+
+        toggleSection("edit-user");
     });
 });
