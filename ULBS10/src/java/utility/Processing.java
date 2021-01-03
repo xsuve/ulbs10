@@ -18,8 +18,11 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+import javax.mail.MessagingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 
@@ -42,8 +45,10 @@ public class Processing {
     private static final int ITERATIONS = 10000;
     private static final int KEY_LENGTH = 256;
 
+
     /**
      * Constructor cu parametrii
+     *
      * @param request
      * @param response
      * @param users
@@ -63,7 +68,7 @@ public class Processing {
      * @throws IOException
      * @throws InvalidKeySpecException
      */
-    public void processLogin(List<Posturi> allPosts) throws ServletException, IOException, InvalidKeySpecException {
+    public void processLogin(List<Posturi> allPosts) throws ServletException, IOException, InvalidKeySpecException{
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
@@ -86,10 +91,6 @@ public class Processing {
             dispatcher.forward(request, response);
         } else {
 <<<<<<< Updated upstream
-=======
-//            gmailSendEmailSSL mail = new gmailSendEmailSSL();
-//            try {
-//                mail.sendMail("secretaria@ulbsibiu.ro", "razvan.toghe@ulbsibiu.ro", "IMPORTANT", "Ati fost selectata pantru a lua tzeapa");
 //            } catch (MessagingException ex) {
 //                Logger.getLogger(Processing.class.getName()).log(Level.SEVERE, null, ex);
 //            }
@@ -106,10 +107,12 @@ public class Processing {
     }
 
     /**
-     * Procesul de inregistrare a unui utilizator din UserServlet s-a mutat aici pentru curatarea codului.
-     * Se verifica daca adresa de email exista in baza de date si se continua cu inregistrarea daca nu exista, daca aceasta exista se trimite
-     * catre jsps un mesaj sugestiv
-     * Se verifica daca campurile sunt goale, iar daca sunt se trimite catre jspx un mesaj sugestiv
+     * Procesul de inregistrare a unui utilizator din UserServlet s-a mutat aici
+     * pentru curatarea codului. Se verifica daca adresa de email exista in baza
+     * de date si se continua cu inregistrarea daca nu exista, daca aceasta
+     * exista se trimite catre jsps un mesaj sugestiv Se verifica daca campurile
+     * sunt goale, iar daca sunt se trimite catre jspx un mesaj sugestiv
+     *
      * @return
      * @throws ServletException
      * @throws IOException
@@ -203,20 +206,23 @@ public class Processing {
     }
 
     /**
-     * Converteste sirul de biti criptat al parolei intr-un string pentru a putea fi stocat in baza de date
+     * Converteste sirul de biti criptat al parolei intr-un string pentru a
+     * putea fi stocat in baza de date
+     *
      * @param password
      * @param salt
      * @return Parola care se v-a salva in baza de date
      * @throws InvalidKeySpecException
      */
     public static String generateSecurePassword(String password, String salt) throws InvalidKeySpecException {
-        byte[] securePassword = hash(password.toCharArray(), salt.getBytes());        
+        byte[] securePassword = hash(password.toCharArray(), salt.getBytes());
         String returnValue = Base64.getEncoder().encodeToString(securePassword);
         return returnValue;
     }
 
     /**
      * Cripteaza parola din formular si o verifica cu cea din baza de date
+     *
      * @param providedPassword
      * @param securedPassword
      * @param salt
@@ -229,7 +235,7 @@ public class Processing {
         // Generate New secure password with the same salt
         String newSecurePassword = generateSecurePassword(providedPassword, salt);
 
-        // Check if two passwords are equal        
+        // Check if two passwords are equal
         boolean returnValue = newSecurePassword.equalsIgnoreCase(securedPassword);
 
         return returnValue;
@@ -237,6 +243,7 @@ public class Processing {
 
     /**
      * Returneaza utilizatorul care v-a fi adaugat in baza de date
+     *
      * @return user
      */
     public Users getUserData() {

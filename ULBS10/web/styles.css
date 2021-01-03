@@ -37,14 +37,17 @@ a {
     color: #fff;
     font-size: 14px;
 }
-.form-control {
+.form-control, .form-select {
     background-color: transparent;
     color: #fff;
     border: 1px solid #3c3f43;
     font-size: 14px;
     padding: 0.575rem 0.75rem;
 }
-.form-control:hover, .form-control:focus {
+.form-control:hover,
+.form-select:hover,
+.form-control:focus,
+.form-select:focus {
     background-color: transparent;
     color: #fff;
 }
@@ -147,4 +150,34 @@ a {
 }
 .posts .post::hover {
     background-color: #3c3f43;
+}
+
+/* Upload CV */
+.upload-cv {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+}
+.upload-cv div {
+    width: 200px;
+    height: 200px;
+    border: 2px dashed #888;
+}
+.upload-cv div .material-icons {
+    color: #888;
+    font-size: 36px;
+}
+.upload-cv input {
+    cursor: pointer;
+    display: block;
+    font-size: 999px;
+    filter: alpha(opacity=0);
+    min-height: 100%;
+    min-width: 100%;
+    opacity: 0;
+    position: absolute;
+    right: 0px;
+    text-align: right;
+    top: 0px;
+    z-index: 1;
 }

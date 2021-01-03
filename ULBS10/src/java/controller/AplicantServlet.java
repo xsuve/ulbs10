@@ -71,7 +71,7 @@ public class AplicantServlet extends HttpServlet {
 
                 HttpSession sesiune = request.getSession();
                 Users u = (Users) sesiune.getAttribute("user");
-                aplicant = new Aplicanti(++lastID, s, date1, request.getParameter("obs"), u.getId());
+                aplicant = new Aplicanti(++lastID,1,1, date1);
                 service.addAplicant(aplicant);
 
                 dispatcher = request.getServletContext().getRequestDispatcher("/newpost.jspx");//todo

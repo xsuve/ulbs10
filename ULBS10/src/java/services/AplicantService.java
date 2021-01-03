@@ -27,19 +27,18 @@ public class AplicantService {
     
     /**
      * Creeaza un aplicant cu parametrii primiti si il adauga in baza de date
-     * @param id
-     * @param cv
-     * @param data_Aplic
-     * @param obs
-     * @param id_Obs
+     * @param i
+     * @param i0
+     * @param i1
+     * @param date1
      */
     @Transactional
-    public void addAplicant(int id, Serializable cv, Date data_Aplic, String obs, int id_Obs){ 
+    public void addAplicant(int i, int i0, int i1, Date date1){ 
         //add in database
         logger.info("createPost");
 
         try {
-            Aplicanti  aplicant = new Aplicanti(id, cv, data_Aplic, obs, id_Obs);
+            Aplicanti  aplicant = new Aplicanti(i,i0, i1, date1);
             em.persist(aplicant);
         } catch (Exception ex) {
             throw new EJBException(ex);

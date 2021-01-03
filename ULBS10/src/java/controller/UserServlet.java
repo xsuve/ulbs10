@@ -14,12 +14,16 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Inject;
+import javax.mail.MessagingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 import services.UserService;
 import utility.Processing;
 
@@ -28,15 +32,12 @@ import utility.Processing;
  * @author Razvan
  */
 @WebServlet(name = "SignupServlet", urlPatterns = {"/login/user"})
-<<<<<<< Updated upstream
-=======
 @MultipartConfig(
-        fileSizeThreshold = 1024 * 1024 * 1, // 1 MB
-        maxFileSize = 1024 * 1024 * 10, // 10 MB
-        maxRequestSize = 1024 * 1024 * 15, // 15 MB
-        location = "C:\\Users\\elena\\OneDrive\\Documente\\GitHub\\ulbs10\\ULBS10\\cv"
+        fileSizeThreshold   = 1024 * 1024 * 1,  // 1 MB
+        maxFileSize         = 1024 * 1024 * 10, // 10 MB
+        maxRequestSize      = 1024 * 1024 * 15, // 15 MB
+        location            = "C:\\Users\\elena\\OneDrive\\Documente\\GitHub\\ulbs10\\ULBS10\\cv"
 )
->>>>>>> Stashed changes
 public class UserServlet extends HttpServlet {
 
     @Inject
@@ -80,17 +81,12 @@ public class UserServlet extends HttpServlet {
             if ("logout".equals(action)) {
                 processing.processLogout();
             }
-<<<<<<< Updated upstream
-=======
-            if ("pdf".equals(action)) {
-
                 HttpSession session = request.getSession();
                 Users u = (Users) session.getAttribute("user");
                 Part o = request.getPart("cv");
                 //String name = o.getSubmittedFileName(); ia numele fisierului incarcat
                 o.write(u.getId().toString() + "_" + u.getFirstname() + ".pdf");
             }
->>>>>>> Stashed changes
         }
     }
 
