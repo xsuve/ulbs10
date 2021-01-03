@@ -82,7 +82,6 @@ public class UserServlet extends HttpServlet {
                 processing.processLogout();
             }
             if ("pdf".equals(action)) {
-
                 HttpSession session = request.getSession();
                 Users u = (Users) session.getAttribute("user");
                 Part o = request.getPart("cv");
