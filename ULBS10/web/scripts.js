@@ -69,7 +69,7 @@ $(document).ready(function() {
         $(".edit-user-form-first-name").val(userFirstName);
         $(".edit-user-form-last-name").val(userLastName);
         $(".edit-user-form-email").val(userEmail);
-        $(".edit-user-form-statut").val(userStatut);
+        $(".edit-user-form-statut option[value='" + userStatut + "']").attr("selected", "selected");
 
         toggleSection("edit-user");
     });
