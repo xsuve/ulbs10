@@ -93,7 +93,8 @@ public class Posturi implements Serializable {
     }
 
     public String getCerinteMinime() {
-        return cerinteMinime;
+        String cerinteMinimeFinal = cerinteMinime.replaceAll("\n","<br />");
+        return cerinteMinimeFinal;
     }
 
     public void setCerinteMinime(String cerinteMinime) {
@@ -101,7 +102,8 @@ public class Posturi implements Serializable {
     }
 
     public String getCerinteOptionale() {
-        return cerinteOptionale;
+        String cerinteOptionaleFinal = cerinteOptionale.replaceAll("\n","<br />");
+        return cerinteOptionaleFinal;
     }
 
     public void setCerinteOptionale(String cerinteOptionale) {

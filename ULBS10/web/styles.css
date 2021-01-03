@@ -15,6 +15,12 @@ a {
     top: 50%;
     transform: translateY(-50%);
 }
+.divider {
+    display: block;
+    height: 1px;
+    background-color: #3c3f43;
+    width: 100%;
+}
 .btn {
     font-size: 14px;
     padding: 0.575rem 0.75rem;
@@ -114,8 +120,15 @@ a {
 }
 
 /* Content */
-.content .content-title {
+.content .content-title,
+.content .content-subtitle {
     color: #fff;
+}
+.content .content-text {
+    color: #888;
+}
+.content .content-text {
+    font-size: 14px;
 }
 .content .content-section {
     display: none;

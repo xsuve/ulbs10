@@ -34,11 +34,13 @@
                                     <h2 class="content-title mb-lg-5">Utilizatori</h2>
                                 </div>
                                 <div class="col-lg-2">
-                                    <div style="text-align: right;">
-                                        <a class="add-user-link" href="#adauga-utilizator">
-                                           <button class="btn btn-primary"><span class="material-icons">add</span> Adauga utilizator</button>
-                                        </a>
-                                    </div>
+                                    <c:if test="${user.getStatut() == 'administrator'}">
+                                        <div style="text-align: right;">
+                                            <a class="add-user-link" href="#adauga-utilizator">
+                                               <button class="btn btn-primary"><span class="material-icons">add</span> Adauga utilizator</button>
+                                            </a>
+                                        </div>
+                                    </c:if>
                                 </div>
                             </div>
                             
@@ -58,28 +60,30 @@
                                     </div>
                                 </div>
 
-                                <c:forEach items="${users}" var="user">
+                                <c:forEach items="${users}" var="u">
                                     <div class="row post pt-lg-3 pb-lg-3">
                                         <div class="col-lg-1">
-                                            <div class="post-id">${user.getId()}</div>
+                                            <div class="post-id">${u.getId()}</div>
                                         </div>
                                         <div class="col-lg-6">
                                             <h6 class="mb-lg-0 mt-lg-0 post-title">
-                                                <a href="viewuser.jspx?id=${user.getId()}">${user.getFirstname()} ${user.getLastname()}</a>
+                                                <a href="viewuser.jspx?id=${u.getId()}">${u.getFirstname()} ${u.getLastname()}</a>
                                             </h6>
                                         </div>
                                         <div class="col-lg-2">
                                             <div class="post-date">
-                                                ${user.getStatut() != null ? user.getStatut() : "-"}
+                                                ${u.getStatut() != null ? u.getStatut() : "-"}
                                             </div>
                                         </div>
                                         <div class="col-lg-3">
                                             <div class="post-actions">
-                                                <a href="viewuser.jspx?id=${user.getId()}">Detalii</a>
-                                                |
-                                                <a href="#edit-user" data-user-id="${user.getId()}" data-user-first-name="${user.getFirstname()}" data-user-last-name="${user.getLastname()}" data-user-email="${user.getEmail()}" data-user-statut="${user.getStatut()}" class="edit-user-link">Editeaza</a>
-                                                |
-                                                <a href="./login/user?action=deleteuser&amp;id=${user.getId()}">Sterge</a>
+                                                <a href="viewuser.jspx?id=${u.getId()}">Detalii</a>
+                                                <c:if test="${user.getStatut() == 'administrator'}">
+                                                    |
+                                                    <a href="#edit-user" data-user-id="${u.getId()}" data-user-first-name="${u.getFirstname()}" data-user-last-name="${u.getLastname()}" data-user-email="${u.getEmail()}" data-user-statut="${u.getStatut()}" class="edit-user-link">Editeaza</a>
+                                                    |
+                                                    <a href="./login/user?action=deleteuser&amp;id=${u.getId()}">Sterge</a>
+                                                </c:if>
                                             </div>
                                         </div>
                                     </div>
@@ -109,7 +113,7 @@
                                             <label class="form-label">Parola</label>
                                             <input type="password" name="password" class="form-control" placeholder="Parola" />
                                         </div>
-                                        <div class="mb-lg-3">
+                                        <div class="mb-lg-4">
                                             <label class="form-label">Statut</label>
                                             <select name="statut" class="form-select">
                                                 <option value="generalDirector">General Director</option>
@@ -145,7 +149,7 @@
                                             <label class="form-label">Email</label>
                                             <input type="email" name="email" class="form-control edit-user-form-email" placeholder="Email" />
                                         </div>
-                                        <div class="mb-lg-3">
+                                        <div class="mb-lg-4">
                                             <label class="form-label">Statut</label>
                                             <select name="statut" class="form-select edit-user-form-statut">
                                                 <option value="generalDirector">General Director</option>
@@ -172,11 +176,13 @@
                                     <h2 class="content-title">Posturi active</h2>
                                 </div>
                                 <div class="col-lg-2">
-                                    <div style="text-align: right;">
-                                        <a class="add-post-link" href="#adauga-post">
-                                           <button class="btn btn-primary"><span class="material-icons">add</span> Adauga post</button>
-                                        </a>
-                                    </div>
+                                    <c:if test="${user.getStatut() == 'administrator'}">
+                                        <div style="text-align: right;">
+                                            <a class="add-post-link" href="#adauga-post">
+                                               <button class="btn btn-primary"><span class="material-icons">add</span> Adauga post</button>
+                                            </a>
+                                        </div>
+                                    </c:if>
                                 </div>
                             </div>
 
@@ -196,30 +202,32 @@
                                     </div>
                                 </div>
 
-                                <c:forEach items="${posts}" var="post">
+                                <c:forEach items="${posts}" var="p">
                                     <div class="row post pt-lg-3 pb-lg-3">
                                         <div class="col-lg-1">
-                                            <div class="post-id">${post.getId()}</div>
+                                            <div class="post-id">${p.getId()}</div>
                                         </div>
                                         <div class="col-lg-6">
                                             <h6 class="mb-lg-0 mt-lg-0 post-title">
-                                                <a href="viewpost.jspx?id=${post.getId()}">${post.getDenumire()}</a>
+                                                <a href="viewpost.jspx?id=${p.getId()}">${p.getDenumire()}</a>
                                             </h6>
                                         </div>
                                         <div class="col-lg-2">
                                             <div class="post-date">
                                                 <fmt:setLocale value="ro_RO" scope="session" />
-                                                <fmt:formatDate value="${post.getDataLimAplic()}" pattern="dd MMMM, yyyy" />
+                                                <fmt:formatDate value="${p.getDataLimAplic()}" pattern="dd MMMM, yyyy" />
                                             </div>
                                         </div>
                                         <div class="col-lg-3">
                                             <div class="post-actions">
-                                                <a href="viewpost.jspx?id=${post.getId()}">Detalii</a>
-                                                |
-                                                <fmt:formatDate value="${post.getDataLimAplic()}" pattern="yyyy-MM-dd" var="dateFormatted" />
-                                                <a href="#edit-post" data-post-id="${post.getId()}" data-post-denumire="${post.getDenumire()}" data-post-cerinte-minime="${post.getCerinteMinime()}" data-post-cerinte-optionale="${post.getCerinteOptionale()}" data-post-data-limita="${dateFormatted}" class="edit-post-link">Editeaza</a>
-                                                |
-                                                <a href="./post?action=deletepost&amp;id=${post.getId()}">Sterge</a>
+                                                <a href="viewpost.jspx?id=${p.getId()}">Detalii</a>
+                                                <c:if test="${user.getStatut() == 'administrator'}">
+                                                    |
+                                                    <fmt:formatDate value="${p.getDataLimAplic()}" pattern="yyyy-MM-dd" var="dateFormatted" />
+                                                    <a href="#edit-post" data-post-id="${p.getId()}" data-post-denumire="${p.getDenumire()}" data-post-cerinte-minime="${p.getCerinteMinime()}" data-post-cerinte-optionale="${p.getCerinteOptionale()}" data-post-data-limita="${dateFormatted}" class="edit-post-link">Editeaza</a>
+                                                    |
+                                                    <a href="./post?action=deletepost&amp;id=${p.getId()}">Sterge</a>
+                                                </c:if>
                                             </div>
                                         </div>
                                     </div>
@@ -277,7 +285,7 @@
                                             <label class="form-label">Cerinte optionale</label>
                                             <textarea name="cerinteOptionale" class="form-control edit-post-form-cerinte-optionale" placeholder="Cerinte optionale" rows="5"><jsp:text /></textarea>
                                         </div>
-                                        <div class="mb-lg-3">
+                                        <div class="mb-lg-4">
                                             <label class="form-label">Data limita</label>
                                             <input type="date" name="dataLimita" class="form-control edit-post-form-data-limita" placeholder="Data limita" />
                                         </div>
@@ -306,9 +314,9 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <form method="POST" enctype="multipart/form-data" action="./login/user?action=pdf">
-                                        <div class="mb-lg-3">
+                                        <div class="mb-lg-4">
                                             <label class="form-label d-block mb-lg-3">Incarca CV</label>
-                                            <div class="upload-cv mb-lg-3">
+                                            <div class="upload-cv">
                                                 <div class="text-center"><span class="material-icons vm">note_add</span></div>
                                                 <input type="file" name="cv" accept=".pdf" />
                                             </div>
