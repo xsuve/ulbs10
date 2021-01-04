@@ -112,8 +112,8 @@ public class PostServlet extends HttpServlet {
             if("getAllPosts".equals(action)){
                 sesiune.setAttribute("posts", service.getAllPosts());
                 //request.setAttribute("posts", service.getAllPosts());
-                //response.sendRedirect(request.getServletContext() + "/newjsp.jspx");
-                dispatcher = request.getServletContext().getRequestDispatcher("/newjsp.jspx");
+                //response.sendRedirect(request.getServletContext() + "/index-mask.jspx");
+                dispatcher = request.getServletContext().getRequestDispatcher("/index-mask.jspx");
                 dispatcher.forward(request, response);
             }
         }
