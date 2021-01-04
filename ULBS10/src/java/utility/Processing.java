@@ -123,7 +123,7 @@ public class Processing {
         String password = request.getParameter("password");
         String firstName = request.getParameter("firstName");
         String lastName = request.getParameter("lastName");
-        String statut = request.getParameter("statut");
+        String statut = "viewer";
         int lastID;
         String securedPassword = generateSecurePassword(password, salt);
         password = securedPassword;
