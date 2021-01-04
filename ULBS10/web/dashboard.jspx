@@ -12,6 +12,7 @@
 
     <jsp:directive.page contentType="text/html" pageEncoding="UTF-8"/>
     <jsp:include page="./components/head.jspx" />
+    <jsp:include page="./components/alert.jspx" />
 
     <jsp:body>
         <div class="container-fluid px-lg-0">
@@ -91,7 +92,9 @@
                                     </c:forEach>
                                 </c:if>
                                 <c:if test="${users.size() == 0}">
-                                    <p class="content-text">Nu exista utilizatori.</p>
+                                    <div class="row post pt-lg-3 pb-lg-3">
+                                        <p class="content-text">Nu exista utilizatori.</p>
+                                    </div>
                                 </c:if>
                             </div>
                         </section>
@@ -242,7 +245,9 @@
                                     </c:forEach>
                                 </c:if>
                                 <c:if test="${posts.size() == 0}">
-                                    <p class="content-text">Nu exista posturi.</p>
+                                    <div class="row post pt-lg-3 pb-lg-3">
+                                        <p class="content-text">Nu exista posturi.</p>
+                                    </div>
                                 </c:if>
                             </div>
                         </section>
