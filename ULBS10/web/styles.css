@@ -57,15 +57,26 @@ a {
     background-color: transparent;
     color: #fff;
 }
-.form h1 {
+.form h1 a {
     font-weight: 800;
     color: #fff;
-    font-size: 72px;
-    line-height: 120px;
+    font-size: 50px;
+    line-height: 50px;
+    letter-spacing: 3px;
 }
 .form .form-text {
     color: #fff;
     font-size: 13px;
+}
+.form .form-side {
+    height: 100%;
+    background-color: #0f131a;
+}
+.form .form-image {
+    height: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url('img/form-image.png');
 }
 
 /* Alerts */
