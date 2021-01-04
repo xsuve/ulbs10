@@ -6,8 +6,15 @@
 package controller;
 
 import entity.Users;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.security.spec.InvalidKeySpecException;
 import java.sql.SQLException;
 import java.util.List;
@@ -34,8 +41,7 @@ import utility.Processing;
 @MultipartConfig(
         fileSizeThreshold = 1024 * 1024 * 1, // 1 MB
         maxFileSize = 1024 * 1024 * 10, // 10 MB
-        maxRequestSize = 1024 * 1024 * 15, // 15 MB
-        location = "C:\\Users\\DxGod\\Documents\\NetBeansProjects"
+        maxRequestSize = 1024 * 1024 * 15 // 15 MB
 )
 public class UserServlet extends HttpServlet {
 
@@ -74,7 +80,6 @@ public class UserServlet extends HttpServlet {
 
             if ("login".equals(action)) {
                 processing.processLogin(service.getAllPosts(), service.getAllAplicants());
-
             }
 
             if ("logout".equals(action)) {
@@ -84,10 +89,37 @@ public class UserServlet extends HttpServlet {
                 HttpSession session = request.getSession();
                 Users u = (Users) session.getAttribute("user");
                 Part o = request.getPart("cv");
-                //String name = o.getSubmittedFileName(); ia numele fisierului incarcat
-                o.write(u.getId().toString() + "_" + u.getFirstname() + ".pdf");
+                //get the InputStream to store the file somewhere
+                InputStream fileInputStream = o.getInputStream();
+                
+                //for example, you can copy the uploaded file to the server
+                //note that you probably don't want to do this in real life!
+                //upload it to a file host like S3 or GCS instead
+                File fileToSave = new File(System.getProperty("user.dir"));
+                System.out.println(System.getProperty("user.dir"));
+                //Files.copy(fileInputStream, fileToSave.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                
+
                 response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx#profil");
             }
+            //maybe
+            if ("download".equals(action)) {
+                int id = Integer.parseInt(request.getParameter("id"));
+                for (Users user : users) {
+                    if (user.getId() == id) {
+                        File f = new File("C://New folder//itext_Test.pdf");
+                        FileInputStream fis = new FileInputStream(f);
+                        DataOutputStream os = new DataOutputStream(response.getOutputStream());
+                        response.setHeader("Content-Length", String.valueOf(f.length()));
+                        byte[] buffer = new byte[1024];
+                        int len = 0;
+                        while ((len = fis.read(buffer)) >= 0) {
+                            os.write(buffer, 0, len);
+                        }
+                    }
+                }
+            }
+
             if ("edituser".equals(action)) {
                 int id = Integer.parseInt(request.getParameter("id"));
                 String email = request.getParameter("email");

@@ -61,7 +61,7 @@
                                         </div>
                                     </div>
 
-                                    <c:if test="${user.getStatut() == 'administrator'}">
+                                    <c:if test="${user.getStatut() != 'viewer'}">
                                         <div class="divider mt-lg-5"></div>
 
                                         <h2 class="content-title pt-lg-5 mb-lg-5">Aplicanti</h2>
