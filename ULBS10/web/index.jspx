@@ -6,8 +6,5 @@
     <jsp:include page="./components/head.jspx" />
 
     <jsp:include page="./post?action=getAllPosts"/>
-    <jsp:body>
-        <a href="./login/login.jspx">Logheaza-te</a>
-    </jsp:body>
 
 </jsp:root>
