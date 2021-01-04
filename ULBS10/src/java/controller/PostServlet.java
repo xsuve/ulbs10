@@ -77,7 +77,7 @@ public class PostServlet extends HttpServlet {
                 String cerinteOptionale = request.getParameter("cerinteOptionale");
                 cerinteOptionale = cerinteOptionale.replaceAll("\n","<br />");
 
-                post = new Posturi(++lastID, request.getParameter("denumire"), cerinteMinime, cerinteOptionale, date1, u);
+                post = new Posturi(++lastID, request.getParameter("denumire"), cerinteMinime, cerinteOptionale, date1, u, true);
                 service.addPost(post);
                 sesiune.setAttribute("posts", service.getAllPosts());
 
@@ -104,13 +104,21 @@ public class PostServlet extends HttpServlet {
                 String cerinteOptionale = request.getParameter("cerinteOptionale");
                 cerinteOptionale = cerinteOptionale.replaceAll("\n","<br />");
 
-                service.editPost(id, request.getParameter("denumire"), cerinteMinime, cerinteOptionale, date1);
+                service.editPost(id, request.getParameter("denumire"), cerinteMinime, cerinteOptionale, date1, true);
                 sesiune.setAttribute("posts", service.getAllPosts());
                 response.sendRedirect(request.getServletContext() + "/../dashboard.jspx#posturi");
             }
             
             if("getAllPosts".equals(action)){
-                sesiune.setAttribute("posts", service.getAllPosts());
+                List<Posturi> postsAvailable = service.getAllPosts();
+                Date todayDate = new Date();
+                
+                for(int i=0; i < postsAvailable.size(); i++){
+                    if(postsAvailable.get(i).getDataLimAplic().before(todayDate))
+                        service.editPost(i, postsAvailable.get(i).getDenumire(), postsAvailable.get(i).getCerinteMinime(), postsAvailable.get(i).getCerinteOptionale(), todayDate, false);
+                }
+                
+                sesiune.setAttribute("posts", postsAvailable);
                 //request.setAttribute("posts", service.getAllPosts());
                 //response.sendRedirect(request.getServletContext() + "/newjsp.jspx");
                 dispatcher = request.getServletContext().getRequestDispatcher("/newjsp.jspx");

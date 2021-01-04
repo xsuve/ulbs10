@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Razvan
+ * @author DxGod
  */
 @Entity
 @Table(name = "POSTURI")
@@ -35,7 +35,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Posturi.findByCerinteMinime", query = "SELECT p FROM Posturi p WHERE p.cerinteMinime = :cerinteMinime")
     , @NamedQuery(name = "Posturi.findByCerinteOptionale", query = "SELECT p FROM Posturi p WHERE p.cerinteOptionale = :cerinteOptionale")
     , @NamedQuery(name = "Posturi.findByDataLimAplic", query = "SELECT p FROM Posturi p WHERE p.dataLimAplic = :dataLimAplic")
-    , @NamedQuery(name = "Posturi.findByDenumire", query = "SELECT p FROM Posturi p WHERE p.denumire = :denumire")})
+    , @NamedQuery(name = "Posturi.findByDenumire", query = "SELECT p FROM Posturi p WHERE p.denumire = :denumire")
+    , @NamedQuery(name = "Posturi.findByValabil", query = "SELECT p FROM Posturi p WHERE p.valabil = :valabil")})
 public class Posturi implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -56,32 +57,28 @@ public class Posturi implements Serializable {
     @Size(max = 255)
     @Column(name = "DENUMIRE")
     private String denumire;
+    @Column(name = "VALABIL")
+    private Boolean valabil;
     @JoinColumn(name = "DESCHIS_DE", referencedColumnName = "ID")
     @ManyToOne
     private Users deschisDe;
-
-    public Posturi(int id, String denumire, String cerinteMinime, String cerinteOptionale, Date dataLimAplic, Users user) {
-        this.id = id;
-        this.denumire = denumire;
-        this.cerinteMinime = cerinteMinime;
-        this.cerinteOptionale = cerinteOptionale;
-        this.dataLimAplic = dataLimAplic;
-        deschisDe = user;
-    }
-
-    public Posturi(String denumire, String cerinteMinime, String cerinteOptionale, Date dataLimAplic, Users user) {
-        this.denumire = denumire;
-        this.cerinteMinime = cerinteMinime;
-        this.cerinteOptionale = cerinteOptionale;
-        this.dataLimAplic = dataLimAplic;
-        deschisDe = user;
-    }
 
     public Posturi() {
     }
 
     public Posturi(Integer id) {
         this.id = id;
+    }
+
+    public Posturi(int id, String denumire, String cerinteMinime, String cerinteOptionale, Date dataLimAplic, Users user, boolean valabil) {
+       this.id = id;
+       this.denumire= denumire;
+       this.cerinteMinime = cerinteMinime;
+       this.cerinteOptionale = cerinteOptionale;
+       this.dataLimAplic = dataLimAplic;
+       this.deschisDe= user;
+       this.valabil = valabil;
+       
     }
 
     public Integer getId() {
@@ -93,8 +90,7 @@ public class Posturi implements Serializable {
     }
 
     public String getCerinteMinime() {
-        String cerinteMinimeFinal = cerinteMinime.replaceAll("\n","<br />");
-        return cerinteMinimeFinal;
+        return cerinteMinime;
     }
 
     public void setCerinteMinime(String cerinteMinime) {
@@ -102,8 +98,7 @@ public class Posturi implements Serializable {
     }
 
     public String getCerinteOptionale() {
-        String cerinteOptionaleFinal = cerinteOptionale.replaceAll("\n","<br />");
-        return cerinteOptionaleFinal;
+        return cerinteOptionale;
     }
 
     public void setCerinteOptionale(String cerinteOptionale) {
@@ -124,6 +119,14 @@ public class Posturi implements Serializable {
 
     public void setDenumire(String denumire) {
         this.denumire = denumire;
+    }
+
+    public Boolean getValabil() {
+        return valabil;
+    }
+
+    public void setValabil(Boolean valabil) {
+        this.valabil = valabil;
     }
 
     public Users getDeschisDe() {
@@ -158,4 +161,5 @@ public class Posturi implements Serializable {
     public String toString() {
         return "entity.Posturi[ id=" + id + " ]";
     }
+    
 }
