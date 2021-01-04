@@ -65,11 +65,42 @@
                                         <div class="divider mt-lg-5"></div>
 
                                         <h2 class="content-title pt-lg-5 mb-lg-5">Aplicanti</h2>
-                                        <c:forEach items="${aplicants}" var="a">
-                                            <c:if test="${a.getIdPost().getId() == p.getId()}">
-                                                ${a.getIdUser().getFirstname()}
-                                            </c:if>
-                                        </c:forEach>
+                                        <div class="posts">
+                                            <div class="row post posts-header pt-lg-3 pb-lg-3">
+                                                <div class="col-lg-6">
+                                                    <h6 class="mb-lg-0 mt-lg-0 post-title">Nume complet</h6>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <div class="post-date">Data aplicarii</div>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <div class="post-actions">Actiuni</div>
+                                                </div>
+                                            </div>
+                                            
+                                            <c:forEach items="${aplicants}" var="a">
+                                                <c:if test="${a.getIdPost().getId() == p.getId()}">
+                                                    <div class="row post pt-lg-3 pb-lg-3">
+                                                        <div class="col-lg-6">
+                                                            <h6 class="mb-lg-0 mt-lg-0 post-title">
+                                                                <a href="viewuser.jspx?id=${a.getIdUser().getId()}">${a.getIdUser().getFirstname()} ${a.getIdUser().getLastname()}</a>
+                                                            </h6>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <div class="post-date">
+                                                                <fmt:setLocale value="ro_RO" scope="session" />
+                                                                <fmt:formatDate value="${a.getDataAplicarii()}" pattern="dd MMMM, yyyy" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <div class="post-actions">
+                                                                <a href="#">Descarca CV</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </c:if>
+                                            </c:forEach>
+                                        </div>
                                     </c:if>
                                 </section>
                                 
