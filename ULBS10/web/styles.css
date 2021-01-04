@@ -197,6 +197,12 @@ a {
     height: 200px;
     border: 2px dashed #888;
 }
+.upload-cv #uploadCVPreview {
+    display: none;
+    color: #fff;
+    font-size: 14px;
+    line-height: 24px;
+}
 .upload-cv div .material-icons {
     color: #888;
     font-size: 36px;

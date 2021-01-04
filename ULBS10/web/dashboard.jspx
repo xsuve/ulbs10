@@ -114,13 +114,19 @@
                                 <div class="col-lg-6">
                                     <h2 class="content-title mb-lg-5">Adauga un nou utilizator</h2>
                                     <form action="./login/user?action=newuser" method="post">
-                                        <div class="mb-lg-3">
-                                            <label class="form-label">Nume</label>
-                                            <input type="text" name="firstName" class="form-control" placeholder="Nume" />
-                                        </div>
-                                        <div class="mb-lg-3">
-                                            <label class="form-label">Prenume</label>
-                                            <input type="text" name="lastName" class="form-control" placeholder="Prenume" />
+                                        <div class="row mb-lg-3">
+                                            <div class="col-lg-6">
+                                                <div>
+                                                    <label class="form-label">Nume</label>
+                                                    <input type="text" name="firstName" class="form-control" placeholder="Nume" />
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div>
+                                                    <label class="form-label">Prenume</label>
+                                                    <input type="text" name="lastName" class="form-control" placeholder="Prenume" />
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="mb-lg-3">
                                             <label class="form-label">Email</label>
@@ -154,13 +160,19 @@
                                 <div class="col-lg-6">
                                     <h2 class="content-title mb-lg-5">Editeaza utilizator</h2>
                                     <form action="./login/user?action=edituser&amp;id=0" method="post" class="edit-user-form">
-                                        <div class="mb-lg-3">
-                                            <label class="form-label">Nume</label>
-                                            <input type="text" name="firstName" class="form-control edit-user-form-first-name" placeholder="Nume" />
-                                        </div>
-                                        <div class="mb-lg-3">
-                                            <label class="form-label">Prenume</label>
-                                            <input type="text" name="lastName" class="form-control edit-user-form-last-name" placeholder="Prenume" />
+                                        <div class="row mb-lg-3">
+                                            <div class="col-lg-6">
+                                                <div>
+                                                    <label class="form-label">Nume</label>
+                                                    <input type="text" name="firstName" class="form-control edit-user-form-first-name" placeholder="Nume" />
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div>
+                                                    <label class="form-label">Prenume</label>
+                                                    <input type="text" name="lastName" class="form-control edit-user-form-last-name" placeholder="Prenume" />
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="mb-lg-3">
                                             <label class="form-label">Email</label>
@@ -343,8 +355,11 @@
                                         <div class="mb-lg-4">
                                             <label class="form-label d-block mb-lg-3">Incarca CV</label>
                                             <div class="upload-cv">
-                                                <div class="text-center"><span class="material-icons vm">note_add</span></div>
-                                                <input type="file" name="cv" accept=".pdf" />
+                                                <div class="text-center">
+                                                    <span class="material-icons d-block vm">note_add<jsp:text /></span>
+                                                    <span id="uploadCVPreview" class="vm"><jsp:text /></span>
+                                                </div>
+                                                <input type="file" name="cv" accept=".pdf" id="uploadCVInput" />
                                             </div>
                                         </div>
 
