@@ -12,6 +12,7 @@
 
     <jsp:directive.page contentType="text/html" pageEncoding="UTF-8"/>
     <jsp:include page="./components/head.jspx" />
+    <jsp:include page="./components/alert.jspx" />
 
     <jsp:body>
         <div class="container-fluid px-lg-0">
@@ -73,7 +74,16 @@
                                             </div>
                                             <div class="col-lg-2">
                                                 <div class="post-date">
-                                                    ${u.getStatut() != null ? u.getStatut() : "-"}
+                                                    <c:if test="${u.getStatut() != null}">
+                                                        <c:choose>
+                                                            <c:when test="${u.getStatut() == 'generalDirector'}">Director General</c:when>
+                                                            <c:when test="${u.getStatut() == 'departamanetDirector'}">Director Departament</c:when>
+                                                            <c:when test="${u.getStatut() == 'humanResourcesDirector'}">Director Resurse Umane</c:when>
+                                                            <c:when test="${u.getStatut() == 'recruiter'}">Recrutor</c:when>
+                                                            <c:when test="${u.getStatut() == 'administrator'}">Administrator</c:when>
+                                                            <c:when test="${u.getStatut() == 'viewer'}">Vizitator</c:when>
+                                                        </c:choose>
+                                                    </c:if>
                                                 </div>
                                             </div>
                                             <div class="col-lg-3">
@@ -91,7 +101,9 @@
                                     </c:forEach>
                                 </c:if>
                                 <c:if test="${users.size() == 0}">
-                                    <p class="content-text">Nu exista utilizatori.</p>
+                                    <div class="row post pt-lg-3 pb-lg-3">
+                                        <p class="content-text">Nu exista utilizatori.</p>
+                                    </div>
                                 </c:if>
                             </div>
                         </section>
@@ -121,12 +133,12 @@
                                         <div class="mb-lg-4">
                                             <label class="form-label">Statut</label>
                                             <select name="statut" class="form-select">
-                                                <option value="generalDirector">General Director</option>
-                                                <option value="departamanetDirector">Departament Director</option>
-                                                <option value="humanResourcesDirector">Human Resources Director</option>
-                                                <option value="recruiter">Recruiter</option>
+                                                <option value="generalDirector">Director General</option>
+                                                <option value="departamanetDirector">Director Departament</option>
+                                                <option value="humanResourcesDirector">Director Resurse Umane</option>
+                                                <option value="recruiter">Recrutor</option>
                                                 <option value="administrator">Administrator</option>
-                                                <option value="viewer">Viewer</option>
+                                                <option value="viewer">Vizitator</option>
                                             </select>
                                         </div>
 
@@ -157,12 +169,12 @@
                                         <div class="mb-lg-4">
                                             <label class="form-label">Statut</label>
                                             <select name="statut" class="form-select edit-user-form-statut">
-                                                <option value="generalDirector">General Director</option>
-                                                <option value="departamanetDirector">Departament Director</option>
-                                                <option value="humanResourcesDirector">Human Resources Director</option>
-                                                <option value="recruiter">Recruiter</option>
+                                                <option value="generalDirector">Director General</option>
+                                                <option value="departamanetDirector">Director Departament</option>
+                                                <option value="humanResourcesDirector">Director Resurse Umane</option>
+                                                <option value="recruiter">Recrutor</option>
                                                 <option value="administrator">Administrator</option>
-                                                <option value="viewer">Viewer</option>
+                                                <option value="viewer">Vizitator</option>
                                             </select>
                                         </div>
 
@@ -242,7 +254,9 @@
                                     </c:forEach>
                                 </c:if>
                                 <c:if test="${posts.size() == 0}">
-                                    <p class="content-text">Nu exista posturi.</p>
+                                    <div class="row post pt-lg-3 pb-lg-3">
+                                        <p class="content-text">Nu exista posturi.</p>
+                                    </div>
                                 </c:if>
                             </div>
                         </section>

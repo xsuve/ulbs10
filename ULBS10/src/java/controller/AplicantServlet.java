@@ -65,8 +65,12 @@ public class AplicantServlet extends HttpServlet {
                 Users user =  (Users) sesiune.getAttribute("user");
                 List<Posturi> posturi = (List<Posturi>) sesiune.getAttribute("posts");   
                 List<Aplicanti> allAplicanti = service.getAllAplicants();
-                Posturi post = posturi.get(idPost-1);
-                            
+                Posturi post = null;
+                for(int i = 0; i < posturi.size(); i++) {
+                    if(posturi.get(i).getId().equals(idPost)) {
+                       post = posturi.get(i);
+                    }
+                }            
                                
                 if(allAplicanti.isEmpty()){
                     idAplicant = 0;
@@ -79,15 +83,24 @@ public class AplicantServlet extends HttpServlet {
                         existInDB = true;
                 }
                 
+                HttpSession session = request.getSession();
+                String[] appAlert = new String[2];
+
                 if(!existInDB){
                     service.addAplicant(++idAplicant, user, post , todayDate);
+                    
+                    appAlert[0] = "Ai aplicat cu succes pentru acest post!";
+                    appAlert[1] = "alert alert-success";
+                    session.setAttribute("appAlert", appAlert);
+                    
                     response.sendRedirect(request.getServletContext() + "./../dashboard.jspx#posturi");
                 } else {
-                    response.sendRedirect(request.getServletContext() + "./../dashboard.jspx#acasa");
+                    appAlert[0] = "Ai aplicat deja pentru acest post!";
+                    appAlert[1] = "alert alert-danger";
+                    session.setAttribute("appAlert", appAlert);
+                    
+                    response.sendRedirect(request.getServletContext() + "./../dashboard.jspx#posturi");
                 }
-               
-                
-
             }
 
         }
