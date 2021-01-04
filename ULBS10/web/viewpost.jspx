@@ -24,12 +24,12 @@
 
                         <c:forEach items="${posts}" var="p">
                             <c:if test="${p.getId() == param.id}">
-                                
+
                                 <section class="content-section active">
                                     <div class="row">
                                         <div class="col-lg-8">
                                             <h2 class="content-title mb-lg-5">${p.getDenumire()}</h2>
-                                            
+
                                             <div class="mb-lg-5">
                                                 <h6 class="content-subtitle">Cerinte minime:</h6>
                                                 <p class="content-text">${p.getCerinteMinime()}</p>
@@ -39,7 +39,7 @@
                                                 <h6 class="content-subtitle">Cerinte optionale:</h6>
                                                 <p class="content-text">${p.getCerinteOptionale()}</p>
                                             </div>
-                                            
+
                                             <div>
                                                 <c:forEach items="${users}" var="u">
                                                     <c:if test="${p.getDeschisDe().getId() == u.getId()}">
@@ -60,7 +60,7 @@
                                             </c:if>
                                         </div>
                                     </div>
-                                          
+
                                     <c:if test="${user.getStatut() == 'administrator'}">
                                         <div class="divider mt-lg-5"></div>
 
@@ -72,7 +72,7 @@
                                         </c:forEach>
                                     </c:if>
                                 </section>
-                                
+
                             </c:if>
                         </c:forEach>
 
