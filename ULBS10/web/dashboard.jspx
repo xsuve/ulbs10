@@ -35,13 +35,22 @@
                                     <h2 class="content-title mb-lg-5">Utilizatori</h2>
                                 </div>
                                 <div class="col-lg-2">
-                                    <c:if test="${user.getStatut() == 'administrator'}">
-                                        <div style="text-align: right;">
-                                            <a class="add-user-link" href="#adauga-utilizator">
-                                                <button class="btn btn-primary"><span class="material-icons">add</span> Adauga utilizator</button>
-                                            </a>
-                                        </div>
-                                    </c:if>
+                                    <c:choose>
+                                        <c:when test="${user.getStatut() == 'generalDirector'}">
+                                            <div style="text-align: right;">
+                                                <a class="add-user-link" href="#adauga-utilizator">
+                                                    <button class="btn btn-primary"><span class="material-icons">add</span> Adauga utilizator</button>
+                                                </a>
+                                            </div>
+                                        </c:when>
+                                        <c:when test="${user.getStatut() == 'administrator'}">
+                                            <div style="text-align: right;">
+                                                <a class="add-user-link" href="#adauga-utilizator">
+                                                    <button class="btn btn-primary"><span class="material-icons">add</span> Adauga utilizator</button>
+                                                </a>
+                                            </div>
+                                        </c:when>
+                                    </c:choose>
                                 </div>
                             </div>
 
@@ -89,12 +98,20 @@
                                             <div class="col-lg-3">
                                                 <div class="post-actions">
                                                     <a href="viewuser.jspx?id=${u.getId()}">Detalii</a>
-                                                    <c:if test="${user.getStatut() == 'administrator'}">
-                                                        |
-                                                        <a href="#edit-user" data-user-id="${u.getId()}" data-user-first-name="${u.getFirstname()}" data-user-last-name="${u.getLastname()}" data-user-email="${u.getEmail()}" data-user-statut="${u.getStatut()}" class="edit-user-link">Editeaza</a>
-                                                        |
-                                                        <a href="./login/user?action=deleteuser&amp;id=${u.getId()}">Sterge</a>
-                                                    </c:if>
+                                                    <c:choose>
+                                                        <c:when test="${user.getStatut() == 'generalDirector'}">
+                                                            |
+                                                            <a href="#edit-user" data-user-id="${u.getId()}" data-user-first-name="${u.getFirstname()}" data-user-last-name="${u.getLastname()}" data-user-email="${u.getEmail()}" data-user-statut="${u.getStatut()}" class="edit-user-link">Editeaza</a>
+                                                            |
+                                                            <a href="./login/user?action=deleteuser&amp;id=${u.getId()}">Sterge</a>
+                                                        </c:when>
+                                                        <c:when test="${user.getStatut() == 'administrator'}">
+                                                            |
+                                                            <a href="#edit-user" data-user-id="${u.getId()}" data-user-first-name="${u.getFirstname()}" data-user-last-name="${u.getLastname()}" data-user-email="${u.getEmail()}" data-user-statut="${u.getStatut()}" class="edit-user-link">Editeaza</a>
+                                                            |
+                                                            <a href="./login/user?action=deleteuser&amp;id=${u.getId()}">Sterge</a>
+                                                        </c:when>
+                                                    </c:choose>
                                                 </div>
                                             </div>
                                         </div>
@@ -205,13 +222,36 @@
                                     <h2 class="content-title">Posturi active</h2>
                                 </div>
                                 <div class="col-lg-2">
-                                    <c:if test="${user.getStatut() == 'administrator'}">
-                                        <div style="text-align: right;">
-                                            <a class="add-post-link" href="#adauga-post">
-                                                <button class="btn btn-primary"><span class="material-icons">add</span> Adauga post</button>
-                                            </a>
-                                        </div>
-                                    </c:if>
+                                    <c:choose>
+                                        <c:when test="${user.getStatut() == 'generalDirector'}">
+                                            <div style="text-align: right;">
+                                                <a class="add-post-link" href="#adauga-post">
+                                                    <button class="btn btn-primary"><span class="material-icons">add</span> Adauga post</button>
+                                                </a>
+                                            </div>
+                                        </c:when>
+                                        <c:when test="${user.getStatut() == 'departmentDirector'}">
+                                            <div style="text-align: right;">
+                                                <a class="add-post-link" href="#adauga-post">
+                                                    <button class="btn btn-primary"><span class="material-icons">add</span> Adauga post</button>
+                                                </a>
+                                            </div>
+                                        </c:when>
+                                        <c:when test="${user.getStatut() == 'humanResourceDirector'}">
+                                            <div style="text-align: right;">
+                                                <a class="add-user-link" href="#adauga-utilizator">
+                                                    <button class="btn btn-primary"><span class="material-icons">add</span> Adauga utilizator</button>
+                                                </a>
+                                            </div>
+                                        </c:when>
+                                        <c:when test="${user.getStatut() == 'recruiter'}">
+                                            <div style="text-align: right;">
+                                                <a class="add-user-link" href="#adauga-utilizator">
+                                                    <button class="btn btn-primary"><span class="material-icons">add</span> Adauga utilizator</button>
+                                                </a>
+                                            </div>
+                                        </c:when>
+                                    </c:choose>
                                 </div>
                             </div>
 
@@ -252,13 +292,36 @@
                                                 <div class="col-lg-3">
                                                     <div class="post-actions">
                                                         <a href="viewpost.jspx?id=${p.getId()}">Detalii</a>
-                                                        <c:if test="${user.getStatut() == 'administrator'}">
-                                                            |
-                                                            <fmt:formatDate value="${p.getDataLimAplic()}" pattern="yyyy-MM-dd" var="dateFormatted" />
-                                                            <a href="#edit-post" data-post-id="${p.getId()}" data-post-denumire="${p.getDenumire()}" data-post-cerinte-minime="${p.getCerinteMinime()}" data-post-cerinte-optionale="${p.getCerinteOptionale()}" data-post-data-limita="${dateFormatted}" class="edit-post-link">Editeaza</a>
-                                                            |
-                                                            <a href="./post?action=deletepost&amp;id=${p.getId()}">Sterge</a>
-                                                        </c:if>
+                                                        <c:choose>
+                                                            <c:when test="${user.getStatut() == 'generalDirector'}">
+                                                                |
+                                                                <fmt:formatDate value="${p.getDataLimAplic()}" pattern="yyyy-MM-dd" var="dateFormatted" />
+                                                                <a href="#edit-post" data-post-id="${p.getId()}" data-post-denumire="${p.getDenumire()}" data-post-cerinte-minime="${p.getCerinteMinime()}" data-post-cerinte-optionale="${p.getCerinteOptionale()}" data-post-data-limita="${dateFormatted}" class="edit-post-link">Editeaza</a>
+                                                                |
+                                                                <a href="./post?action=deletepost&amp;id=${p.getId()}">Sterge</a>
+                                                            </c:when>
+                                                            <c:when test="${user.getStatut() == 'departmentDirector'}">
+                                                                |
+                                                                <fmt:formatDate value="${p.getDataLimAplic()}" pattern="yyyy-MM-dd" var="dateFormatted" />
+                                                                <a href="#edit-post" data-post-id="${p.getId()}" data-post-denumire="${p.getDenumire()}" data-post-cerinte-minime="${p.getCerinteMinime()}" data-post-cerinte-optionale="${p.getCerinteOptionale()}" data-post-data-limita="${dateFormatted}" class="edit-post-link">Editeaza</a>
+                                                                |
+                                                                <a href="./post?action=deletepost&amp;id=${p.getId()}">Sterge</a>
+                                                            </c:when>
+                                                            <c:when test="${user.getStatut() == 'humanResourceDirector'}">
+                                                                |
+                                                                <fmt:formatDate value="${p.getDataLimAplic()}" pattern="yyyy-MM-dd" var="dateFormatted" />
+                                                                <a href="#edit-post" data-post-id="${p.getId()}" data-post-denumire="${p.getDenumire()}" data-post-cerinte-minime="${p.getCerinteMinime()}" data-post-cerinte-optionale="${p.getCerinteOptionale()}" data-post-data-limita="${dateFormatted}" class="edit-post-link">Editeaza</a>
+                                                                |
+                                                                <a href="./post?action=deletepost&amp;id=${p.getId()}">Sterge</a>
+                                                            </c:when>
+                                                            <c:when test="${user.getStatut() == 'recruiter'}">
+                                                                |
+                                                                <fmt:formatDate value="${p.getDataLimAplic()}" pattern="yyyy-MM-dd" var="dateFormatted" />
+                                                                <a href="#edit-post" data-post-id="${p.getId()}" data-post-denumire="${p.getDenumire()}" data-post-cerinte-minime="${p.getCerinteMinime()}" data-post-cerinte-optionale="${p.getCerinteOptionale()}" data-post-data-limita="${dateFormatted}" class="edit-post-link">Editeaza</a>
+                                                                |
+                                                                <a href="./post?action=deletepost&amp;id=${p.getId()}">Sterge</a>
+                                                            </c:when>
+                                                        </c:choose>
                                                     </div>
                                                 </div>
                                             </div>
