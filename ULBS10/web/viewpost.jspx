@@ -94,7 +94,15 @@
                                                         </div>
                                                         <div class="col-lg-3">
                                                             <div class="post-actions">
-                                                                <a href="#">Descarca CV</a>
+                                                                <c:choose>
+                                                                    <c:when test="${user.getStatut() != 'viewer'}">
+                                                                        <a href="#">Descarca CV</a>
+                                                                    </c:when>
+                                                                    <c:when test="${user.getStatut() == 'generalDirector'}">
+                                                                        | 
+                                                                        <a href="#">Sterge</a>
+                                                                    </c:when>
+                                                                </c:choose>
                                                             </div>
                                                         </div>
                                                     </div>
