@@ -65,7 +65,7 @@ public class AplicantServlet extends HttpServlet {
                 Users user =  (Users) sesiune.getAttribute("user");
                 List<Posturi> posturi = (List<Posturi>) sesiune.getAttribute("posts");   
                 List<Aplicanti> allAplicanti = service.getAllAplicants();
-                Posturi post = posturi.get(idPost);
+                Posturi post = posturi.get(idPost-1);
                             
                                
                 if(allAplicanti.size() == 0){
@@ -73,9 +73,20 @@ public class AplicantServlet extends HttpServlet {
                 } else {
                     idAplicant = allAplicanti.get(allAplicanti.size() - 1).getId();
                 }
+                boolean existInDB = false;
+                for(int i=0; i<allAplicanti.size();i++){
+                    if(allAplicanti.get(i).getIdPost().equals(post)  && allAplicanti.get(i).getIdUser().equals(user))
+                        existInDB = true;
+                }
                 
-                service.addAplicant(++idAplicant, user, post , todayDate);
-                 response.sendRedirect(request.getServletContext() + "./../dashboard.jspx#posturi");
+                if(!existInDB){
+                    service.addAplicant(++idAplicant, user, post , todayDate);
+                    response.sendRedirect(request.getServletContext() + "./../dashboard.jspx#posturi");
+                } else {
+                    response.sendRedirect(request.getServletContext() + "./../dashboard.jspx#acasa");
+                }
+               
+                
 
             }
 
