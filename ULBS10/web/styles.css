@@ -102,6 +102,8 @@ a {
 
 /* Sidebar */
 .sidebar {
+    position: sticky;
+    top: 0px;
     height: 100vh;
     background-color: #0f131a;
 }
