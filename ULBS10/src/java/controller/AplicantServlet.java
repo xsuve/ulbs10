@@ -6,15 +6,12 @@
 package controller;
 
 import entity.Aplicanti;
+import entity.Posturi;
+import entity.Users;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.Serializable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -53,24 +50,35 @@ public class AplicantServlet extends HttpServlet {
     Processing processing;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException{
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             String action = request.getParameter("action");
             aplicanti = service.getAllAplicants();
-            Date date1 = new SimpleDateFormat("yyyy-mm-dd").parse(request.getParameter("dataAplicarii"));
-            Serializable s = request.getParameter("cv");
 
             if ("aplica".equals(action)) {
                 HttpSession sesiune = request.getSession();
-                int id = (int) sesiune.getAttribute("id");
+                Date todayDate = new Date();
+                int idAplicant;
+                int idPost = Integer.parseInt(request.getParameter("id_post")); 
+                 
+                Users user =  (Users) sesiune.getAttribute("user");
+                List<Posturi> posturi = (List<Posturi>) sesiune.getAttribute("posts");   
+                List<Aplicanti> allAplicanti = service.getAllAplicants();
+                Posturi post = posturi.get(idPost);
+                            
+                               
+                if(allAplicanti.size() == 0){
+                    idAplicant = 0;
+                } else {
+                    idAplicant = allAplicanti.get(allAplicanti.size() - 1).getId();
+                }
                 
-                
-                request.setAttribute("aplicanti", aplicanti);
-                
+                service.addAplicant(++idAplicant, user, post , todayDate);
+                 response.sendRedirect(request.getServletContext() + "./../dashboard.jspx#posturi");
+
             }
-        } catch (ParseException ex) {
-            Logger.getLogger(AplicantServlet.class.getName()).log(Level.SEVERE, null, ex);
+
         }
     }
 
