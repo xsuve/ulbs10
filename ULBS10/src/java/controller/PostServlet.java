@@ -77,7 +77,7 @@ public class PostServlet extends HttpServlet {
                 String cerinteOptionale = request.getParameter("cerinteOptionale");
                 cerinteOptionale = cerinteOptionale.replaceAll("\n","<br />");
 
-                post = new Posturi(++lastID, request.getParameter("denumire"), cerinteMinime, cerinteOptionale, date1, u);
+                post = new Posturi(++lastID, request.getParameter("denumire"), cerinteMinime, cerinteOptionale, date1, u, true);
                 service.addPost(post);
                 sesiune.setAttribute("posts", service.getAllPosts());
 
@@ -103,14 +103,28 @@ public class PostServlet extends HttpServlet {
                 cerinteMinime = cerinteMinime.replaceAll("\n","<br />");
                 String cerinteOptionale = request.getParameter("cerinteOptionale");
                 cerinteOptionale = cerinteOptionale.replaceAll("\n","<br />");
+                
+                Date todayDate = new Date();
 
-                service.editPost(id, request.getParameter("denumire"), cerinteMinime, cerinteOptionale, date1);
+                if(date1.before(todayDate))
+                    service.editPost(id, request.getParameter("denumire"), cerinteMinime, cerinteOptionale, date1, false);
+                else
+                    service.editPost(id, request.getParameter("denumire"), cerinteMinime, cerinteOptionale, date1, true);               
+                
                 sesiune.setAttribute("posts", service.getAllPosts());
                 response.sendRedirect(request.getServletContext() + "/../dashboard.jspx#posturi");
             }
             
             if("getAllPosts".equals(action)){
-                sesiune.setAttribute("posts", service.getAllPosts());
+                List<Posturi> postsAvailable = service.getAllPosts();
+                Date todayDate = new Date();
+                
+                for(int i = 0; i < postsAvailable.size(); i++){
+                    if(postsAvailable.get(i).getDataLimAplic().before(todayDate))
+                        service.editPost(postsAvailable.get(i).getId(), postsAvailable.get(i).getDenumire(), postsAvailable.get(i).getCerinteMinime(), postsAvailable.get(i).getCerinteOptionale(), postsAvailable.get(i).getDataLimAplic(), false);
+                }
+                
+                sesiune.setAttribute("posts", postsAvailable);
                 //request.setAttribute("posts", service.getAllPosts());
                 //response.sendRedirect(request.getServletContext() + "/newjsp.jspx");
                 dispatcher = request.getServletContext().getRequestDispatcher("/newjsp.jspx");

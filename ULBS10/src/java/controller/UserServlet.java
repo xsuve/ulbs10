@@ -36,7 +36,7 @@ import utility.Processing;
         fileSizeThreshold = 1024 * 1024 * 1, // 1 MB
         maxFileSize = 1024 * 1024 * 10, // 10 MB
         maxRequestSize = 1024 * 1024 * 15, // 15 MB
-        location = "C:\\"
+        location = "C:\\Users\\DxGod\\Documents\\NetBeansProjects"
 )
 public class UserServlet extends HttpServlet {
 
@@ -87,6 +87,7 @@ public class UserServlet extends HttpServlet {
                 Part o = request.getPart("cv");
                 //String name = o.getSubmittedFileName(); ia numele fisierului incarcat
                 o.write(u.getId().toString() + "_" + u.getFirstname() + ".pdf");
+                response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx#profil");
             }
             if ("edituser".equals(action)) {
                 int id = Integer.parseInt(request.getParameter("id"));
