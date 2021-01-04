@@ -73,9 +73,9 @@ public class PostServlet extends HttpServlet {
                 request.setAttribute("posturi", posturi);
 
                 String cerinteMinime = request.getParameter("cerinteMinime");
-                cerinteMinime = cerinteMinime.replaceAll("\n","<br />");
+                cerinteMinime = cerinteMinime.replaceAll("\n", "<br />");
                 String cerinteOptionale = request.getParameter("cerinteOptionale");
-                cerinteOptionale = cerinteOptionale.replaceAll("\n","<br />");
+                cerinteOptionale = cerinteOptionale.replaceAll("\n", "<br />");
 
                 post = new Posturi(++lastID, request.getParameter("denumire"), cerinteMinime, cerinteOptionale, date1, u);
                 service.addPost(post);
@@ -89,7 +89,10 @@ public class PostServlet extends HttpServlet {
 
             if ("deletepost".equals(action)) {
                 int id = Integer.parseInt(request.getParameter("id"));
-                service.removePost(id);
+                posturi = (List<Posturi>) sesiune.getAttribute("posts");
+                posturi.stream().filter((item) -> (item.getId() == id)).forEachOrdered((item) -> {
+                    service.removePost(item);
+                });
                 sesiune.setAttribute("posts", service.getAllPosts());
                 response.sendRedirect(request.getServletContext() + "/../dashboard.jspx#posturi");
             }
@@ -100,15 +103,14 @@ public class PostServlet extends HttpServlet {
                 Date date1 = originalFormat.parse(request.getParameter("dataLimita"));
 
                 String cerinteMinime = request.getParameter("cerinteMinime");
-                cerinteMinime = cerinteMinime.replaceAll("\n","<br />");
+                cerinteMinime = cerinteMinime.replaceAll("\n", "<br />");
                 String cerinteOptionale = request.getParameter("cerinteOptionale");
-                cerinteOptionale = cerinteOptionale.replaceAll("\n","<br />");
+                cerinteOptionale = cerinteOptionale.replaceAll("\n", "<br />");
 
                 service.editPost(id, request.getParameter("denumire"), cerinteMinime, cerinteOptionale, date1);
                 sesiune.setAttribute("posts", service.getAllPosts());
                 response.sendRedirect(request.getServletContext() + "/../dashboard.jspx#posturi");
             }
-            
             if("getAllPosts".equals(action)){
                 sesiune.setAttribute("posts", service.getAllPosts());
                 //request.setAttribute("posts", service.getAllPosts());

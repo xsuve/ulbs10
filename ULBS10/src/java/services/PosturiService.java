@@ -5,10 +5,12 @@
  */
 package services;
 
+import entity.Aplicanti;
 import entity.Posturi;
 import entity.Users;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Logger;
 import javax.ejb.EJBException;
 import javax.persistence.EntityManager;
@@ -73,7 +75,6 @@ public class PosturiService {
      */
     @Transactional
     public void addPost(Posturi postData) {
-        //add in database
         logger.info("createPost");
         try {
             Posturi post = postData;
@@ -85,14 +86,17 @@ public class PosturiService {
 
     /**
      * Sterge din baza de date postul cu id-ul dat ca parametru
-     * @param id
+     * @param post
      */
     @Transactional
-    public void removePost(int id) {
+    public void removePost(Posturi post) {
         logger.info("removePost");
         try {
-            Posturi post = em.find(Posturi.class, id);
-            em.remove(post);
+            List<Aplicanti> aplicanti = (List<Aplicanti>) em.createNamedQuery("Aplicanti.findByIdPost").setParameter("idPost", post).getResultList(); 
+            aplicanti.stream().filter((aplicant) -> (Objects.equals(aplicant.getIdPost().getId(), post.getId()))).forEachOrdered(em::remove);
+            
+            Posturi removePost = em.find(Posturi.class,post.getId());
+            em.remove(removePost); 
         } catch (Exception ex) {
             throw new EJBException(ex);
         }
