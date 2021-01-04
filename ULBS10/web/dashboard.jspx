@@ -37,13 +37,13 @@
                                     <c:if test="${user.getStatut() == 'administrator'}">
                                         <div style="text-align: right;">
                                             <a class="add-user-link" href="#adauga-utilizator">
-                                               <button class="btn btn-primary"><span class="material-icons">add</span> Adauga utilizator</button>
+                                                <button class="btn btn-primary"><span class="material-icons">add</span> Adauga utilizator</button>
                                             </a>
                                         </div>
                                     </c:if>
                                 </div>
                             </div>
-                            
+
                             <div class="posts mt-lg-5">
                                 <div class="row post posts-header pt-lg-3 pb-lg-3">
                                     <div class="col-lg-1">
@@ -95,7 +95,7 @@
                                 </c:if>
                             </div>
                         </section>
-                        
+
                         <!-- Adauga user -->
                         <section data-tab="adauga-user" class="content-section">
                             <div class="row">
@@ -135,7 +135,7 @@
                                 </div>
                             </div>
                         </section>
-                        
+
                         <!-- Edit user -->
                         <section data-tab="edit-user" class="content-section">
                             <div class="row">
@@ -171,8 +171,8 @@
                                 </div>
                             </div>
                         </section>
-                                        
-                                        
+
+
 
                         <!-- Posturi -->
                         <section data-tab="posturi" class="content-section">
@@ -184,7 +184,7 @@
                                     <c:if test="${user.getStatut() == 'administrator'}">
                                         <div style="text-align: right;">
                                             <a class="add-post-link" href="#adauga-post">
-                                               <button class="btn btn-primary"><span class="material-icons">add</span> Adauga post</button>
+                                                <button class="btn btn-primary"><span class="material-icons">add</span> Adauga post</button>
                                             </a>
                                         </div>
                                     </c:if>
@@ -209,34 +209,36 @@
 
                                 <c:if test="${posts.size() > 0}">
                                     <c:forEach items="${posts}" var="p">
-                                        <div class="row post pt-lg-3 pb-lg-3">
-                                            <div class="col-lg-1">
-                                                <div class="post-id">${p.getId()}</div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <h6 class="mb-lg-0 mt-lg-0 post-title">
-                                                    <a href="viewpost.jspx?id=${p.getId()}">${p.getDenumire()}</a>
-                                                </h6>
-                                            </div>
-                                            <div class="col-lg-2">
-                                                <div class="post-date">
-                                                    <fmt:setLocale value="ro_RO" scope="session" />
-                                                    <fmt:formatDate value="${p.getDataLimAplic()}" pattern="dd MMMM, yyyy" />
+                                        <c:if test="${p.isValabil() == true}">
+                                            <div class="row post pt-lg-3 pb-lg-3">
+                                                <div class="col-lg-1">
+                                                    <div class="post-id">${p.getId()}</div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <h6 class="mb-lg-0 mt-lg-0 post-title">
+                                                        <a href="viewpost.jspx?id=${p.getId()}">${p.getDenumire()}</a>
+                                                    </h6>
+                                                </div>
+                                                <div class="col-lg-2">
+                                                    <div class="post-date">
+                                                        <fmt:setLocale value="ro_RO" scope="session" />
+                                                        <fmt:formatDate value="${p.getDataLimAplic()}" pattern="dd MMMM, yyyy" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <div class="post-actions">
+                                                        <a href="viewpost.jspx?id=${p.getId()}">Detalii</a>
+                                                        <c:if test="${user.getStatut() == 'administrator'}">
+                                                            |
+                                                            <fmt:formatDate value="${p.getDataLimAplic()}" pattern="yyyy-MM-dd" var="dateFormatted" />
+                                                            <a href="#edit-post" data-post-id="${p.getId()}" data-post-denumire="${p.getDenumire()}" data-post-cerinte-minime="${p.getCerinteMinime()}" data-post-cerinte-optionale="${p.getCerinteOptionale()}" data-post-data-limita="${dateFormatted}" class="edit-post-link">Editeaza</a>
+                                                            |
+                                                            <a href="./post?action=deletepost&amp;id=${p.getId()}">Sterge</a>
+                                                        </c:if>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-3">
-                                                <div class="post-actions">
-                                                    <a href="viewpost.jspx?id=${p.getId()}">Detalii</a>
-                                                    <c:if test="${user.getStatut() == 'administrator'}">
-                                                        |
-                                                        <fmt:formatDate value="${p.getDataLimAplic()}" pattern="yyyy-MM-dd" var="dateFormatted" />
-                                                        <a href="#edit-post" data-post-id="${p.getId()}" data-post-denumire="${p.getDenumire()}" data-post-cerinte-minime="${p.getCerinteMinime()}" data-post-cerinte-optionale="${p.getCerinteOptionale()}" data-post-data-limita="${dateFormatted}" class="edit-post-link">Editeaza</a>
-                                                        |
-                                                        <a href="./post?action=deletepost&amp;id=${p.getId()}">Sterge</a>
-                                                    </c:if>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        </c:if>
                                     </c:forEach>
                                 </c:if>
                                 <c:if test="${posts.size() == 0}">
@@ -276,7 +278,7 @@
                                 </div>
                             </div>
                         </section>
-                        
+
                         <!-- Edit post -->
                         <section data-tab="edit-post" class="content-section">
                             <div class="row">
@@ -305,7 +307,7 @@
                                 </div>
                             </div>
                         </section>
-                                        
+
                         <!-- Profil -->
                         <section data-tab="profil" class="content-section">
                             <div class="row pb-lg-5">
@@ -315,12 +317,12 @@
                                 <div class="col-lg-2">
                                     <div style="text-align: right;">
                                         <a class="edit-profil-link" href="#edit-profil">
-                                           <button class="btn btn-primary"><span class="material-icons">edit</span> Editeaza profil</button>
+                                            <button class="btn btn-primary"><span class="material-icons">edit</span> Editeaza profil</button>
                                         </a>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="row">
                                 <div class="col-lg-6">
                                     <form method="POST" enctype="multipart/form-data" action="./login/user?action=pdf">
@@ -331,7 +333,7 @@
                                                 <input type="file" name="cv" accept=".pdf" />
                                             </div>
                                         </div>
-                                        
+
                                         <button type="submit" class="btn btn-primary">Incarca CV</button>
                                     </form>
                                 </div>

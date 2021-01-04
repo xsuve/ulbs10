@@ -10,7 +10,7 @@
     <jsp:include page="./components/head.jspx" />
 
     <jsp:body>
-        
+
         <div class="header text-center">
             <div class="vm">
                 <h1>ULBS10</h1>
@@ -28,41 +28,43 @@
                 <img src="img/header-image.png" alt="ulbs10" />
             </div>
         </div>
-        
+
         <div class="landing-section">
             <div class="container">
                 <h2 class="landing-section-title">Posturi disponibile</h2>
                 <h6 class="landing-section-text">Aplica acum pentru un job din lista de mai jos</h6>
-                
+
                 <div class="posts mt-lg-5 pt-lg-5">
                     <c:forEach items="${posts}" var="p">
-                        <div class="row post pt-lg-3 pb-lg-3">
-                            <div class="col-lg-1">
-                                <div class="post-id">${p.getId()}</div>
-                            </div>
-                            <div class="col-lg-6">
-                                <h6 class="mb-lg-0 mt-lg-0 post-title">
-                                    <a href="viewpost.jspx?id=${p.getId()}">${p.getDenumire()}</a>
-                                </h6>
-                            </div>
-                            <div class="col-lg-2">
-                                <div class="post-date">
-                                    <fmt:setLocale value="ro_RO" scope="session" />
-                                    <fmt:formatDate value="${p.getDataLimAplic()}" pattern="dd MMMM, yyyy" />
+                        <c:if test="${p.isValabil() == true}">
+                            <div class="row post pt-lg-3 pb-lg-3">
+                                <div class="col-lg-1">
+                                    <div class="post-id">${p.getId()}</div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <h6 class="mb-lg-0 mt-lg-0 post-title">
+                                        <a href="viewpost.jspx?id=${p.getId()}">${p.getDenumire()}</a>
+                                    </h6>
+                                </div>
+                                <div class="col-lg-2">
+                                    <div class="post-date">
+                                        <fmt:setLocale value="ro_RO" scope="session" />
+                                        <fmt:formatDate value="${p.getDataLimAplic()}" pattern="dd MMMM, yyyy" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="post-actions">
+                                        <a href="viewpost.jspx?id=${p.getId()}">Detalii</a>
+                                        <fmt:formatDate value="${p.getDataLimAplic()}" pattern="yyyy-MM-dd" var="dateFormatted" />
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-lg-3">
-                                <div class="post-actions">
-                                    <a href="viewpost.jspx?id=${p.getId()}">Detalii</a>
-                                    <fmt:formatDate value="${p.getDataLimAplic()}" pattern="yyyy-MM-dd" var="dateFormatted" />
-                                </div>
-                            </div>
-                        </div>
+                        </c:if>
                     </c:forEach>
                 </div>
             </div>
         </div>
-        
+
     </jsp:body>
 
 </jsp:root>

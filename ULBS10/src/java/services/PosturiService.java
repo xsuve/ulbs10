@@ -41,7 +41,7 @@ public class PosturiService {
         logger.info("createPost");
 
         try {
-            Posturi post = new Posturi(id, denumire, cerinteMinime, cerinteOptionale, dataLimAplic, user, true);
+            Posturi post = new Posturi(id, denumire, cerinteMinime, cerinteOptionale, dataLimAplic, user);
             em.persist(post);
         } catch (Exception ex) {
             throw new EJBException(ex);
@@ -108,12 +108,11 @@ public class PosturiService {
      * @param dataLimAplic
      */
     @Transactional
-    public void editPost(int id, String denumire, String cerinteMinime, String cerinteOptionale, Date dataLimAplic, boolean valabil){
+    public void editPost(int id, String denumire, String cerinteMinime, String cerinteOptionale, Date dataLimAplic){
         Posturi post = em.find(Posturi.class, id);
         post.setDenumire(denumire);
         post.setCerinteMinime(cerinteMinime);
         post.setCerinteOptionale(cerinteOptionale);
         post.setDataLimAplic(dataLimAplic);
-        post.setValabil(valabil);
     }
 }

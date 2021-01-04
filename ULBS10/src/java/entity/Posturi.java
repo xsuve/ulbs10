@@ -35,8 +35,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Posturi.findByCerinteMinime", query = "SELECT p FROM Posturi p WHERE p.cerinteMinime = :cerinteMinime")
     , @NamedQuery(name = "Posturi.findByCerinteOptionale", query = "SELECT p FROM Posturi p WHERE p.cerinteOptionale = :cerinteOptionale")
     , @NamedQuery(name = "Posturi.findByDataLimAplic", query = "SELECT p FROM Posturi p WHERE p.dataLimAplic = :dataLimAplic")
-    , @NamedQuery(name = "Posturi.findByDenumire", query = "SELECT p FROM Posturi p WHERE p.denumire = :denumire")
-    , @NamedQuery(name = "Posturi.findByValabil", query = "SELECT p FROM Posturi p WHERE p.valabil = :valabil")})
+    , @NamedQuery(name = "Posturi.findByDenumire", query = "SELECT p FROM Posturi p WHERE p.denumire = :denumire")})
 public class Posturi implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -57,8 +56,6 @@ public class Posturi implements Serializable {
     @Size(max = 255)
     @Column(name = "DENUMIRE")
     private String denumire;
-    @Column(name = "VALABIL")
-    private Boolean valabil;
     @JoinColumn(name = "DESCHIS_DE", referencedColumnName = "ID")
     @ManyToOne
     private Users deschisDe;
@@ -70,14 +67,13 @@ public class Posturi implements Serializable {
         this.id = id;
     }
 
-    public Posturi(int id, String denumire, String cerinteMinime, String cerinteOptionale, Date dataLimAplic, Users user, boolean valabil) {
+    public Posturi(int id, String denumire, String cerinteMinime, String cerinteOptionale, Date dataLimAplic, Users user) {
        this.id = id;
        this.denumire= denumire;
        this.cerinteMinime = cerinteMinime;
        this.cerinteOptionale = cerinteOptionale;
        this.dataLimAplic = dataLimAplic;
        this.deschisDe= user;
-       this.valabil = valabil;
        
     }
 
@@ -121,13 +117,6 @@ public class Posturi implements Serializable {
         this.denumire = denumire;
     }
 
-    public Boolean getValabil() {
-        return valabil;
-    }
-
-    public void setValabil(Boolean valabil) {
-        this.valabil = valabil;
-    }
 
     public Users getDeschisDe() {
         return deschisDe;
@@ -160,6 +149,15 @@ public class Posturi implements Serializable {
     @Override
     public String toString() {
         return "entity.Posturi[ id=" + id + " ]";
+    }
+
+    public Boolean isValabil() {
+        Date todayDate = new Date();
+        if(dataLimAplic.after(todayDate)){
+            return true;
+        }else{
+            return false;
+        }
     }
     
 }
