@@ -7,6 +7,22 @@
 
     <c:if test="${appAlert != null}">
         <div class="alert ${appAlert[1]} mt-lg-5 alert-app">${appAlert[0]}</div>
+        <script type="text/javascript">
+            function showAlert() {
+                $('.alert').animate({
+                    'opacity': 1,
+                    'right': '50px'
+                }, 350);
+                setTimeout(hideAlert, 5000);
+            }
+            function hideAlert() {
+                $('.alert').animate({
+                    'opacity': 0,
+                    'right': '-500px'
+                }, 350);
+            }
+            showAlert();
+	</script>
         ${appAlert = null}
     </c:if>
 
