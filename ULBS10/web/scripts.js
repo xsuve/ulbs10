@@ -73,4 +73,11 @@ $(document).ready(function() {
 
         toggleSection("edit-user");
     });
+    
+    //
+    $('#uploadCVInput').on('change', function() {
+        var fileName = $(this).val().split('\\').pop();
+        $('#uploadCVPreview').text(fileName);
+        $('.upload-cv #uploadCVPreview').show();
+    });
 });
