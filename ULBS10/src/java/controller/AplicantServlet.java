@@ -65,8 +65,12 @@ public class AplicantServlet extends HttpServlet {
                 Users user =  (Users) sesiune.getAttribute("user");
                 List<Posturi> posturi = (List<Posturi>) sesiune.getAttribute("posts");   
                 List<Aplicanti> allAplicanti = service.getAllAplicants();
-                Posturi post = posturi.get(idPost-1);
-                            
+                Posturi post = null;
+                for(int i = 0; i < posturi.size(); i++) {
+                    if(posturi.get(i).getId().equals(idPost)) {
+                       post = posturi.get(i);
+                    }
+                }            
                                
                 if(allAplicanti.size() == 0){
                     idAplicant = 0;
