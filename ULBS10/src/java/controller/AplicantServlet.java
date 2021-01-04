@@ -68,7 +68,7 @@ public class AplicantServlet extends HttpServlet {
                 Posturi post = posturi.get(idPost-1);
                             
                                
-                if(allAplicanti.size() == 0){
+                if(allAplicanti.isEmpty()){
                     idAplicant = 0;
                 } else {
                     idAplicant = allAplicanti.get(allAplicanti.size() - 1).getId();
