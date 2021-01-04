@@ -129,6 +129,7 @@ a {
 }
 .content .content-text {
     font-size: 14px;
+    font-weight: 300;
 }
 .content .content-section {
     display: none;
