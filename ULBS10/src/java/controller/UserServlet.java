@@ -87,13 +87,12 @@ public class UserServlet extends HttpServlet {
             }
             if ("pdf".equals(action)) {
                 String applicationPath = request.getServletContext().getRealPath("");
-                applicationPath = applicationPath.replace("build\\web", "cv\\");
                 HttpSession session = request.getSession();
                 Users u = (Users) session.getAttribute("user");
                 Part o = request.getPart("cv");
                 InputStream fileInputStream = o.getInputStream();
                 
-                String fileName = u.getId().toString() + "_" + u.getFirstname() + ".pdf";
+                String fileName = u.getId().toString() + ".pdf";
                 File fileToSave = new File(applicationPath + fileName);
                 Files.copy(fileInputStream, fileToSave.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
