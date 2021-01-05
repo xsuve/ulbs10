@@ -75,11 +75,15 @@
                                 <div class="col-lg-3">
                                     <div class="stats-box p-lg-4">
                                         <div class="row">
-                                            <div class="col-lg-8">
-                                                <h6 class="mb-lg-3">Cel mai autist</h6>
-                                                <h4 class="mb-lg-0">${user.getFirstname()} ${user.getLastname()}</h4>
+                                            <div class="col-lg-9">
+                                                <h6 class="mb-lg-3">Data curenta</h6>
+                                                <h4 class="mb-lg-0">
+                                                    <fmt:setLocale value="ro_RO" scope="session" />
+                                                    <jsp:useBean id="now" class="java.util.Date" />
+                                                    <fmt:formatDate value="${now}" pattern="dd MMMM" />
+                                                </h4>
                                             </div>
-                                            <div class="col-lg-4">
+                                            <div class="col-lg-3">
                                                 <div class="stats-box-icon vm">
                                                     <span class="material-icons">grade</span>
                                                 </div>
