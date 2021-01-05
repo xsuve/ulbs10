@@ -86,19 +86,16 @@ public class UserServlet extends HttpServlet {
                 processing.processLogout();
             }
             if ("pdf".equals(action)) {
+                String applicationPath = request.getServletContext().getRealPath("");
+                applicationPath = applicationPath.replace("build\\web", "cv\\");
                 HttpSession session = request.getSession();
                 Users u = (Users) session.getAttribute("user");
                 Part o = request.getPart("cv");
-                //get the InputStream to store the file somewhere
                 InputStream fileInputStream = o.getInputStream();
                 
-                //for example, you can copy the uploaded file to the server
-                //note that you probably don't want to do this in real life!
-                //upload it to a file host like S3 or GCS instead
-                File fileToSave = new File(System.getProperty("user.dir"));
-                System.out.println(System.getProperty("user.dir"));
-                //Files.copy(fileInputStream, fileToSave.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                
+                String fileName = u.getId().toString() + "_" + u.getFirstname() + ".pdf";
+                File fileToSave = new File(applicationPath + fileName);
+                Files.copy(fileInputStream, fileToSave.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
                 response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx#profil");
             }
