@@ -10,9 +10,7 @@ import java.io.Serializable;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,7 +23,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import org.apache.jasper.tagplugins.jstl.ForEach;
 
 /**
  *
@@ -201,7 +198,8 @@ public class Users implements Serializable {
         }
         p += id.toString() + ".pdf";
             returnare+=id.toString()+".pdf";
-        File file = new File(p);
+            Path path = Paths.get(p);
+        File file = new File(path.toString());
         if (file.exists()) {
             return returnare;
         } else {
