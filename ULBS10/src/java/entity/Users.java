@@ -7,7 +7,9 @@ package entity;
 
 import java.io.File;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -193,6 +195,7 @@ public class Users implements Serializable {
         String returnare = "";
         if (p.contains("/")) {
             p = p.replace("WEB-INF/classes/entity/Users.class", "cv/");
+            p = p.replace("WEB-INF/classes/entity/Users.class", "cv/");
             returnare+="cv/";
         }
         if (p.contains("\\")) {
@@ -200,7 +203,14 @@ public class Users implements Serializable {
             returnare+="cv\\";
         }
         p += id.toString() + ".pdf";
-            returnare+=id.toString()+".pdf";
+        returnare+=id.toString()+".pdf";
+            
+        try {
+            p = java.net.URLDecoder.decode(p, StandardCharsets.UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            // not going to happen - value came from JDK's own StandardCharsets
+        }
+            
         File file = new File(p);
         if (file.exists()) {
             return returnare;
