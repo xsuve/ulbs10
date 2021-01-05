@@ -80,5 +80,16 @@ public class AplicantService {
         }
     }
 
+    @Transactional
+    public void removeAplicant(int id) {
+         logger.info("removeAplicant");
+         try {
+            Aplicanti aplicant = em.find(Aplicanti.class,id);
+            em.remove(aplicant);
+        } catch (Exception ex) {
+            throw new EJBException(ex);
+        }
+    }
+
 
 }
