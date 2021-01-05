@@ -72,7 +72,7 @@ public class AplicantServlet extends HttpServlet {
                     }
                 }            
                                
-                if(allAplicanti.size() == 0){
+                if(allAplicanti.isEmpty()){
                     idAplicant = 0;
                 } else {
                     idAplicant = allAplicanti.get(allAplicanti.size() - 1).getId();
@@ -91,6 +91,7 @@ public class AplicantServlet extends HttpServlet {
                     
                     appAlert[0] = "Ai aplicat cu succes pentru acest post!";
                     appAlert[1] = "alert alert-success";
+                    session.setAttribute("aplicants", service.getAllAplicants());
                     session.setAttribute("appAlert", appAlert);
                     
                     response.sendRedirect(request.getServletContext() + "./../dashboard.jspx#posturi");
@@ -102,6 +103,21 @@ public class AplicantServlet extends HttpServlet {
                     response.sendRedirect(request.getServletContext() + "./../dashboard.jspx#posturi");
                 }
             }
+            
+             if ("deleteaplicant".equals(action)) {
+                  int id = Integer.parseInt(request.getParameter("id"));
+                  List<Aplicanti> aplican = service.getAllAplicants();
+                  
+                  for(Aplicanti aplic : aplican){
+                      if(aplic.getId().equals(id)){
+                          service.removeAplicant(id);
+                      }
+                  }
+                HttpSession sesiune = request.getSession();
+                sesiune.setAttribute("aplicants", service.getAllAplicants());
+                response.sendRedirect(request.getServletContext() + "/../dashboard.jspx#posturi");
+             
+             }
 
         }
     }

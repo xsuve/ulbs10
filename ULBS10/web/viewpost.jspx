@@ -24,12 +24,12 @@
 
                         <c:forEach items="${posts}" var="p">
                             <c:if test="${p.getId() == param.id}">
-                                
+
                                 <section class="content-section active">
                                     <div class="row">
                                         <div class="col-lg-8">
                                             <h2 class="content-title mb-lg-5">${p.getDenumire()}</h2>
-                                            
+
                                             <div class="mb-lg-5">
                                                 <h6 class="content-subtitle">Cerinte minime:</h6>
                                                 <p class="content-text">${p.getCerinteMinime()}</p>
@@ -39,7 +39,7 @@
                                                 <h6 class="content-subtitle">Cerinte optionale:</h6>
                                                 <p class="content-text">${p.getCerinteOptionale()}</p>
                                             </div>
-                                            
+
                                             <div>
                                                 <c:forEach items="${users}" var="u">
                                                     <c:if test="${p.getDeschisDe().getId() == u.getId()}">
@@ -50,7 +50,7 @@
                                             </div>
                                         </div>
                                         <div class="col-lg-4">
-                                            <c:if test="${user.getStatut() != 'administrator'}">
+                                            <c:if test="${user.getStatut() == 'viewer'}">
                                                 <div style="text-align: right;">
                                                     <form action="./aplicant?action=aplica" method="post">
                                                         <input type="hidden" name="id_post" value = "${p.getId()}"/>
@@ -60,19 +60,58 @@
                                             </c:if>
                                         </div>
                                     </div>
-                                          
-                                    <c:if test="${user.getStatut() == 'administrator'}">
+
+                                    <c:if test="${user.getStatut() != 'viewer'}">
+
                                         <div class="divider mt-lg-5"></div>
 
                                         <h2 class="content-title pt-lg-5 mb-lg-5">Aplicanti</h2>
-                                        <c:forEach items="${aplicants}" var="a">
-                                            <c:if test="${a.getIdPost().getId() == p.getId()}">
-                                                ${a.getIdUser().getFirstname()}
-                                            </c:if>
-                                        </c:forEach>
-                                    </c:if>
+                                        <div class="posts">
+                                            <div class="row post posts-header pt-lg-3 pb-lg-3">
+                                                <div class="col-lg-5">
+                                                    <h6 class="mb-lg-0 mt-lg-0 post-title">Nume complet</h6>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <div class="post-date">Data aplicarii</div>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <div class="post-actions">Actiuni</div>
+                                                </div>
+                                            </div>
+                                            
+                                            <c:forEach items="${aplicants}" var="a">
+                                                <c:if test="${a.getIdPost().getId() == p.getId()}">
+                                                    <div class="row post pt-lg-3 pb-lg-3">
+                                                        <div class="col-lg-5">
+                                                            <h6 class="mb-lg-0 mt-lg-0 post-title">
+                                                                <a href="viewuser.jspx?id=${a.getIdUser().getId()}">${a.getIdUser().getFirstname()} ${a.getIdUser().getLastname()}</a>
+                                                            </h6>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <div class="post-date">
+                                                                <fmt:setLocale value="ro_RO" scope="session" />
+                                                                <fmt:formatDate value="${a.getDataAplicarii()}" pattern="dd MMMM, yyyy" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4">
+                                                            <div class="post-actions">
+
+                                                                    <c:if test="${user.getStatut() != 'viewer'}">
+                                                                         <a href="#">Descarca CV</a>
+                                                                    </c:if>
+                                                                    <c:if test="${user.getStatut() == 'generalDirector'}">
+                                                                        | 
+                                                                         <a href="./aplicant?action=deleteaplicant&amp;id=${a.getId()}">Sterge</a>
+                                                                    </c:if>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </c:if>
+                                            </c:forEach>
+                                        </div>
+
                                 </section>
-                                
+
                             </c:if>
                         </c:forEach>
 

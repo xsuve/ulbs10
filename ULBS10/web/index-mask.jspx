@@ -39,15 +39,12 @@
                         <c:forEach items="${posts}" var="p">
                             <c:if test="${p.isValabil() == true}">
                                 <div class="row post pt-lg-3 pb-lg-3">
-                                    <div class="col-lg-1">
-                                        <div class="post-id">${p.getId()}</div>
-                                    </div>
                                     <div class="col-lg-6">
                                         <h6 class="mb-lg-0 mt-lg-0 post-title">
                                             <a href="viewpost.jspx?id=${p.getId()}">${p.getDenumire()}</a>
                                         </h6>
                                     </div>
-                                    <div class="col-lg-2">
+                                    <div class="col-lg-3">
                                         <div class="post-date">
                                             <fmt:setLocale value="ro_RO" scope="session" />
                                             <fmt:formatDate value="${p.getDataLimAplic()}" pattern="dd MMMM, yyyy" />

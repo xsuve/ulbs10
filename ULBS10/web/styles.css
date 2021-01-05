@@ -95,13 +95,15 @@ a {
 .alert.alert-app {
     position: fixed;
     top: 0px;
-    right: 50px;
     display: inline-block;
     z-index: 9990;
+    right: -500px;
 }
 
 /* Sidebar */
 .sidebar {
+    position: sticky;
+    top: 0px;
     height: 100vh;
     background-color: #0f131a;
 }
@@ -194,6 +196,12 @@ a {
     width: 200px;
     height: 200px;
     border: 2px dashed #888;
+}
+.upload-cv #uploadCVPreview {
+    display: none;
+    color: #fff;
+    font-size: 14px;
+    line-height: 24px;
 }
 .upload-cv div .material-icons {
     color: #888;
