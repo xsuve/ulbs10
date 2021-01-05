@@ -286,3 +286,25 @@ a {
     font-weight: 300;
     font-size: 14px;
 }
+
+/* Stats */
+.stats-box {
+    background-color: #0f131a;
+}
+.stats-box h6 {
+    color: #888;
+    font-size: 15px;
+    font-weight: 300;
+}
+.stats-box h4 {
+    color: #fff;
+    font-size: 22px;
+    font-weight: 400;
+}
+.stats-box .stats-box-icon {
+    text-align: right;
+}
+.stats-box .material-icons {
+    font-size: 34px;
+    color: #fff;
+}

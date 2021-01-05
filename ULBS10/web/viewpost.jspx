@@ -95,18 +95,17 @@
                                                         </div>
                                                         <div class="col-lg-4">
                                                             <div class="post-actions">
-
-                                                                    <c:if test="${user.getStatut() != 'viewer'}">
-                                                                         <a href="${a.getIdUser().getCV()}">Descarca CV</a>
-                                                                    </c:if>
-                                                                    <c:if test="${user.getStatut() == 'generalDirector'}">
-                                                                        |
-                                                                         <a href="./aplicant?action=deleteaplicant&amp;id=${a.getId()}">Sterge</a>
-                                                                    </c:if>
-                                                                    <c:if test="${user.getStatut() == 'generalDirector'}">
-                                                                        |
-                                                                         <a href="./aplicant?action=acceptAplicant&amp;id=${a.getId()}">Accepta</a>
-                                                                    </c:if>
+                                                                <c:if test="${user.getStatut() != 'viewer'}">
+                                                                     <a href="${a.getIdUser().getCV()}">Descarca CV</a>
+                                                                </c:if>
+                                                                <c:if test="${user.getStatut() == 'generalDirector'}">
+                                                                    |
+                                                                     <a href="./aplicant?action=deleteaplicant&amp;id=${a.getId()}">Sterge</a>
+                                                                </c:if>
+                                                                <c:if test="${user.getStatut() == 'generalDirector'}">
+                                                                    |
+                                                                     <a href="./aplicant?action=acceptAplicant&amp;id=${a.getId()}">Accepta</a>
+                                                                </c:if>
                                                             </div>
                                                         </div>
                                                     </div>

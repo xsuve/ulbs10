@@ -27,7 +27,7 @@
                                 
                                 <section class="content-section active">
                                     <h2 class="content-title mb-lg-5">${u.getFirstname()} ${u.getLastname()}</h2>
-                                    
+                                    <a href="mailto:${u.getEmail()}"><p class="content-text">${u.getEmail()}</p></a>
                                 </section>
                                 
                             </c:if>
