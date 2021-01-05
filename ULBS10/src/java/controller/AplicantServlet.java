@@ -12,7 +12,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.inject.Inject;
+import javax.mail.MessagingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,8 +23,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import model.User;
 import services.AplicantService;
 import utility.Processing;
+import utility.gmailSendEmailSSL;
 
 /**
  *
@@ -50,7 +55,7 @@ public class AplicantServlet extends HttpServlet {
     Processing processing;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, MessagingException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             String action = request.getParameter("action");
@@ -118,6 +123,29 @@ public class AplicantServlet extends HttpServlet {
                 response.sendRedirect(request.getServletContext() + "/../dashboard.jspx#posturi");
              
              }
+             
+             if ("acceptAplicant".equals(action)) {
+                  int id = Integer.parseInt(request.getParameter("id"));
+                  List<Aplicanti> aplican = service.getAllAplicants();
+                  
+                  for(Aplicanti aplic : aplican){
+                      if(aplic.getId().equals(id)){
+                          HttpSession sesiune = request.getSession();
+                          List<Users> users = (List<Users>)sesiune.getAttribute("users");
+                          for(Users user : users) {
+                              if(aplic.getIdUser().getId().equals(user.getId())) {
+                                  Users use = user;
+                                  gmailSendEmailSSL sendemail = new gmailSendEmailSSL();
+                                  sendemail.sendMail("", use.getEmail(), "Oferta job", "Ai fost acceptat pentru acest post");
+                                  sesiune.setAttribute("aplicants", service.getAllAplicants());
+                              }
+                          }
+                      }
+                  }
+
+                response.sendRedirect(request.getServletContext() + "/../dashboard.jspx#posturi");
+             
+             }
 
         }
     }
@@ -134,7 +162,11 @@ public class AplicantServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (MessagingException ex) {
+            Logger.getLogger(AplicantServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -148,7 +180,11 @@ public class AplicantServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (MessagingException ex) {
+            Logger.getLogger(AplicantServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
