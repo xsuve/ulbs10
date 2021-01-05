@@ -107,23 +107,6 @@ public class UserServlet extends HttpServlet {
                 session.setAttribute("appAlert", alert);
                 response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx#profil");
             }
-            //maybe
-            if ("download".equals(action)) {
-                int id = Integer.parseInt(request.getParameter("id"));
-                for (Users user : users) {
-                    if (user.getId() == id) {
-                        File f = new File("C://New folder//itext_Test.pdf");
-                        FileInputStream fis = new FileInputStream(f);
-                        DataOutputStream os = new DataOutputStream(response.getOutputStream());
-                        response.setHeader("Content-Length", String.valueOf(f.length()));
-                        byte[] buffer = new byte[1024];
-                        int len = 0;
-                        while ((len = fis.read(buffer)) >= 0) {
-                            os.write(buffer, 0, len);
-                        }
-                    }
-                }
-            }
 
             if ("edituser".equals(action)) {
                 int id = Integer.parseInt(request.getParameter("id"));

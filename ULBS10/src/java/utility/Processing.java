@@ -82,7 +82,8 @@ public class Processing {
                 break;
             }
         }
-
+        Users u = users.get(0);
+        u.getCV();
         if (!logare) {
             alert[0] = "Email sau parola incorecta!";
             alert[1] = "alert alert-danger";
