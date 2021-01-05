@@ -53,7 +53,8 @@ public class AplicantServlet extends HttpServlet {
     String alerta;
     RequestDispatcher dispatcher = null;
     Processing processing;
-
+    String[] alert = new String[2];
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, MessagingException {
         response.setContentType("text/html;charset=UTF-8");
@@ -119,6 +120,9 @@ public class AplicantServlet extends HttpServlet {
                       }
                   }
                 HttpSession sesiune = request.getSession();
+                alert[0] = "Aplicantul a fost refuzat pentru acest post!";
+                alert[1] = "alert alert-danger";
+                sesiune.setAttribute("appAlert", alert);
                 sesiune.setAttribute("aplicants", service.getAllAplicants());
                 response.sendRedirect(request.getServletContext() + "/../dashboard.jspx#posturi");
              
@@ -137,6 +141,9 @@ public class AplicantServlet extends HttpServlet {
                                   Users use = user;
                                   gmailSendEmailSSL sendemail = new gmailSendEmailSSL();
                                   sendemail.sendMail("", use.getEmail(), "Oferta job", "Ai fost acceptat pentru acest post");
+                                  alert[0] = "Aplicantul a fost acceptat pentru acest post!";
+                                  alert[1] = "alert alert-success";
+                                  sesiune.setAttribute("appAlert", alert);
                                   sesiune.setAttribute("aplicants", service.getAllAplicants());
                               }
                           }

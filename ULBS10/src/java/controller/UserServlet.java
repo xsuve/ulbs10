@@ -61,7 +61,8 @@ public class UserServlet extends HttpServlet {
     String alerta;
     RequestDispatcher dispatcher = null;
     Processing processing;
-
+    String[] alert = new String[2];
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException, InvalidKeySpecException {
         response.setContentType("text/html;charset=UTF-8");
@@ -101,7 +102,9 @@ public class UserServlet extends HttpServlet {
                 
                 File fileToSave = new File(uploadFilePath + File.separator + fileName);
                 Files.copy(fileInputStream, fileToSave.toPath(), StandardCopyOption.REPLACE_EXISTING);
-
+                alert[0] = "Ai incarcat cu succes CV-ul!";
+                alert[1] = "alert alert-success";
+                session.setAttribute("appAlert", alert);
                 response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx#profil");
             }
             //maybe
@@ -141,7 +144,10 @@ public class UserServlet extends HttpServlet {
                 }
                 users = service.getAllUsers();
                 sesiune.setAttribute("users", users);
-                response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx#utilizatori");
+                alert[0] = "Utilizator modificat cu succes!";
+                alert[1] = "alert alert-success";
+                sesiune.setAttribute("appAlert", alert);
+                response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx#utilizatori");                              
             }
 
             if ("deleteuser".equals(action)) {
@@ -152,8 +158,14 @@ public class UserServlet extends HttpServlet {
                     service.removeUser(id);
                     users = service.getAllUsers();
                     sesiune.setAttribute("users", users);
+                    alert[0] = "Utilizator sters cu succes!";
+                    alert[1] = "alert alert-success";
+                    sesiune.setAttribute("appAlert", alert);
                     response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx#utilizatori");
                 } else {
+                    alert[0] = "Utilizatorul nu a fost sters!";
+                    alert[1] = "alert alert-danger";
+                    sesiune.setAttribute("appAlert", alert);
                     response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx#utilizatori");
                 }
             }
@@ -162,6 +174,9 @@ public class UserServlet extends HttpServlet {
                     service.addUser(processing.getUserData());
                     HttpSession session = request.getSession();
                     List<Users> u = (List<Users>) service.getAllUsers();
+                    alert[0] = "Utilizator adaugat cu succes!";
+                    alert[1] = "alert alert-success";
+                    session.setAttribute("appAlert", alert);
                     session.setAttribute("users", u);
                 }
             }
