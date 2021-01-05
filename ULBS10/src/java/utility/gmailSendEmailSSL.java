@@ -36,6 +36,7 @@ public class gmailSendEmailSSL {
                 return new PasswordAuthentication(USERNAME, PASSWORD);
             }
         });
+        mailFrom = "ulbs10.recrutari@gmail.com";
         MimeMessage message = new MimeMessage(session);
         message.setFrom(new InternetAddress(mailFrom));
         message.addRecipient(Message.RecipientType.TO, new InternetAddress(mailTo));
