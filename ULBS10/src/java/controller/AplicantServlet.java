@@ -144,6 +144,7 @@ public class AplicantServlet extends HttpServlet {
                                   alert[0] = "Aplicantul a fost acceptat pentru acest post!";
                                   alert[1] = "alert alert-success";
                                   sesiune.setAttribute("appAlert", alert);
+                                  service.removeAplicant(id);
                                   sesiune.setAttribute("aplicants", service.getAllAplicants());
                               }
                           }
