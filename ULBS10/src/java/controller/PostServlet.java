@@ -51,6 +51,7 @@ public class PostServlet extends HttpServlet {
     String alerta;
     RequestDispatcher dispatcher = null;
     Processing processing;
+    String[] alert = new String[2];
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, ParseException {
@@ -80,7 +81,10 @@ public class PostServlet extends HttpServlet {
                 post = new Posturi(++lastID, request.getParameter("denumire"), cerinteMinime, cerinteOptionale, date1, u);
                 service.addPost(post);
                 sesiune.setAttribute("posts", service.getAllPosts());
-
+                
+                alert[0] = "Post adaugat cu succes!";
+                alert[1] = "alert alert-success";
+                sesiune.setAttribute("appAlert", alert);
                 response.sendRedirect(request.getServletContext() + "/../dashboard.jspx#posturi");
                 //dispatcher = request.getServletContext().getRequestDispatcher("/dashboard.jspx");
                 //dispatcher.forward(request, response);
@@ -94,6 +98,9 @@ public class PostServlet extends HttpServlet {
                     service.removePost(item);
                 });
                 sesiune.setAttribute("posts", service.getAllPosts());
+                alert[0] = "Post sters cu succes!";
+                alert[1] = "alert alert-success";
+                sesiune.setAttribute("appAlert", alert);
                 response.sendRedirect(request.getServletContext() + "/../dashboard.jspx#posturi");
             }
 
@@ -108,6 +115,9 @@ public class PostServlet extends HttpServlet {
                 cerinteOptionale = cerinteOptionale.replaceAll("\n", "<br />");
 
                 service.editPost(id, request.getParameter("denumire"), cerinteMinime, cerinteOptionale, date1);
+                alert[0] = "Post modificat cu succes!";
+                alert[1] = "alert alert-success";
+                sesiune.setAttribute("appAlert", alert);
                 sesiune.setAttribute("posts", service.getAllPosts());
                 response.sendRedirect(request.getServletContext() + "/../dashboard.jspx#posturi");
             }

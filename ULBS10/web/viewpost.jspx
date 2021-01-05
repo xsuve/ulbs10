@@ -95,6 +95,7 @@
                                                         </div>
                                                         <div class="col-lg-4">
                                                             <div class="post-actions">
+
                                                                 <c:if test="${user.getStatut() != 'viewer'}">
                                                                      <a href="${a.getIdUser().getCV()}">Descarca CV</a>
                                                                 </c:if>
@@ -106,13 +107,16 @@
                                                                     |
                                                                      <a href="./aplicant?action=acceptAplicant&amp;id=${a.getId()}">Accepta</a>
                                                                 </c:if>
+
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </c:if>
                                             </c:forEach>
                                         </div>
+
                                      </c:if>
+                                        
                                 </section>
                             </c:if>
                         </c:forEach>
