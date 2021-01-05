@@ -99,7 +99,7 @@ public class UserServlet extends HttpServlet {
                     fileSaveDir.mkdirs();
                 }
                 
-                File fileToSave = new File(uploadFilePath + "\\" + fileName);
+                File fileToSave = new File(uploadFilePath + File.separator + fileName);
                 Files.copy(fileInputStream, fileToSave.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
                 response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx#profil");
