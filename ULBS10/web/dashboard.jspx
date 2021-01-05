@@ -26,6 +26,68 @@
                         <!-- Acasa -->
                         <section data-tab="acasa" class="content-section active">
                             <h2 class="content-title mb-lg-5">Bine ai revenit, ${user.getFirstname()} ${user.getLastname()}!</h2>
+                            <div class="row mt-lg-5">
+                                <div class="col-lg-3">
+                                    <div class="stats-box p-lg-4">
+                                        <div class="row">
+                                            <div class="col-lg-8">
+                                                <h6 class="mb-lg-3">Total utilizatori</h6>
+                                                <h4 class="mb-lg-0">${users.size()}</h4>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="stats-box-icon vm">
+                                                    <span class="material-icons">group</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="stats-box p-lg-4">
+                                        <div class="row">
+                                            <div class="col-lg-8">
+                                                <h6 class="mb-lg-3">Total posturi</h6>
+                                                <h4 class="mb-lg-0">${posts.size()}</h4>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="stats-box-icon vm">
+                                                    <span class="material-icons">work</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="stats-box p-lg-4">
+                                        <div class="row">
+                                            <div class="col-lg-8">
+                                                <h6 class="mb-lg-3">Total aplicanti</h6>
+                                                <h4 class="mb-lg-0">${aplicants.size()}</h4>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="stats-box-icon vm">
+                                                    <span class="material-icons">post_add</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="stats-box p-lg-4">
+                                        <div class="row">
+                                            <div class="col-lg-8">
+                                                <h6 class="mb-lg-3">Cel mai autist</h6>
+                                                <h4 class="mb-lg-0">${user.getFirstname()} ${user.getLastname()}</h4>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="stats-box-icon vm">
+                                                    <span class="material-icons">grade</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </section>
 
                         <!-- Utilizatori -->
