@@ -5,7 +5,11 @@
  */
 package entity;
 
+import java.io.File;
 import java.io.Serializable;
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -67,21 +71,24 @@ public class Users implements Serializable {
 
     public Users() {
     }
-    public Users(String stEmail, String stPassword, String stFirstName, String stLastName, String stStatut){
-    email=stEmail;
-    password=stPassword;
-    firstname=stFirstName;
-    lastname=stLastName;
-    statut=stStatut;
+
+    public Users(String stEmail, String stPassword, String stFirstName, String stLastName, String stStatut) {
+        email = stEmail;
+        password = stPassword;
+        firstname = stFirstName;
+        lastname = stLastName;
+        statut = stStatut;
     }
-    public Users(int inID, String stEmail, String stPassword, String stFirstName, String stLastName, String stStatut){
-    id = inID;
-    email=stEmail;
-    password=stPassword;
-    firstname=stFirstName;
-    lastname=stLastName;
-    statut=stStatut;
+
+    public Users(int inID, String stEmail, String stPassword, String stFirstName, String stLastName, String stStatut) {
+        id = inID;
+        email = stEmail;
+        password = stPassword;
+        firstname = stFirstName;
+        lastname = stLastName;
+        statut = stStatut;
     }
+
     public Users(Integer id) {
         this.id = id;
     }
@@ -176,5 +183,25 @@ public class Users implements Serializable {
     public void setPosturiCollection(Collection<Posturi> posturiCollection) {
         this.posturiCollection = posturiCollection;
     }
-    
+
+    public String getCV() {
+        URL s = this.getClass().getProtectionDomain().getCodeSource().getLocation();
+        String p = s.getPath();
+        String[] plm;
+        if(p.contains("/")){
+        plm = p.split("/");
+        }else{            
+        plm = p.split("\\");
+        }
+        
+        Path path = Paths.get(plm[1], plm[2], plm[3], plm[4], plm[5], plm[6], "cv", "");
+        Path afisare = Paths.get("cv", id.toString());
+        String returnare = afisare.toString()+ ".pdf";
+        File file = new File(path + File.separator + id + ".pdf");
+        if (file.exists()) {
+            return returnare;
+        } else {
+            return "#";
+        }
+    }
 }

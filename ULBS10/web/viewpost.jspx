@@ -97,7 +97,7 @@
                                                             <div class="post-actions">
 
                                                                     <c:if test="${user.getStatut() != 'viewer'}">
-                                                                         <a href="#">Descarca CV</a>
+                                                                         <a href="${a.getIdUser().getCV()}">Descarca CV</a>
                                                                     </c:if>
                                                                     <c:if test="${user.getStatut() == 'generalDirector'}">
                                                                         |

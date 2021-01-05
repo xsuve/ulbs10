@@ -23,7 +23,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import model.User;
 import services.AplicantService;
 import utility.Processing;
 import utility.gmailSendEmailSSL;
@@ -65,87 +64,94 @@ public class AplicantServlet extends HttpServlet {
                 HttpSession sesiune = request.getSession();
                 Date todayDate = new Date();
                 int idAplicant;
-                int idPost = Integer.parseInt(request.getParameter("id_post")); 
-                 
-                Users user =  (Users) sesiune.getAttribute("user");
-                List<Posturi> posturi = (List<Posturi>) sesiune.getAttribute("posts");   
+                int idPost = Integer.parseInt(request.getParameter("id_post"));
+
+                Users user = (Users) sesiune.getAttribute("user");
+                List<Posturi> posturi = (List<Posturi>) sesiune.getAttribute("posts");
                 List<Aplicanti> allAplicanti = service.getAllAplicants();
                 Posturi post = null;
-                for(int i = 0; i < posturi.size(); i++) {
-                    if(posturi.get(i).getId().equals(idPost)) {
-                       post = posturi.get(i);
+                for (int i = 0; i < posturi.size(); i++) {
+                    if (posturi.get(i).getId().equals(idPost)) {
+                        post = posturi.get(i);
                     }
-                }            
-                               
-                if(allAplicanti.isEmpty()){
+                }
+
+                if (allAplicanti.isEmpty()) {
                     idAplicant = 0;
                 } else {
                     idAplicant = allAplicanti.get(allAplicanti.size() - 1).getId();
                 }
                 boolean existInDB = false;
-                for(int i=0; i<allAplicanti.size();i++){
-                    if(allAplicanti.get(i).getIdPost().equals(post)  && allAplicanti.get(i).getIdUser().equals(user))
+                for (int i = 0; i < allAplicanti.size(); i++) {
+                    if (allAplicanti.get(i).getIdPost().equals(post) && allAplicanti.get(i).getIdUser().equals(user)) {
                         existInDB = true;
+                    }
                 }
-                
+
                 HttpSession session = request.getSession();
                 String[] appAlert = new String[2];
 
-                if(!existInDB){
-                    service.addAplicant(++idAplicant, user, post , todayDate);
-                    
+                if (!existInDB) {
+                    service.addAplicant(++idAplicant, user, post, todayDate);
+
                     appAlert[0] = "Ai aplicat cu succes pentru acest post!";
                     appAlert[1] = "alert alert-success";
                     session.setAttribute("aplicants", service.getAllAplicants());
                     session.setAttribute("appAlert", appAlert);
-                    
+
                     response.sendRedirect(request.getServletContext() + "./../dashboard.jspx#posturi");
                 } else {
                     appAlert[0] = "Ai aplicat deja pentru acest post!";
                     appAlert[1] = "alert alert-danger";
                     session.setAttribute("appAlert", appAlert);
-                    
+
                     response.sendRedirect(request.getServletContext() + "./../dashboard.jspx#posturi");
                 }
             }
-            
-             if ("deleteaplicant".equals(action)) {
-                  int id = Integer.parseInt(request.getParameter("id"));
-                  List<Aplicanti> aplican = service.getAllAplicants();
-                  
-                  for(Aplicanti aplic : aplican){
-                      if(aplic.getId().equals(id)){
-                          service.removeAplicant(id);
-                      }
-                  }
+
+            if ("deleteaplicant".equals(action)) {
+                int id = Integer.parseInt(request.getParameter("id"));
+                List<Aplicanti> aplican = service.getAllAplicants();
+
+                for (Aplicanti aplic : aplican) {
+                    if (aplic.getId().equals(id)) {
+                        service.removeAplicant(id);
+                    }
+                }
                 HttpSession sesiune = request.getSession();
                 sesiune.setAttribute("aplicants", service.getAllAplicants());
                 response.sendRedirect(request.getServletContext() + "/../dashboard.jspx#posturi");
-             
-             }
-             
-             if ("acceptAplicant".equals(action)) {
-                  int id = Integer.parseInt(request.getParameter("id"));
-                  List<Aplicanti> aplican = service.getAllAplicants();
-                  
-                  for(Aplicanti aplic : aplican){
-                      if(aplic.getId().equals(id)){
-                          HttpSession sesiune = request.getSession();
-                          List<Users> users = (List<Users>)sesiune.getAttribute("users");
-                          for(Users user : users) {
-                              if(aplic.getIdUser().getId().equals(user.getId())) {
-                                  Users use = user;
-                                  gmailSendEmailSSL sendemail = new gmailSendEmailSSL();
-                                  sendemail.sendMail("", use.getEmail(), "Oferta job", "Ai fost acceptat pentru acest post");
-                                  sesiune.setAttribute("aplicants", service.getAllAplicants());
-                              }
-                          }
-                      }
-                  }
+
+            }
+
+            if ("acceptAplicant".equals(action)) {
+                int id = Integer.parseInt(request.getParameter("id"));
+                List<Aplicanti> aplican = service.getAllAplicants();
+
+                for (Aplicanti aplic : aplican) {
+                    if (aplic.getId().equals(id)) {
+                        HttpSession sesiune = request.getSession();
+                        List<Users> users = (List<Users>) sesiune.getAttribute("users");
+                        for (Users user : users) {
+                            if (aplic.getIdUser().getId().equals(user.getId())) {
+                                Users use = user;
+                                Posturi post = new Posturi();
+                                post = aplic.getIdPost();
+                                String mesaj = "Felicitari " + user.getFirstname() + " " + user.getLastname() + ",\n"
+                                        + "Ati fost acceptat pentru postul " + post.getDenumire() + ",\n\n"
+                                        + "O zi buna!";
+                                gmailSendEmailSSL sendemail = new gmailSendEmailSSL();
+                                sendemail.sendMail("", use.getEmail(), "Oferta job", mesaj);
+                                service.removeAplicant(id);
+                                sesiune.setAttribute("aplicants", service.getAllAplicants());
+                            }
+                        }
+                    }
+                }
 
                 response.sendRedirect(request.getServletContext() + "/../dashboard.jspx#posturi");
-             
-             }
+
+            }
 
         }
     }
