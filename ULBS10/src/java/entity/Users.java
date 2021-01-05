@@ -10,7 +10,9 @@ import java.io.Serializable;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,6 +25,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.apache.jasper.tagplugins.jstl.ForEach;
 
 /**
  *
@@ -187,17 +190,18 @@ public class Users implements Serializable {
     public String getCV() {
         URL s = this.getClass().getProtectionDomain().getCodeSource().getLocation();
         String p = s.getPath();
-        String[] plm;
-        if(p.contains("/")){
-        plm = p.split("/");
-        }else{            
-        plm = p.split("\\");
+        String returnare = "";
+        if (p.contains("/")) {
+            p = p.replace("WEB-INF/classes/entity/Users.class", "cv/");
+            returnare+="cv/";
         }
-        
-        Path path = Paths.get(plm[1], plm[2], plm[3], plm[4], plm[5], plm[6], "cv", "");
-        Path afisare = Paths.get("cv", id.toString());
-        String returnare = afisare.toString()+ ".pdf";
-        File file = new File(path + File.separator + id + ".pdf");
+        if (p.contains("\\")) {
+            p = p.replace("WEB-INF\\classes\\entity\\Users.class", "cv\\");
+            returnare+="cv\\";
+        }
+        p += id.toString() + ".pdf";
+            returnare+=id.toString()+".pdf";
+        File file = new File(p);
         if (file.exists()) {
             return returnare;
         } else {
