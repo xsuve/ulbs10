@@ -55,7 +55,7 @@
                                                     <form action="./aplicant?action=aplica" method="post">
                                                         <input type="hidden" name="id_post" value = "${p.getId()}"/>
                                                         <button type="submit" class="btn btn-success" name="newpostsubmit"><span class="material-icons">check_circle</span> Aplica pentru acest post</button>
-                                                    </form>                                                                      
+                                                    </form>
                                                 </div>
                                             </c:if>
                                         </div>
@@ -78,7 +78,7 @@
                                                     <div class="post-actions">Actiuni</div>
                                                 </div>
                                             </div>
-                                            
+
                                             <c:forEach items="${aplicants}" var="a">
                                                 <c:if test="${a.getIdPost().getId() == p.getId()}">
                                                     <div class="row post pt-lg-3 pb-lg-3">
@@ -100,11 +100,11 @@
                                                                          <a href="#">Descarca CV</a>
                                                                     </c:if>
                                                                     <c:if test="${user.getStatut() == 'generalDirector'}">
-                                                                        | 
+                                                                        |
                                                                          <a href="./aplicant?action=deleteaplicant&amp;id=${a.getId()}">Sterge</a>
                                                                     </c:if>
                                                                     <c:if test="${user.getStatut() == 'generalDirector'}">
-                                                                        | 
+                                                                        |
                                                                          <a href="./aplicant?action=acceptAplicant&amp;id=${a.getId()}">Accepta</a>
                                                                     </c:if>
                                                             </div>
@@ -115,10 +115,8 @@
                                         </div>
                                      </c:if>
                                 </section>
-
                             </c:if>
                         </c:forEach>
-
                     </div>
                 </div>
             </div>

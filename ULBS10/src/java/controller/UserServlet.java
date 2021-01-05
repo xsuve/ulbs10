@@ -87,13 +87,19 @@ public class UserServlet extends HttpServlet {
             }
             if ("pdf".equals(action)) {
                 String applicationPath = request.getServletContext().getRealPath("");
+                String uploadFilePath = applicationPath + File.separator + "cv";
                 HttpSession session = request.getSession();
                 Users u = (Users) session.getAttribute("user");
                 Part o = request.getPart("cv");
                 InputStream fileInputStream = o.getInputStream();
-                
                 String fileName = u.getId().toString() + ".pdf";
-                File fileToSave = new File(applicationPath + fileName);
+                
+                File fileSaveDir = new File(uploadFilePath);
+                if (!fileSaveDir.exists()) {
+                    fileSaveDir.mkdirs();
+                }
+                
+                File fileToSave = new File(uploadFilePath + "\\" + fileName);
                 Files.copy(fileInputStream, fileToSave.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
                 response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx#profil");
