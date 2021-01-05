@@ -78,7 +78,7 @@
                                                     <div class="post-actions">Actiuni</div>
                                                 </div>
                                             </div>
-                                            
+
                                             <c:forEach items="${aplicants}" var="a">
                                                 <c:if test="${a.getIdPost().getId() == p.getId()}">
                                                     <div class="row post pt-lg-3 pb-lg-3">
@@ -96,25 +96,23 @@
                                                         <div class="col-lg-4">
                                                             <div class="post-actions">
 
-                                                                    <c:if test="${user.getStatut() != 'viewer'}">
-                                                                         <a href="#">Descarca CV</a>
-                                                                    </c:if>
-                                                                    <c:if test="${user.getStatut() == 'generalDirector'}">
-                                                                        | 
-                                                                         <a href="./aplicant?action=deleteaplicant&amp;id=${a.getId()}">Sterge</a>
-                                                                    </c:if>
+                                                                <c:if test="${user.getStatut() != 'viewer'}">
+                                                                    <a href="#">Descarca CV</a>
+                                                                </c:if>
+                                                                <c:if test="${user.getStatut() == 'generalDirector'}">
+                                                                    | 
+                                                                    <a href="./aplicant?action=deleteaplicant&amp;id=${a.getId()}">Sterge</a>
+                                                                </c:if>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </c:if>
                                             </c:forEach>
                                         </div>
-
+                                    </c:if>
                                 </section>
-
                             </c:if>
                         </c:forEach>
-
                     </div>
                 </div>
             </div>
