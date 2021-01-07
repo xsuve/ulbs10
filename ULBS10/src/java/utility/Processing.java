@@ -5,13 +5,18 @@
  */
 package utility;
 
+import controller.UserServlet;
 import entity.Aplicanti;
 import entity.Posturi;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import entity.Users;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
@@ -19,10 +24,14 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+import javax.mail.MessagingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.http.Part;
 
 /**
  *
@@ -149,7 +158,7 @@ public class Processing {
             request.setAttribute("alert", alert);
             if ("signup".equals(type)) {
                 dispatcher = request.getServletContext().getRequestDispatcher("/login/signup.jspx");
-            dispatcher.forward(request, response);
+                dispatcher.forward(request, response);
             } else {
                 dispatcher = request.getServletContext().getRequestDispatcher("/../../dashboard.jspx#utilizatori");
             }
@@ -160,12 +169,21 @@ public class Processing {
                 alert[0] = "Te-ai inregistrat cu succes!";
                 alert[1] = "alert alert-success";
                 request.setAttribute("alert", alert);
-            if ("signup".equals(type)) {
-                dispatcher = request.getServletContext().getRequestDispatcher("/login/login.jspx");
-                dispatcher.forward(request, response);
-            } else {
-                response.sendRedirect(request.getServletContext() + "/../../dashboard.jspx#utilizatori");
-            }
+
+                gmailSendEmailSSL gmail = new gmailSendEmailSSL();
+                String mesaj = "Bine ai venit " + firstName + " " + lastName + ",\n" + "V-ati inregistrat cu succes, va dorim "
+                        + "mult noroc si o cariera de succes!";
+                try {
+                    gmail.sendMail("", email, "Inregistrare platforma ULBS10", mesaj);
+                } catch (MessagingException ex) {
+                    Logger.getLogger(Processing.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                if ("signup".equals(type)) {
+                    dispatcher = request.getServletContext().getRequestDispatcher("/login/login.jspx");
+                    dispatcher.forward(request, response);
+                } else {
+                    response.sendRedirect(request.getServletContext() + "/../../dashboard.jspx#utilizatori");
+                }
                 user = new Users(++lastID, email, password, firstName, lastName, statut);
                 return true;
 
@@ -173,12 +191,12 @@ public class Processing {
                 alert[0] = "Emailul deja exista in baza de date!";
                 alert[1] = "alert alert-danger";
                 request.setAttribute("alert", alert);
-            if ("signup".equals(type)) {
-                dispatcher = request.getServletContext().getRequestDispatcher("/login/signup.jspx");
-                dispatcher.forward(request, response);
-            } else {
-                response.sendRedirect(request.getServletContext() + "/../../dashboard.jspx#utilizatori");
-            }
+                if ("signup".equals(type)) {
+                    dispatcher = request.getServletContext().getRequestDispatcher("/login/signup.jspx");
+                    dispatcher.forward(request, response);
+                } else {
+                    response.sendRedirect(request.getServletContext() + "/../../dashboard.jspx#utilizatori");
+                }
                 return false;
             }
         }
@@ -263,6 +281,56 @@ public class Processing {
      */
     public Users getUserData() {
         return user;
+    }
+
+    public void processCV() throws IOException, ServletException {
+        String applicationPath = request.getServletContext().getRealPath("");
+        String uploadFilePath = applicationPath + File.separator + "cv";
+        HttpSession session = request.getSession();
+        Users u = (Users) session.getAttribute("user");
+        Part o = request.getPart("cv");
+        InputStream fileInputStream = o.getInputStream();
+        String fileName = u.getId().toString() + ".pdf";
+
+        File fileSaveDir = new File(uploadFilePath);
+        if (!fileSaveDir.exists()) {
+            fileSaveDir.mkdirs();
+        }
+
+        File fileToSave = new File(uploadFilePath + File.separator + fileName);
+        Files.copy(fileInputStream, fileToSave.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        alert[0] = "Ai incarcat cu succes CV-ul!";
+        alert[1] = "alert alert-success";
+        session.setAttribute("appAlert", alert);
+        response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx#profil");
+    }
+
+    public void removeUser(List<Users> users) {
+        try {
+            HttpSession sesiune = request.getSession();
+            String appPath = request.getServletContext().getRealPath("");
+            String uploadFilePath = appPath + File.separator + "cv" + File.separator + user.getId() + ".pdf";
+            
+            File fileDelete = new File(uploadFilePath);
+            if (fileDelete.exists()) {
+                fileDelete.delete();
+            }
+            
+            gmailSendEmailSSL email = new gmailSendEmailSSL();
+            try {
+                email.sendMail("", user.getEmail(), "Stergere cont", "Contul dumneavoastra a fost sters de pe platforma ULBS10 Recrutari");
+            } catch (MessagingException ex) {
+                Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            sesiune.setAttribute("users", users);
+            alert[0] = "Utilizator sters cu succes!";
+            alert[1] = "alert alert-success";
+            sesiune.setAttribute("appAlert", alert);
+            response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx#utilizatori");
+        } catch (IOException ex) {
+            Logger.getLogger(Processing.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

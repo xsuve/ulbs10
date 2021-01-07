@@ -108,6 +108,7 @@ public class UserService {
 
     @Transactional
     public void removeUser(int id) {
+        
         logger.info("removeUser");
         try {
             Users user = em.find(Users.class, id);

@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Inject;
+import javax.mail.MessagingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -29,6 +30,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import services.UserService;
 import utility.Processing;
+import utility.gmailSendEmailSSL;
 
 /**
  *
@@ -59,7 +61,7 @@ public class UserServlet extends HttpServlet {
     RequestDispatcher dispatcher = null;
     Processing processing;
     String[] alert = new String[2];
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException, InvalidKeySpecException {
         response.setContentType("text/html;charset=UTF-8");
@@ -84,25 +86,7 @@ public class UserServlet extends HttpServlet {
                 processing.processLogout();
             }
             if ("pdf".equals(action)) {
-                String applicationPath = request.getServletContext().getRealPath("");
-                String uploadFilePath = applicationPath + File.separator + "cv";
-                HttpSession session = request.getSession();
-                Users u = (Users) session.getAttribute("user");
-                Part o = request.getPart("cv");
-                InputStream fileInputStream = o.getInputStream();
-                String fileName = u.getId().toString() + ".pdf";
-                
-                File fileSaveDir = new File(uploadFilePath);
-                if (!fileSaveDir.exists()) {
-                    fileSaveDir.mkdirs();
-                }
-                
-                File fileToSave = new File(uploadFilePath + File.separator + fileName);
-                Files.copy(fileInputStream, fileToSave.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                alert[0] = "Ai incarcat cu succes CV-ul!";
-                alert[1] = "alert alert-success";
-                session.setAttribute("appAlert", alert);
-                response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx#profil");
+                processing.processCV();
             }
 
             if ("edituser".equals(action)) {
@@ -127,7 +111,7 @@ public class UserServlet extends HttpServlet {
                 alert[0] = "Utilizator modificat cu succes!";
                 alert[1] = "alert alert-success";
                 sesiune.setAttribute("appAlert", alert);
-                response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx#utilizatori");                              
+                response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx#utilizatori");
             }
 
             if ("deleteuser".equals(action)) {
@@ -135,13 +119,10 @@ public class UserServlet extends HttpServlet {
                 Users user = (Users) sesiune.getAttribute("user");
                 int id = Integer.parseInt(request.getParameter("id"));
                 if (!user.getId().equals(id)) {
-                    service.removeUser(id);
+                    
                     users = service.getAllUsers();
-                    sesiune.setAttribute("users", users);
-                    alert[0] = "Utilizator sters cu succes!";
-                    alert[1] = "alert alert-success";
-                    sesiune.setAttribute("appAlert", alert);
-                    response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx#utilizatori");
+                    service.removeUser(id);
+                    processing.removeUser(users);
                 } else {
                     alert[0] = "Utilizatorul nu a fost sters!";
                     alert[1] = "alert alert-danger";
@@ -157,7 +138,7 @@ public class UserServlet extends HttpServlet {
                     alert[0] = "Utilizator adaugat cu succes!";
                     alert[1] = "alert alert-success";
                     session.setAttribute("appAlert", alert);
-                    session.setAttribute("users", u);
+                    session.setAttribute("users", u);                    
                 }
             }
         }
