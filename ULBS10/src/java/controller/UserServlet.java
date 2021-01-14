@@ -6,42 +6,29 @@
 package controller;
 
 import entity.Users;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.security.spec.InvalidKeySpecException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Inject;
-import javax.mail.MessagingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.Part;
 import services.UserService;
 import utility.Processing;
-import utility.gmailSendEmailSSL;
 
 /**
  *
  * @author Razvan
  */
 @WebServlet(name = "SignupServlet", urlPatterns = {"/login/user"})
-@MultipartConfig(
-        fileSizeThreshold = 1024 * 1024 * 1, // 1 MB
-        maxFileSize = 1024 * 1024 * 10, // 10 MB
-        maxRequestSize = 1024 * 1024 * 15 // 15 MB
-)
 public class UserServlet extends HttpServlet {
 
     @Inject
@@ -68,9 +55,10 @@ public class UserServlet extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             String action = request.getParameter("action");
+            HttpSession sesiune = request.getSession();
 
             users = service.getAllUsers();
-            processing = new Processing(request, response, users);
+            processing = new Processing(request, response, sesiune, users, null, null);
 
             if ("signup".equals(action)) {
                 if (processing.processSignup("signup")) {
@@ -97,32 +85,18 @@ public class UserServlet extends HttpServlet {
                 String statut = request.getParameter("statut");
 
                 service.editUser(id, email, firstname, lastname, statut);
-                HttpSession sesiune = request.getSession();
-                Users user = (Users) sesiune.getAttribute("user");
-                if (user.getId().equals(id)) {
-                    user.setEmail(email);
-                    user.setFirstname(firstname);
-                    user.setLastname(lastname);
-                    user.setStatut(statut);
-                    sesiune.setAttribute("user", user);
-                }
                 users = service.getAllUsers();
-                sesiune.setAttribute("users", users);
-                alert[0] = "Utilizator modificat cu succes!";
-                alert[1] = "alert alert-success";
-                sesiune.setAttribute("appAlert", alert);
-                response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx#utilizatori");
+                processing.processEditUser(id, email, firstname, lastname, statut, users);
             }
 
             if ("deleteuser".equals(action)) {
-                HttpSession sesiune = request.getSession();
                 Users user = (Users) sesiune.getAttribute("user");
                 int id = Integer.parseInt(request.getParameter("id"));
                 if (!user.getId().equals(id)) {
-                    
+
                     users = service.getAllUsers();
                     service.removeUser(id);
-                    processing.removeUser(users);
+                    processing.processRemoveUser(users);
                 } else {
                     alert[0] = "Utilizatorul nu a fost sters!";
                     alert[1] = "alert alert-danger";
@@ -133,12 +107,11 @@ public class UserServlet extends HttpServlet {
             if ("newuser".equals(action)) {
                 if (processing.processSignup(action)) {
                     service.addUser(processing.getUserData());
-                    HttpSession session = request.getSession();
                     List<Users> u = (List<Users>) service.getAllUsers();
                     alert[0] = "Utilizator adaugat cu succes!";
                     alert[1] = "alert alert-success";
-                    session.setAttribute("appAlert", alert);
-                    session.setAttribute("users", u);                    
+                    sesiune.setAttribute("appAlert", alert);
+                    sesiune.setAttribute("users", u);
                 }
             }
         }

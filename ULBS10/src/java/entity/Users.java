@@ -10,8 +10,6 @@ import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -186,6 +184,11 @@ public class Users implements Serializable {
         this.posturiCollection = posturiCollection;
     }
 
+    /**
+     *  Returneaza un URL cu CV-ul unui utilizator, daca acesta exista sau # daca nu
+     *
+     * @return
+     */
     public String getCV() {
         URL s = this.getClass().getProtectionDomain().getCodeSource().getLocation();
         String p = s.getPath();
