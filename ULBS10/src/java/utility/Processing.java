@@ -279,9 +279,9 @@ public class Processing {
     /**
      * Cripteaza parola din formular si o verifica cu cea din baza de date
      *
-     * @param providedPassword
-     * @param securedPassword
-     * @param salt
+     * @param providedPassword  Parola care se furnizeaza
+     * @param securedPassword   Parola criptata din baza de date
+     * @param salt  Saltul
      * @return  <code>true</code> daca parola din formular estea ceeasi cu parola
      * din baza de date; <code>false</code> in caz contrar.
      * @throws InvalidKeySpecException Daca exista o problema la
@@ -304,7 +304,7 @@ public class Processing {
     //-----------------------------------------------------------------------------------------
     /**
      * Ia locatia servletului(build/web), creeaza un folder numit cv daca nu
-     * exista si salveaza fisierul in folderul cv cu numele ID.pdf, ID -> id-ul
+     * exista si salveaza fisierul in folderul cv cu numele ID.pdf, ID - id-ul
      * utilizatorului care a incarcat fisierul
      *
      * @throws IOException Daca exista o problema la copierea fisierului pe
@@ -471,7 +471,8 @@ public class Processing {
      *
      * @param postAplicare  Postul la care a aplicat utilizatorul
      * @param existInDB Variabila care verifica daca a mai aplicat sau nu la acest post
-     * @return
+     * @return  <code>true</code> daca utilizatorul nu a mai aplicat la acest post
+     *          <code>false</code> daca a mai aplicat
      */
     public boolean processAplicant(Posturi postAplicare, boolean existInDB) {
         //Se salveaza data de azi si utilizatorul curent

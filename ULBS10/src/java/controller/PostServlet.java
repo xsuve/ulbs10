@@ -36,6 +36,14 @@ public class PostServlet extends HttpServlet {
 
     @Inject
     PosturiService service;
+    int lastID;
+    List<Posturi> posturi;
+    Posturi post = null;
+    String alerta;
+    RequestDispatcher dispatcher = null;
+    Processing processing;
+    String[] alert = new String[2];
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -44,15 +52,8 @@ public class PostServlet extends HttpServlet {
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
+     * @throws java.text.ParseException if a Parse error occurs
      */
-    int lastID;
-    List<Posturi> posturi;
-    Posturi post = null;
-    String alerta;
-    RequestDispatcher dispatcher = null;
-    Processing processing;
-    String[] alert = new String[2];
-
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, ParseException {
         response.setContentType("text/html;charset=UTF-8");

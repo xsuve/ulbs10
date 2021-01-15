@@ -31,18 +31,9 @@ import utility.Processing;
  */
 @WebServlet(name = "AplicantServlet", urlPatterns = {"/aplicant"})
 public class AplicantServlet extends HttpServlet {
-
+    
     @Inject
     AplicantService service;
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
 
     int lastID;
     List<Aplicanti> aplicanti;
@@ -52,7 +43,17 @@ public class AplicantServlet extends HttpServlet {
     RequestDispatcher dispatcher = null;
     Processing processing;
     String[] alert = new String[2];
-
+    
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     * @throws javax.mail.MessagingException    if an Message error occurs
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, MessagingException {
         response.setContentType("text/html;charset=UTF-8");

@@ -33,6 +33,13 @@ public class UserServlet extends HttpServlet {
 
     @Inject
     UserService service;
+    int lastID;
+    List<Users> users;
+    String alerta;
+    RequestDispatcher dispatcher = null;
+    Processing processing;
+    String[] alert = new String[2];
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -41,14 +48,9 @@ public class UserServlet extends HttpServlet {
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
+     * @throws java.sql.SQLException if an SQL error occurs
+     * @throws java.security.spec.InvalidKeySpecException if an Key error occurs
      */
-    int lastID;
-    List<Users> users;
-    String alerta;
-    RequestDispatcher dispatcher = null;
-    Processing processing;
-    String[] alert = new String[2];
-
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException, InvalidKeySpecException {
         response.setContentType("text/html;charset=UTF-8");
