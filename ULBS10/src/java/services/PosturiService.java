@@ -30,14 +30,14 @@ public class PosturiService {
     private EntityManager em;
 
     /**
-     * Creeaza un post cu parametrii primiri si il adauga in baza de date
+     *  Creeaza un Post folosind parametrii, post ce v-a fi adaugat in baza de date
      *
-     * @param id
-     * @param denumire
-     * @param cerinteMinime
-     * @param cerinteOptionale
-     * @param dataLimAplic
-     * @param user
+     * @param id    ID-ul post-ului
+     * @param denumire  Denumirea postului
+     * @param cerinteMinime Cerintele minime ale postului
+     * @param cerinteOptionale  Cerintele optionale ale postului
+     * @param dataLimAplic  Data limita pentru a aplica la un post
+     * @param user  Utilizatorul care a aplicat la post
      */
     @Transactional
     public void AddPost(int id, String denumire, String cerinteMinime, String cerinteOptionale, Date dataLimAplic, Users user) {
@@ -53,9 +53,9 @@ public class PosturiService {
     }
 
     /**
-     * Returneaza o lista cu toate posturile din baza de date
+     *  Executa un querry pentru a cauta in baza de date toate posturile
      *
-     * @return Posturile din baza de date
+     * @return O lista cu toate posturile din baza de date
      */
     @SuppressWarnings("unchecked")
     public List<Posturi> getAllPosts() {
@@ -71,23 +71,23 @@ public class PosturiService {
     /**
      * Adauga un post in baza de date avant ca parametru un post
      *
-     * @param postData
+     * @param postData  Post-ul ce v-a fi adaugat in baza de date
      */
     @Transactional
     public void addPost(Posturi postData) {
         logger.log(Level.INFO, "Adauga postul {0} - {1} in baza de date", new Object[]{postData.getId(), postData.getDenumire()});
         try {
-            Posturi post = postData;
-            em.persist(post);
+            em.persist(postData);
         } catch (Exception ex) {
             throw new EJBException(ex);
         }
     }
 
     /**
-     * Sterge din baza de date postul cu id-ul dat ca parametru
+     *  Executa un querry pentru a cauta in baza de date aplicantii care au aplicat la un post,
+     * apoi sterge fiecare aplicant care a aplicat la acel post si postul.
      *
-     * @param post
+     * @param post  Postul care v-a fi sters din baza de date, si aplicantii corespunzatori postului
      */
     @Transactional
     public void removePost(Posturi post) {
@@ -95,7 +95,6 @@ public class PosturiService {
         try {
             List<Aplicanti> aplicanti = (List<Aplicanti>) em.createNamedQuery("Aplicanti.findByIdPost").setParameter("idPost", post).getResultList();
             aplicanti.stream().filter((aplicant) -> (Objects.equals(aplicant.getIdPost().getId(), post.getId()))).forEachOrdered(em::remove);
-
             Posturi removePost = em.find(Posturi.class, post.getId());
             em.remove(removePost);
         } catch (Exception ex) {
@@ -108,11 +107,11 @@ public class PosturiService {
      * face cu metodele set ale entitatii
      *
      * @see Posturi
-     * @param id
-     * @param denumire
-     * @param cerinteMinime
-     * @param cerinteOptionale
-     * @param dataLimAplic
+     * @param id    ID-ul postului
+     * @param denumire  Denumirea noua ce v-a fi salvata in baza de date
+     * @param cerinteMinime Cerintele minime noi ce vor fi salvate in baza de date
+     * @param cerinteOptionale Cerintele optionale noi ce vor fi salvate in baza de date
+     * @param dataLimAplic Data noua limita pentru care se poate aplica la post
      */
     @Transactional
     public void editPost(int id, String denumire, String cerinteMinime, String cerinteOptionale, Date dataLimAplic) {

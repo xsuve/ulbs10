@@ -31,12 +31,12 @@ public class UserService {
      * Creeaza un user nou cu ajutorul parametriilor si apoi il introduce in
      * baza de date
      *
-     * @param inID
-     * @param stEmail
-     * @param stPassword
-     * @param stFirstName
-     * @param stLastName
-     * @param stStatut
+     * @param inID  ID-ul utilizatorului ce v-a fi salvat in baza de date
+     * @param stEmail   Email-ul ce v-a fi salvat in baza de date
+     * @param stPassword    Parola ce v-a fi salvata in baza de date
+     * @param stFirstName   Numele ce v-a fi salvat in baza de date
+     * @param stLastName    Prenumele ce v-a fi salvat in baza de date
+     * @param stStatut  Statutul ce v-a fi salvat in baza de date, implicit Viewer
      */
     @Transactional
     public void addUser(int inID, String stEmail, String stPassword, String stFirstName, String stLastName, String stStatut) {
@@ -51,9 +51,9 @@ public class UserService {
     }
 
     /**
-     * Returneaza o lista cu toti utilizatorii din baza de date
+     * Executa un querry care cauta in baza de date toti utilizatorii
      *
-     * @return Utilizatorii din baza de date
+     * @return O lista cu toti utilizatorii din baza de date
      */
     @SuppressWarnings("unchecked")
     public List<Users> getAllUsers() {
@@ -69,7 +69,7 @@ public class UserService {
     /**
      * Adauga un user in baza de date cu EntityManager persist
      *
-     * @param userData
+     * @param userData  Utilizatorul ce v-a fi salvat in baza de date
      */
     @Transactional
     public void addUser(Users userData) {
@@ -84,9 +84,9 @@ public class UserService {
     }
 
     /**
-     * Returneaza o lista cu toate posturile din baza de date
+     * Executa un querry care cauta in baza de date toate posturile
      *
-     * @return Posturile din baza de date
+     * @return O lista cu toate posturile din baza de date
      */
     @SuppressWarnings("unchecked")
     public List<Posturi> getAllPosts() {
@@ -102,11 +102,11 @@ public class UserService {
     /**
      *  Actualizeaza un utilizator din baza de date
      *
-     * @param id
-     * @param email
-     * @param firstname
-     * @param lastname
-     * @param statut
+     * @param id    ID-ul utilizatorului
+     * @param email     Email-ul nou ce v-a fi modificat in baza de date
+     * @param firstname     Numele nou ce v-a fi modificat in baza de date
+     * @param lastname      Prenumele nou ce v-a fi modificat in baza de date  
+     * @param statut    Statutul nou ce v-a fi modificat in baza de date
      */
     @Transactional
     public void editUser(int id, String email, String firstname, String lastname, String statut) {
@@ -124,7 +124,7 @@ public class UserService {
     /**
      *  Sterge un utilizator din baza de date dupa id
      *
-     * @param id
+     * @param id    ID-ul dupa care se v-a sterge utilizatorul din baza de date
      */
     @Transactional
     public void removeUser(int id) {        
@@ -138,9 +138,9 @@ public class UserService {
     }
 
     /**
-     *  Returneaza o lista cu toti aplicantii din baza de date
+     *  Executa un querry care cauta in baza de date toti aplicantii
      *
-     * @return
+     * @return      O lista cu toti aplicantii din baza de date
      */
     @Transactional
     public List<Aplicanti> getAllAplicants() {

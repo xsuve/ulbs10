@@ -66,12 +66,12 @@ public class Processing {
     /**
      * Constructor cu parametrii
      *
-     * @param request
-     * @param response
-     * @param sesiune
-     * @param users
-     * @param posturi
-     * @param aplicanti
+     * @param request request-ul din servlet
+     * @param response response-ul din servlet
+     * @param sesiune sesiunea din front-end
+     * @param users Lista cu toti utilizatorii din baza de date
+     * @param posturi Lista cu toate posturile din baza de date
+     * @param aplicanti Lista cu toti aplicantii din baza de date
      */
     public Processing(HttpServletRequest request, HttpServletResponse response, HttpSession sesiune, List<Users> users, List<Posturi> posturi, List<Aplicanti> aplicanti) {
         this.request = request;
@@ -83,16 +83,15 @@ public class Processing {
     }
 
     /**
-     * Procesul de autentificare a unui utilizator din UserServlet s-a mutat
-     * aici pentru curatarea codului. Se verifica adresele de email si parolele
-     * din baza de date pentru a gasi persoana in baza de date, daca aceasta
-     * exista, daca nu se trimit catre jspx mesaje sugestive
+     * Se verifica adresele de email si parolele din baza de date pentru a gasi
+     * persoana in baza de date, daca aceasta exista, daca nu se trimit catre
+     * jspx mesaje sugestive
      *
-     * @param allPosts
-     * @param allAplicants
-     * @throws ServletException
-     * @throws IOException
-     * @throws InvalidKeySpecException
+     * @param allPosts Lista cu toate posturile din baza de date
+     * @param allAplicants Lista cu toti aplicantii din baza de date
+     * @throws ServletException Daca sunt probleme la forward
+     * @throws IOException Daca sunt probleme la forward
+     * @throws InvalidKeySpecException Daca sunt probleme la verificarea parolei
      */
     public void processLogin(List<Posturi> allPosts, List<Aplicanti> allAplicants) throws ServletException, IOException, InvalidKeySpecException {
         String email = request.getParameter("email");
@@ -130,11 +129,13 @@ public class Processing {
      * exista se trimite catre jsps un mesaj sugestiv Se verifica daca campurile
      * sunt goale, iar daca sunt se trimite catre jspx un mesaj sugestiv
      *
-     * @param type
-     * @return
-     * @throws ServletException
-     * @throws IOException
-     * @throws InvalidKeySpecException
+     * @param type signup daca este la inregistrare, sau orice alt ceva daca
+     * este la adaugare din formular
+     * @return  <code>true</code> daca utilizatorul nu exista in baza de date;
+     * <code>false</code> daca exista deja.
+     * @throws ServletException Daca sunt probleme la forward
+     * @throws IOException Daca sunt probleme la forward
+     * @throws InvalidKeySpecException Daca sunt probleme la verificarea parolei
      */
     public boolean processSignup(String type) throws ServletException, IOException, InvalidKeySpecException {
         String email = request.getParameter("email");
@@ -216,9 +217,9 @@ public class Processing {
     /**
      * Se invalideaza sesiunea utilizatorului si se redirectioneaza catre index
      *
-     * @see HttpSession
-     * @throws ServletException
-     * @throws IOException
+     * @see HttpSession Sesiunea din front-end
+     * @throws ServletException Daca sunt probleme la forward
+     * @throws IOException Daca sunt probleme la forward
      */
     public void processLogout() throws ServletException, IOException {
         sesiune.invalidate();
@@ -230,7 +231,7 @@ public class Processing {
     /**
      * Returneaza utilizatorul care v-a fi adaugat in baza de date
      *
-     * @return user
+     * @return Utilizatorul curent
      */
     public Users getUserData() {
         return user;
@@ -242,10 +243,10 @@ public class Processing {
     /**
      * Cripteaza parola cu o cheie salt, algoritm luat de pe internet
      *
-     * @param password
-     * @param salt
+     * @param password Parola
+     * @param salt Salt
      * @return Sir binar ce contine parola criptata
-     * @throws InvalidKeySpecException
+     * @throws InvalidKeySpecException Daca exista o problema cu PBEKeySpecs
      */
     public static byte[] hash(char[] password, byte[] salt) throws InvalidKeySpecException {
         PBEKeySpec spec = new PBEKeySpec(password, salt, ITERATIONS, KEY_LENGTH);
@@ -264,10 +265,10 @@ public class Processing {
      * Converteste sirul de biti criptat al parolei intr-un string pentru a
      * putea fi stocat in baza de date
      *
-     * @param password
-     * @param salt
+     * @param password Parola
+     * @param salt Saltul
      * @return Parola care se v-a salva in baza de date
-     * @throws InvalidKeySpecException
+     * @throws InvalidKeySpecException Daca exista o problema la hash
      */
     public static String generateSecurePassword(String password, String salt) throws InvalidKeySpecException {
         byte[] securePassword = hash(password.toCharArray(), salt.getBytes());
@@ -281,8 +282,10 @@ public class Processing {
      * @param providedPassword
      * @param securedPassword
      * @param salt
-     * @return true/false
-     * @throws InvalidKeySpecException
+     * @return  <code>true</code> daca parola din formular estea ceeasi cu parola
+     * din baza de date; <code>false</code> in caz contrar.
+     * @throws InvalidKeySpecException Daca exista o problema la
+     * generateSecurePassword
      */
     public static boolean verifyUserPassword(String providedPassword,
             String securedPassword, String salt) throws InvalidKeySpecException {
@@ -304,8 +307,9 @@ public class Processing {
      * exista si salveaza fisierul in folderul cv cu numele ID.pdf, ID -> id-ul
      * utilizatorului care a incarcat fisierul
      *
-     * @throws IOException
-     * @throws ServletException
+     * @throws IOException Daca exista o problema la copierea fisierului pe
+     * HardDisk
+     * @throws ServletException Daca exista o problema la preluarea CV-ului
      */
     public void processCV() throws IOException, ServletException {
         //Ia locatia servletului
@@ -341,7 +345,7 @@ public class Processing {
      * Sterge un utilizator din baza de date, sterge CV-ul utilizatorului,
      * notificare utilizator prin email
      *
-     * @param users
+     * @param users Lista utilizatorilor actualizata dupa stergere
      */
     public void processRemoveUser(List<Users> users) {
         try {
@@ -377,12 +381,12 @@ public class Processing {
     /**
      * Editeaza utilizatorul curent daca si-a modificat datele personale
      *
-     * @param id
-     * @param email
-     * @param firstname
-     * @param lastname
-     * @param statut
-     * @param users
+     * @param id ID-ul utilizatorului
+     * @param email Email-ul nou al utilizatorului curent
+     * @param firstname Numele nou al utilizatorului curent
+     * @param lastname Prenumele nou al utilizatorului curent
+     * @param statut Statutul nou al utilizatorului curent
+     * @param users Lista cu utilizatori dupa actualizarea bazei de date
      */
     public void processEditUser(int id, String email, String firstname, String lastname, String statut, List<Users> users) {
         user = (Users) sesiune.getAttribute("user");
@@ -415,33 +419,36 @@ public class Processing {
      * Returneaza un post care v-a fi ulterior salvat in baza de date si se face
      * redirectionare daca se cere
      *
-     * @param allPosts
-     * @param type
-     * @return
+     * @param allPosts Lista cu posturile actualizate din baza de date
+     * @param type redirect daca se face redirectionare, sau orice alt ceva
+     * pentru a adauga un nou post in baza de date
+     * @return Postul care urmeaza sa fie salvat in baza de date
      */
     public Posturi processNewPost(List<Posturi> allPosts, String type) {
         try {
-            user = (Users) sesiune.getAttribute("user");
-            int lastID = 0;
+            if (!"redirect".equals(type)) {
+                user = (Users) sesiune.getAttribute("user");
+                int lastID = 0;
 
-            //Se ia ultimul ID al posturilor din baza de date
-            if (!posturi.isEmpty()) {
-                lastID = posturi.get(posturi.size() - 1).getId();
-            }
-            request.setAttribute("posturi", posturi);
+                //Se ia ultimul ID al posturilor din baza de date
+                if (!allPosts.isEmpty()) {
+                    lastID = allPosts.get(allPosts.size() - 1).getId();
+                }
+                request.setAttribute("posturi", allPosts);
 
-            //Se ia parametrii din formularul pentru un nou Post
-            Date date1 = new SimpleDateFormat("yyyy-mm-dd").parse(request.getParameter("dataLimita"));
-            String cerinteMinime = request.getParameter("cerinteMinime");
-            cerinteMinime = cerinteMinime.replaceAll("\n", "<br />");
-            String cerinteOptionale = request.getParameter("cerinteOptionale");
-            cerinteOptionale = cerinteOptionale.replaceAll("\n", "<br />");
+                //Se ia parametrii din formularul pentru un nou Post
+                Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("dataLimita"));
+                String cerinteMinime = request.getParameter("cerinteMinime");
+                cerinteMinime = cerinteMinime.replaceAll("\n", "<br />");
+                String cerinteOptionale = request.getParameter("cerinteOptionale");
+                cerinteOptionale = cerinteOptionale.replaceAll("\n", "<br />");
 
-            //Se creeaza postul care v-a fi returnat
-            post = new Posturi(++lastID, request.getParameter("denumire"), cerinteMinime, cerinteOptionale, date1, user);
+                //Se creeaza postul care v-a fi returnat
+                post = new Posturi(++lastID, request.getParameter("denumire"), cerinteMinime, cerinteOptionale, date1, user);
+            } 
 
             //Daca se face redirectionare, se trimit parametrii pentru front-end
-            if ("redirect".equals(type)) {
+            else {
                 sesiune.setAttribute("posts", allPosts);
                 alert[0] = "Post adaugat cu succes!";
                 alert[1] = "alert alert-success";
@@ -462,8 +469,8 @@ public class Processing {
      * Returneaza true daca s-a creeat cu succes o aplicatie pentru un post sau
      * false daca utilizatorul a aplicat deja pentru post-ul respectiv
      *
-     * @param postAplicare
-     * @param existInDB
+     * @param postAplicare  Postul la care a aplicat utilizatorul
+     * @param existInDB Variabila care verifica daca a mai aplicat sau nu la acest post
      * @return
      */
     public boolean processAplicant(Posturi postAplicare, boolean existInDB) {
@@ -512,19 +519,18 @@ public class Processing {
      * Accepta un utilizator care a aplicat la un post si se trimite un email
      * catre acel utilizator pentru a-l
      *
-     * @param userSearch
-     * @param aplicantSearch
+     * @param userSearch    Utilizatorul care a fost acceptat
+     * @param aplicantSearch    Aplicantul ale caror detalii se vor trimite prin email
      */
     public void processAcceptAplicant(Users userSearch, Aplicanti aplicantSearch) {
         if (userSearch != null) {
             try {
-                Users use = userSearch;
                 post = aplicantSearch.getIdPost();
                 String mesaj = "Felicitari " + userSearch.getFirstname() + " " + userSearch.getLastname() + ",\n"
                         + "Ati fost acceptat pentru postul " + post.getDenumire() + ",\n\n"
                         + "O zi buna!";
                 gmailSendEmailSSL sendemail = new gmailSendEmailSSL();
-                sendemail.sendMail(use.getEmail(), "Oferta job", mesaj);
+                sendemail.sendMail(userSearch.getEmail(), "Oferta job", mesaj);
                 alert[0] = "Aplicantul a fost acceptat pentru acest post!";
                 alert[1] = "alert alert-success";
                 sesiune.setAttribute("appAlert", alert);
@@ -537,7 +543,7 @@ public class Processing {
     /**
      * Returneaza aplicantul pentru a-l adauga ulterior in baza de date
      *
-     * @return
+     * @return  Aplicantul care urmeaza sa fie salvat in baza de date
      */
     public Aplicanti getAplicantData() {
         return aplicant;

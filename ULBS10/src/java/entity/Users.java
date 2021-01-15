@@ -185,9 +185,11 @@ public class Users implements Serializable {
     }
 
     /**
-     *  Returneaza un URL cu CV-ul unui utilizator, daca acesta exista sau # daca nu
+     *  Metoda ia intr-un URL adresa clasei, o prelucreaza pentru a ajunge in folderul
+     * potrivit (build/web/cv), adauga ID-ul utilizatorului din baza de date si extensia
+     * .pdf la acel URL, poi verifica daca exista vreun fisier cu aceste date la acea locatie
      *
-     * @return
+     * @return      URL-ul corespunzator cu CV-ul unui utilizator
      */
     public String getCV() {
         URL s = this.getClass().getProtectionDomain().getCodeSource().getLocation();

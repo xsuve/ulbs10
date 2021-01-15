@@ -31,10 +31,10 @@ public class AplicantService {
     /**
      * Creeaza un aplicant cu parametrii primiti si il adauga in baza de date
      *
-     * @param i
-     * @param u
-     * @param p
-     * @param date1
+     * @param i     ID-ul ce v-a fi salvat in baza de date
+     * @param u     Utilizatorul
+     * @param p     Postul
+     * @param date1 Data aplicarii (data de azi)
      */
     @Transactional
     public void addAplicant(int i, Users u, Posturi p, Date date1) {
@@ -51,9 +51,9 @@ public class AplicantService {
     }
 
     /**
-     * Returneaza o lista cu toti aplicantii din baza de date
+     *  Executa un querry care returneaza toti aplicantii din baza de date
      *
-     * @return Aplicantii din baza de date
+     * @return  Lista cu aplicantii din baza de date
      */
     @SuppressWarnings("unchecked")
     public List<Aplicanti> getAllAplicants() {
@@ -69,7 +69,7 @@ public class AplicantService {
     /**
      * Adauga un aplicant dat ca parametru in baza de date
      *
-     * @param aplicantData
+     * @param aplicantData  Aplicantul care v-a fi adaugat in baza de date
      */
     @Transactional
     public void addAplicant(Aplicanti aplicantData) {
@@ -82,10 +82,11 @@ public class AplicantService {
         }
     }
 
-    /*
-     *  Sterge aplicantul din baza de date care are id-ul trimis ca parametru
+    /**
+     *  Executa un querry pentru a cauta un Aplicant dupa ID, apoi sterge acea
+     * inregistrare din baza de date
      *
-     * @param id
+     * @param id    ID-ul utilizatorului ce v-a fi sters
      */
     @Transactional
     public void removeAplicant(int id) {
@@ -101,11 +102,16 @@ public class AplicantService {
     }
 
     /**
-     * Verifica daca utilizatorul a mai aplicat la acel post
+     *  Executa un querry pentru a cauta in baza de date un Post din baza de date dupa un ID,
+     * un querry pentru a cauta in baza de date un Aplicant dupa un utilizator si inca un 
+     * querry pentru a cauta in baza de date un Aplicant dupa Post-ul din primul querry
+     *  Adica verifica daca exista un aplicant care are utilizatorul si postul specifici
      *
-     * @param idUser
-     * @param id
-     * @return
+     * @param idUser    Utilizatorul care se cauta in Aplicanti
+     * @param id    ID-ul care se v-a cauta in Posturi, post ce v-a fi cautat in Aplicanti
+     * @return      <code>true</code> daca s-a gasit un rezultat in baza de date dupa specificatiile
+     *              pe care le-am vrut;
+     *              <code>false</code> daca nu s-a gasit.
      */
     @Transactional
     public boolean existaAplicantByIdUser(Users idUser, int id) {
@@ -124,10 +130,10 @@ public class AplicantService {
     }
 
     /**
-     * Returneaza postul din baza de date care are id-ul trimis ca parametru
+     *  Executa un querry pentru a cauta in baza de date un Post dupa un ID
      *
-     * @param id
-     * @return
+     * @param id    ID-ul dupa care se v-a cauta Postul in baza de date
+     * @return      Postul care a avut ID-ul cerut.
      */
     @Transactional
     public Posturi findPostByID(int id) {
@@ -142,11 +148,13 @@ public class AplicantService {
     }
 
     /**
-     * Verifica daca exista un utilizator care a aplicat la un post, si
-     * returneaza acel utilizator
+     *  Executa un querry pentru a cauta in baza de date un Aplicant dupa ID si un querry care
+     * cauta in baza de date un utilizator dupa id-ul utilizatorului care exista in aplicantul
+     * primului querry
      *
-     * @param id
-     * @return
+     * @param id    ID-ul dupa care se v-a cauta Aplicantul in baza de date
+     * @return  Utilizatorul care are ID-ul specific;
+     *          <code>null</code> daca nu exista.
      */
     @Transactional
     public Users existaUserByAplicantByID(int id) {
@@ -164,10 +172,11 @@ public class AplicantService {
     }
 
     /**
-     * Cauta un aplicant in baza de date dupa ID
+     *  Executa un querry pentru a cauta in baza de date un aplicant dupa ID
      *
-     * @param id
-     * @return
+     * @param id    ID-ul dupa care se v-a cauta Aplicantul in baza de date
+     * @return  Aplicantul care are ID-ul specific;
+     *          <code>null</code> daca nu exista.
      */
     @Transactional
     public Aplicanti findByID(int id) {

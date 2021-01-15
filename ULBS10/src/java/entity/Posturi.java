@@ -157,6 +157,13 @@ public class Posturi implements Serializable {
         return "entity.Posturi[ id=" + id + " ]";
     }
 
+    /**
+     *  Verifica daca data limita aplicarii din baza de date este dupa data 
+     * de azi
+     *
+     * @return  <code>true</code> daca data limita aplicarii a trecut de ziua curenta;
+     *          <code>false</code> daca nu a trecut.
+     */
     public Boolean isValabil() {
         Date todayDate = new Date();
         if(dataLimAplic.after(todayDate)){

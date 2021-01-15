@@ -24,11 +24,11 @@ public class gmailSendEmailSSL {
      *  Se conecteaza la un cont de gmail, se seteaza parametrii unui email si se trimite
      * catre adresa destinatarului
      *
-     * @param mailTo
-     * @param mailSubject
-     * @param mailText
-     * @throws AddressException
-     * @throws MessagingException
+     * @param mailTo    Adresa de email a destinatarului    
+     * @param mailSubject   Subiectul email-ului
+     * @param mailText  Continutul email-ului
+     * @throws AddressException Daca exista probleme cu adresele setate
+     * @throws MessagingException   Daca exista probleme cu mesajele setate
      */
     public void sendMail(String mailTo, String mailSubject,
             String mailText) throws AddressException, MessagingException {
