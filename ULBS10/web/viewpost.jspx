@@ -107,6 +107,10 @@
                                                                     |
                                                                      <a href="./aplicant?action=acceptAplicant&amp;id=${a.getId()}">Accepta</a>
                                                                 </c:if>
+                                                                <c:if test="${user.getStatut() == 'recruiter'}">
+                                                                    |
+                                                                     <a href="./aplicant?action=acceptAplicant&amp;id=${a.getId()}">Accepta</a>
+                                                                </c:if>
 
                                                             </div>
                                                         </div>

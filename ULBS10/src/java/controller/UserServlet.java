@@ -29,7 +29,7 @@ import utility.Processing;
  *
  * @author Razvan
  */
-@WebServlet(name = "SignupServlet", urlPatterns = {"/login/user"})
+@WebServlet(name = "UserServlet", urlPatterns = {"/login/user"})
 @MultipartConfig(
         fileSizeThreshold = 1024 * 1024 * 1, // 1 MB
         maxFileSize = 1024 * 1024 * 10, // 10 MB

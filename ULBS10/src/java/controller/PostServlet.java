@@ -65,7 +65,7 @@ public class PostServlet extends HttpServlet {
             posturi = service.getAllPosts();
             processing = new Processing(request, response, sesiune, null, posturi, null);
 
-            if ("newpost".equals(action)) {
+            if ("newpost".equals(action)) {                
                 service.addPost(processing.processNewPost(service.getAllPosts(), ""));
                 processing.processNewPost(service.getAllPosts(), "redirect");
             }
