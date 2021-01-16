@@ -193,6 +193,7 @@ public class Processing {
                     dispatcher = request.getServletContext().getRequestDispatcher("/login/login.jspx");
                     dispatcher.forward(request, response);
                 } else {
+                    statut = request.getParameter("statut");
                     response.sendRedirect(request.getServletContext() + "/../../dashboard.jspx#utilizatori");
                 }
                 user = new Users(++lastID, email, password, firstName, lastName, statut);

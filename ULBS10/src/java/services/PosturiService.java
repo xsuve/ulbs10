@@ -116,7 +116,7 @@ public class PosturiService {
     @Transactional
     public void editPost(int id, String denumire, String cerinteMinime, String cerinteOptionale, Date dataLimAplic) {
         Posturi post = em.find(Posturi.class, id);
-        logger.log(Level.INFO, "Editeaza utilizatorul{0} cu datele {1}-{2}-{3}-{4} in : {5}{6}{7}{8}",
+        logger.log(Level.INFO, "Editeaza utilizatorul {0} cu datele {1}-{2}-{3}-{4} in : {5}{6}{7}{8}",
                 new Object[]{id, post.getDenumire(), post.getCerinteMinime(), post.getCerinteOptionale(), 
                             post.getDataLimAplic(), denumire, cerinteMinime, cerinteOptionale, dataLimAplic});
 

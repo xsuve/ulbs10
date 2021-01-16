@@ -197,7 +197,6 @@ public class Users implements Serializable {
         String returnare = "";
         if (p.contains("/")) {
             p = p.replace("WEB-INF/classes/entity/Users.class", "cv/");
-            p = p.replace("WEB-INF/classes/entity/Users.class", "cv/");
             returnare+="cv/";
         }
         if (p.contains("\\")) {
