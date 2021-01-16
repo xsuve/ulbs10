@@ -10,8 +10,6 @@ import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -186,12 +184,18 @@ public class Users implements Serializable {
         this.posturiCollection = posturiCollection;
     }
 
+    /**
+     *  Metoda ia intr-un URL adresa clasei, o prelucreaza pentru a ajunge in folderul
+     * potrivit (build/web/cv), adauga ID-ul utilizatorului din baza de date si extensia
+     * .pdf la acel URL, poi verifica daca exista vreun fisier cu aceste date la acea locatie
+     *
+     * @return      URL-ul corespunzator cu CV-ul unui utilizator
+     */
     public String getCV() {
         URL s = this.getClass().getProtectionDomain().getCodeSource().getLocation();
         String p = s.getPath();
         String returnare = "";
         if (p.contains("/")) {
-            p = p.replace("WEB-INF/classes/entity/Users.class", "cv/");
             p = p.replace("WEB-INF/classes/entity/Users.class", "cv/");
             returnare+="cv/";
         }

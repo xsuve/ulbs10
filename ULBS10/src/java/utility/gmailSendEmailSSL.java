@@ -20,8 +20,20 @@ public class gmailSendEmailSSL {
     private static final String USERNAME = "ulbs10.recrutari@gmail.com";
     private static final String PASSWORD = "Ulbs10#recrutari";
 
-    public void sendMail(String mailFrom, String mailTo, String mailSubject,
+    /**
+     *  Se conecteaza la un cont de gmail, se seteaza parametrii unui email si se trimite
+     * catre adresa destinatarului
+     *
+     * @param mailTo    Adresa de email a destinatarului    
+     * @param mailSubject   Subiectul email-ului
+     * @param mailText  Continutul email-ului
+     * @throws AddressException Daca exista probleme cu adresele setate
+     * @throws MessagingException   Daca exista probleme cu mesajele setate
+     */
+    public void sendMail(String mailTo, String mailSubject,
             String mailText) throws AddressException, MessagingException {
+        
+        //Seteaza proprietatile serverului de email
         Properties props = System.getProperties();
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.starttls.enable", "true");// Must issue a STARTTLS command first
@@ -36,13 +48,16 @@ public class gmailSendEmailSSL {
                 return new PasswordAuthentication(USERNAME, PASSWORD);
             }
         });
-        mailFrom = "ulbs10.recrutari@gmail.com";
+        
+        //Seteaza proprietatile email-ului
+        String mailFrom = "ulbs10.recrutari@gmail.com";
         MimeMessage message = new MimeMessage(session);
         message.setFrom(new InternetAddress(mailFrom));
         message.addRecipient(Message.RecipientType.TO, new InternetAddress(mailTo));
         message.setSubject(mailSubject);
         message.setText(mailText);
 
+        //Trimite email-ul
         Transport.send(message, USERNAME, PASSWORD);
     }
 }

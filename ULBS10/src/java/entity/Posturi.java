@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -15,12 +16,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -37,6 +40,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Posturi.findByDataLimAplic", query = "SELECT p FROM Posturi p WHERE p.dataLimAplic = :dataLimAplic")
     , @NamedQuery(name = "Posturi.findByDenumire", query = "SELECT p FROM Posturi p WHERE p.denumire = :denumire")})
 public class Posturi implements Serializable {
+
+    @OneToMany(mappedBy = "idPost")
+    private Collection<Aplicanti> aplicantiCollection;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -151,6 +157,13 @@ public class Posturi implements Serializable {
         return "entity.Posturi[ id=" + id + " ]";
     }
 
+    /**
+     *  Verifica daca data limita aplicarii din baza de date este dupa data 
+     * de azi
+     *
+     * @return  <code>true</code> daca data limita aplicarii a trecut de ziua curenta;
+     *          <code>false</code> daca nu a trecut.
+     */
     public Boolean isValabil() {
         Date todayDate = new Date();
         if(dataLimAplic.after(todayDate)){
@@ -158,6 +171,15 @@ public class Posturi implements Serializable {
         }else{
             return false;
         }
+    }
+
+    @XmlTransient
+    public Collection<Aplicanti> getAplicantiCollection() {
+        return aplicantiCollection;
+    }
+
+    public void setAplicantiCollection(Collection<Aplicanti> aplicantiCollection) {
+        this.aplicantiCollection = aplicantiCollection;
     }
     
 }

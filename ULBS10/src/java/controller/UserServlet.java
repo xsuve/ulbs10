@@ -6,12 +6,8 @@
 package controller;
 
 import entity.Users;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.security.spec.InvalidKeySpecException;
 import java.sql.SQLException;
 import java.util.List;
@@ -26,7 +22,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.Part;
 import services.UserService;
 import utility.Processing;
 
@@ -44,6 +39,13 @@ public class UserServlet extends HttpServlet {
 
     @Inject
     UserService service;
+    int lastID;
+    List<Users> users;
+    String alerta;
+    RequestDispatcher dispatcher = null;
+    Processing processing;
+    String[] alert = new String[2];
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -52,23 +54,19 @@ public class UserServlet extends HttpServlet {
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
+     * @throws java.sql.SQLException if an SQL error occurs
+     * @throws java.security.spec.InvalidKeySpecException if an Key error occurs
      */
-    int lastID;
-    List<Users> users;
-    String alerta;
-    RequestDispatcher dispatcher = null;
-    Processing processing;
-    String[] alert = new String[2];
-    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException, InvalidKeySpecException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             String action = request.getParameter("action");
+            HttpSession sesiune = request.getSession();
 
             users = service.getAllUsers();
-            processing = new Processing(request, response, users);
+            processing = new Processing(request, response, sesiune, users, null, null);
 
             if ("signup".equals(action)) {
                 if (processing.processSignup("signup")) {
@@ -84,25 +82,7 @@ public class UserServlet extends HttpServlet {
                 processing.processLogout();
             }
             if ("pdf".equals(action)) {
-                String applicationPath = request.getServletContext().getRealPath("");
-                String uploadFilePath = applicationPath + File.separator + "cv";
-                HttpSession session = request.getSession();
-                Users u = (Users) session.getAttribute("user");
-                Part o = request.getPart("cv");
-                InputStream fileInputStream = o.getInputStream();
-                String fileName = u.getId().toString() + ".pdf";
-                
-                File fileSaveDir = new File(uploadFilePath);
-                if (!fileSaveDir.exists()) {
-                    fileSaveDir.mkdirs();
-                }
-                
-                File fileToSave = new File(uploadFilePath + File.separator + fileName);
-                Files.copy(fileInputStream, fileToSave.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                alert[0] = "Ai incarcat cu succes CV-ul!";
-                alert[1] = "alert alert-success";
-                session.setAttribute("appAlert", alert);
-                response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx#profil");
+                processing.processCV();
             }
 
             if ("edituser".equals(action)) {
@@ -113,35 +93,18 @@ public class UserServlet extends HttpServlet {
                 String statut = request.getParameter("statut");
 
                 service.editUser(id, email, firstname, lastname, statut);
-                HttpSession sesiune = request.getSession();
-                Users user = (Users) sesiune.getAttribute("user");
-                if (user.getId().equals(id)) {
-                    user.setEmail(email);
-                    user.setFirstname(firstname);
-                    user.setLastname(lastname);
-                    user.setStatut(statut);
-                    sesiune.setAttribute("user", user);
-                }
                 users = service.getAllUsers();
-                sesiune.setAttribute("users", users);
-                alert[0] = "Utilizator modificat cu succes!";
-                alert[1] = "alert alert-success";
-                sesiune.setAttribute("appAlert", alert);
-                response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx#utilizatori");                              
+                processing.processEditUser(id, email, firstname, lastname, statut, users);
             }
 
             if ("deleteuser".equals(action)) {
-                HttpSession sesiune = request.getSession();
                 Users user = (Users) sesiune.getAttribute("user");
                 int id = Integer.parseInt(request.getParameter("id"));
                 if (!user.getId().equals(id)) {
-                    service.removeUser(id);
+
                     users = service.getAllUsers();
-                    sesiune.setAttribute("users", users);
-                    alert[0] = "Utilizator sters cu succes!";
-                    alert[1] = "alert alert-success";
-                    sesiune.setAttribute("appAlert", alert);
-                    response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx#utilizatori");
+                    service.removeUser(id);
+                    processing.processRemoveUser(users);
                 } else {
                     alert[0] = "Utilizatorul nu a fost sters!";
                     alert[1] = "alert alert-danger";
@@ -152,12 +115,11 @@ public class UserServlet extends HttpServlet {
             if ("newuser".equals(action)) {
                 if (processing.processSignup(action)) {
                     service.addUser(processing.getUserData());
-                    HttpSession session = request.getSession();
                     List<Users> u = (List<Users>) service.getAllUsers();
                     alert[0] = "Utilizator adaugat cu succes!";
                     alert[1] = "alert alert-success";
-                    session.setAttribute("appAlert", alert);
-                    session.setAttribute("users", u);
+                    sesiune.setAttribute("appAlert", alert);
+                    sesiune.setAttribute("users", u);
                 }
             }
         }

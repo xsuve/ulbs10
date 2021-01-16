@@ -36,6 +36,14 @@ public class PostServlet extends HttpServlet {
 
     @Inject
     PosturiService service;
+    int lastID;
+    List<Posturi> posturi;
+    Posturi post = null;
+    String alerta;
+    RequestDispatcher dispatcher = null;
+    Processing processing;
+    String[] alert = new String[2];
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -44,15 +52,8 @@ public class PostServlet extends HttpServlet {
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
+     * @throws java.text.ParseException if a Parse error occurs
      */
-    int lastID;
-    List<Posturi> posturi;
-    Posturi post = null;
-    String alerta;
-    RequestDispatcher dispatcher = null;
-    Processing processing;
-    String[] alert = new String[2];
-
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, ParseException {
         response.setContentType("text/html;charset=UTF-8");
@@ -62,33 +63,11 @@ public class PostServlet extends HttpServlet {
             Users u = (Users) sesiune.getAttribute("user");
             String action = request.getParameter("action");
             posturi = service.getAllPosts();
+            processing = new Processing(request, response, sesiune, null, posturi, null);
 
             if ("newpost".equals(action)) {
-                Date date1 = new SimpleDateFormat("yyyy-mm-dd").parse(request.getParameter("dataLimita"));
-
-                if (posturi.isEmpty()) {
-                    lastID = 0;
-                } else {
-                    lastID = posturi.get(posturi.size() - 1).getId();
-                }
-                request.setAttribute("posturi", posturi);
-
-                String cerinteMinime = request.getParameter("cerinteMinime");
-                cerinteMinime = cerinteMinime.replaceAll("\n", "<br />");
-                String cerinteOptionale = request.getParameter("cerinteOptionale");
-                cerinteOptionale = cerinteOptionale.replaceAll("\n", "<br />");
-
-                post = new Posturi(++lastID, request.getParameter("denumire"), cerinteMinime, cerinteOptionale, date1, u);
-                service.addPost(post);
-                sesiune.setAttribute("posts", service.getAllPosts());
-                
-                alert[0] = "Post adaugat cu succes!";
-                alert[1] = "alert alert-success";
-                sesiune.setAttribute("appAlert", alert);
-                response.sendRedirect(request.getServletContext() + "/../dashboard.jspx#posturi");
-                //dispatcher = request.getServletContext().getRequestDispatcher("/dashboard.jspx");
-                //dispatcher.forward(request, response);
-
+                service.addPost(processing.processNewPost(service.getAllPosts(), ""));
+                processing.processNewPost(service.getAllPosts(), "redirect");
             }
 
             if ("deletepost".equals(action)) {
@@ -121,12 +100,10 @@ public class PostServlet extends HttpServlet {
                 sesiune.setAttribute("posts", service.getAllPosts());
                 response.sendRedirect(request.getServletContext() + "/../dashboard.jspx#posturi");
             }
-            if("getAllPosts".equals(action)){
-                List<Posturi> postsAvailable = service.getAllPosts();
 
+            if ("getAllPosts".equals(action)) {
+                List<Posturi> postsAvailable = service.getAllPosts();
                 sesiune.setAttribute("posts", postsAvailable);
-                //request.setAttribute("posts", service.getAllPosts());
-                //response.sendRedirect(request.getServletContext() + "/index-mask.jspx");
                 dispatcher = request.getServletContext().getRequestDispatcher("/index-mask.jspx");
                 dispatcher.forward(request, response);
             }

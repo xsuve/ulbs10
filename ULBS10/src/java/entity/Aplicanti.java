@@ -42,7 +42,7 @@ public class Aplicanti implements Serializable {
     @JoinColumn(name = "ID_USER", referencedColumnName = "ID")
     @ManyToOne
     private Users idUser;
-
+    
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
