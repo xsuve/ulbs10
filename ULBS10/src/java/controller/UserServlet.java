@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +30,11 @@ import utility.Processing;
  * @author Razvan
  */
 @WebServlet(name = "SignupServlet", urlPatterns = {"/login/user"})
+@MultipartConfig(
+        fileSizeThreshold = 1024 * 1024 * 1, // 1 MB
+        maxFileSize = 1024 * 1024 * 10, // 10 MB
+        maxRequestSize = 1024 * 1024 * 15 // 15 MB
+)
 public class UserServlet extends HttpServlet {
 
     @Inject
@@ -39,7 +45,7 @@ public class UserServlet extends HttpServlet {
     RequestDispatcher dispatcher = null;
     Processing processing;
     String[] alert = new String[2];
-    
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.

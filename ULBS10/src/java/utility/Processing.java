@@ -279,9 +279,9 @@ public class Processing {
     /**
      * Cripteaza parola din formular si o verifica cu cea din baza de date
      *
-     * @param providedPassword  Parola care se furnizeaza
-     * @param securedPassword   Parola criptata din baza de date
-     * @param salt  Saltul
+     * @param providedPassword Parola care se furnizeaza
+     * @param securedPassword Parola criptata din baza de date
+     * @param salt Saltul
      * @return  <code>true</code> daca parola din formular estea ceeasi cu parola
      * din baza de date; <code>false</code> in caz contrar.
      * @throws InvalidKeySpecException Daca exista o problema la
@@ -319,26 +319,35 @@ public class Processing {
         //Userul curent
         Users u = (Users) sesiune.getAttribute("user");
         Part o = request.getPart("cv");
-        InputStream fileInputStream = o.getInputStream();
+        if ("".equals(o.getSubmittedFileName())) {
+            String[] appAlert = new String[2];
+            appAlert[0] = "Nu ai selectat CV-ul !";
+            appAlert[1] = "alert alert-danger";
+            sesiune.setAttribute("appAlert", appAlert);
 
-        //Numele fisierului ( ID.pdf )
-        String fileName = u.getId().toString() + ".pdf";
+            response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx#profil");
+        } else {
+            InputStream fileInputStream = o.getInputStream();
 
-        //Creare folder
-        File fileSaveDir = new File(uploadFilePath);
-        if (!fileSaveDir.exists()) {
-            fileSaveDir.mkdirs();
+            //Numele fisierului ( ID.pdf )
+            String fileName = u.getId().toString() + ".pdf";
+
+            //Creare folder
+            File fileSaveDir = new File(uploadFilePath);
+            if (!fileSaveDir.exists()) {
+                fileSaveDir.mkdirs();
+            }
+
+            //Creare fisier si salvare
+            File fileToSave = new File(uploadFilePath + File.separator + fileName);
+            Files.copy(fileInputStream, fileToSave.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+            //Atribuire alerte pentru front-end
+            alert[0] = "Ai incarcat cu succes CV-ul!";
+            alert[1] = "alert alert-success";
+            sesiune.setAttribute("appAlert", alert);
+            response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx#profil");
         }
-
-        //Creare fisier si salvare
-        File fileToSave = new File(uploadFilePath + File.separator + fileName);
-        Files.copy(fileInputStream, fileToSave.toPath(), StandardCopyOption.REPLACE_EXISTING);
-
-        //Atribuire alerte pentru front-end
-        alert[0] = "Ai incarcat cu succes CV-ul!";
-        alert[1] = "alert alert-success";
-        sesiune.setAttribute("appAlert", alert);
-        response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx#profil");
     }
 
     /**
@@ -445,9 +454,7 @@ public class Processing {
 
                 //Se creeaza postul care v-a fi returnat
                 post = new Posturi(++lastID, request.getParameter("denumire"), cerinteMinime, cerinteOptionale, date1, user);
-            } 
-
-            //Daca se face redirectionare, se trimit parametrii pentru front-end
+            } //Daca se face redirectionare, se trimit parametrii pentru front-end
             else {
                 sesiune.setAttribute("posts", allPosts);
                 alert[0] = "Post adaugat cu succes!";
@@ -469,10 +476,11 @@ public class Processing {
      * Returneaza true daca s-a creeat cu succes o aplicatie pentru un post sau
      * false daca utilizatorul a aplicat deja pentru post-ul respectiv
      *
-     * @param postAplicare  Postul la care a aplicat utilizatorul
-     * @param existInDB Variabila care verifica daca a mai aplicat sau nu la acest post
-     * @return  <code>true</code> daca utilizatorul nu a mai aplicat la acest post
-     *          <code>false</code> daca a mai aplicat
+     * @param postAplicare Postul la care a aplicat utilizatorul
+     * @param existInDB Variabila care verifica daca a mai aplicat sau nu la
+     * acest post
+     * @return  <code>true</code> daca utilizatorul nu a mai aplicat la acest
+     * post <code>false</code> daca a mai aplicat
      */
     public boolean processAplicant(Posturi postAplicare, boolean existInDB) {
         //Se salveaza data de azi si utilizatorul curent
@@ -490,14 +498,34 @@ public class Processing {
         //Daca nu a aplicat deja
         if (!existInDB) {
             try {
-                aplicant = new Aplicanti(++idAplicant, user, postAplicare, todayDate);
-                appAlert[0] = "Ai aplicat cu succes pentru acest post!";
-                appAlert[1] = "alert alert-success";
-                sesiune.setAttribute("aplicants", aplicanti);
-                sesiune.setAttribute("appAlert", appAlert);
+                boolean areCV;
+                //Ia locatia servletului
+                String applicationPath = request.getServletContext().getRealPath("");
+                String uploadFilePath = applicationPath + File.separator + "cv";
 
-                response.sendRedirect(request.getServletContext() + "./../dashboard.jspx#posturi");
-                return true;
+                //Numele fisierului ( ID.pdf )
+                String fileName = uploadFilePath + File.separator + user.getId().toString() + ".pdf";
+
+                File file = new File(fileName);
+                areCV = file.exists();
+
+                if (areCV) {
+                    aplicant = new Aplicanti(++idAplicant, user, postAplicare, todayDate);
+                    appAlert[0] = "Ai aplicat cu succes pentru acest post!";
+                    appAlert[1] = "alert alert-success";
+                    sesiune.setAttribute("aplicants", aplicanti);
+                    sesiune.setAttribute("appAlert", appAlert);
+
+                    response.sendRedirect(request.getServletContext() + "./../dashboard.jspx#posturi");
+                    return true;
+                } else {
+                    appAlert[0] = "Nu ai nici un CV!";
+                    appAlert[1] = "alert alert-danger";
+                    sesiune.setAttribute("appAlert", appAlert);
+
+                    response.sendRedirect(request.getServletContext() + "./../dashboard.jspx#profil");
+
+                }
             } catch (IOException ex) {
                 Logger.getLogger(Processing.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -520,8 +548,9 @@ public class Processing {
      * Accepta un utilizator care a aplicat la un post si se trimite un email
      * catre acel utilizator pentru a-l
      *
-     * @param userSearch    Utilizatorul care a fost acceptat
-     * @param aplicantSearch    Aplicantul ale caror detalii se vor trimite prin email
+     * @param userSearch Utilizatorul care a fost acceptat
+     * @param aplicantSearch Aplicantul ale caror detalii se vor trimite prin
+     * email
      */
     public void processAcceptAplicant(Users userSearch, Aplicanti aplicantSearch) {
         if (userSearch != null) {
@@ -544,7 +573,7 @@ public class Processing {
     /**
      * Returneaza aplicantul pentru a-l adauga ulterior in baza de date
      *
-     * @return  Aplicantul care urmeaza sa fie salvat in baza de date
+     * @return Aplicantul care urmeaza sa fie salvat in baza de date
      */
     public Aplicanti getAplicantData() {
         return aplicant;
