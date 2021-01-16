@@ -31,7 +31,7 @@ import utility.Processing;
  */
 @WebServlet(name = "AplicantServlet", urlPatterns = {"/aplicant"})
 public class AplicantServlet extends HttpServlet {
-    
+
     @Inject
     AplicantService service;
 
@@ -43,7 +43,7 @@ public class AplicantServlet extends HttpServlet {
     RequestDispatcher dispatcher = null;
     Processing processing;
     String[] alert = new String[2];
-    
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -52,7 +52,7 @@ public class AplicantServlet extends HttpServlet {
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
-     * @throws javax.mail.MessagingException    if an Message error occurs
+     * @throws javax.mail.MessagingException if an Message error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, MessagingException {
@@ -73,11 +73,7 @@ public class AplicantServlet extends HttpServlet {
 
             if ("deleteaplicant".equals(action)) {
                 int id = Integer.parseInt(request.getParameter("id"));
-                List<Aplicanti> aplican = service.getAllAplicants();
-
-                aplican.stream().filter((aplic) -> (aplic.getId().equals(id))).forEachOrdered((_item) -> {
-                    service.removeAplicant(id);
-                });
+                service.removeAplicant(id);
                 alert[0] = "Aplicantul a fost refuzat pentru acest post!";
                 alert[1] = "alert alert-danger";
                 sesiune.setAttribute("appAlert", alert);
@@ -87,11 +83,10 @@ public class AplicantServlet extends HttpServlet {
 
             if ("acceptAplicant".equals(action)) {
                 int id = Integer.parseInt(request.getParameter("id"));
-                processing.processAcceptAplicant(service.existaUserByAplicantByID(id),service.findByID(id));
+                processing.processAcceptAplicant(service.existaUserByAplicantByID(id), service.findByID(id));
                 service.removeAplicant(id);
                 sesiune.setAttribute("aplicants", service.getAllAplicants());
                 response.sendRedirect(request.getServletContext() + "/../dashboard.jspx#posturi");
-
             }
 
         }

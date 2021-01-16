@@ -51,7 +51,7 @@ public class UserService {
     }
 
     /**
-     * Executa un querry care cauta in baza de date toti utilizatorii
+     * Executa un query care cauta in baza de date toti utilizatorii
      *
      * @return O lista cu toti utilizatorii din baza de date
      */
@@ -84,7 +84,7 @@ public class UserService {
     }
 
     /**
-     * Executa un querry care cauta in baza de date toate posturile
+     * Executa un query care cauta in baza de date toate posturile
      *
      * @return O lista cu toate posturile din baza de date
      */
@@ -138,7 +138,7 @@ public class UserService {
     }
 
     /**
-     *  Executa un querry care cauta in baza de date toti aplicantii
+     *  Executa un query care cauta in baza de date toti aplicantii
      *
      * @return      O lista cu toti aplicantii din baza de date
      */

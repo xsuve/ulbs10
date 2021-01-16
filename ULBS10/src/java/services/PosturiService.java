@@ -53,7 +53,7 @@ public class PosturiService {
     }
 
     /**
-     *  Executa un querry pentru a cauta in baza de date toate posturile
+     *  Executa un query pentru a cauta in baza de date toate posturile
      *
      * @return O lista cu toate posturile din baza de date
      */
@@ -84,7 +84,7 @@ public class PosturiService {
     }
 
     /**
-     *  Executa un querry pentru a cauta in baza de date aplicantii care au aplicat la un post,
+     *  Executa un query pentru a cauta in baza de date aplicantii care au aplicat la un post,
      * apoi sterge fiecare aplicant care a aplicat la acel post si postul.
      *
      * @param post  Postul care v-a fi sters din baza de date, si aplicantii corespunzatori postului

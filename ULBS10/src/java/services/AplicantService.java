@@ -51,7 +51,7 @@ public class AplicantService {
     }
 
     /**
-     *  Executa un querry care returneaza toti aplicantii din baza de date
+     *  Executa un query care returneaza toti aplicantii din baza de date
      *
      * @return  Lista cu aplicantii din baza de date
      */
@@ -83,7 +83,7 @@ public class AplicantService {
     }
 
     /**
-     *  Executa un querry pentru a cauta un Aplicant dupa ID, apoi sterge acea
+     *  Executa un query pentru a cauta un Aplicant dupa ID, apoi sterge acea
      * inregistrare din baza de date
      *
      * @param id    ID-ul utilizatorului ce v-a fi sters
@@ -102,7 +102,7 @@ public class AplicantService {
     }
 
     /**
-     *  Executa un querry pentru a cauta in baza de date un Post din baza de date dupa un ID,
+     *  Executa un query pentru a cauta in baza de date un Post din baza de date dupa un ID,
      * un querry pentru a cauta in baza de date un Aplicant dupa un utilizator si inca un 
      * querry pentru a cauta in baza de date un Aplicant dupa Post-ul din primul querry
      *  Adica verifica daca exista un aplicant care are utilizatorul si postul specifici
@@ -130,7 +130,7 @@ public class AplicantService {
     }
 
     /**
-     *  Executa un querry pentru a cauta in baza de date un Post dupa un ID
+     *  Executa un query pentru a cauta in baza de date un Post dupa un ID
      *
      * @param id    ID-ul dupa care se v-a cauta Postul in baza de date
      * @return      Postul care a avut ID-ul cerut.
@@ -148,7 +148,7 @@ public class AplicantService {
     }
 
     /**
-     *  Executa un querry pentru a cauta in baza de date un Aplicant dupa ID si un querry care
+     *  Executa un query pentru a cauta in baza de date un Aplicant dupa ID si un querry care
      * cauta in baza de date un utilizator dupa id-ul utilizatorului care exista in aplicantul
      * primului querry
      *
@@ -172,7 +172,7 @@ public class AplicantService {
     }
 
     /**
-     *  Executa un querry pentru a cauta in baza de date un aplicant dupa ID
+     *  Executa un query pentru a cauta in baza de date un aplicant dupa ID
      *
      * @param id    ID-ul dupa care se v-a cauta Aplicantul in baza de date
      * @return  Aplicantul care are ID-ul specific;
