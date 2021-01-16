@@ -404,22 +404,22 @@
                                     <form action="./post?action=newpost" method="post">
                                         <div class="mb-lg-3">
                                             <label class="form-label">Denumire</label>
-                                            <input type="text" name="denumire" class="form-control" placeholder="Denumire" />
+                                            <input type="text" name="denumire" class="form-control" placeholder="Denumire" required="required"/>
                                         </div>
                                         <div class="mb-lg-3">
                                             <label class="form-label">Cerinte minime</label>
-                                            <textarea name="cerinteMinime" class="form-control" placeholder="Cerinte minime" rows="5"><jsp:text /></textarea>
+                                            <textarea name="cerinteMinime" class="form-control" placeholder="Cerinte minime" rows="5" required="required"><jsp:text /></textarea>
                                         </div>
                                         <div class="mb-lg-3">
                                             <label class="form-label">Cerinte optionale</label>
-                                            <textarea name="cerinteOptionale" class="form-control" placeholder="Cerinte optionale" rows="5"><jsp:text /></textarea>
+                                            <textarea name="cerinteOptionale" class="form-control" placeholder="Cerinte optionale" rows="5" required="required"><jsp:text /></textarea>
                                         </div>
                                         <div class="mb-lg-3">
                                             <label class="form-label">Data limita</label>
-                                            <input type="date" name="dataLimita" class="form-control" placeholder="Data limita" />
+                                            <input type="date" name="dataLimita" class="form-control" placeholder="Data limita" required="required"/>
                                         </div>
                                         <div class="mb-lg-4">
-                                            <input type="hidden" name="idUser" class="form-control" placeholder=" " />
+                                            <input type="hidden" name="idUser" class="form-control" placeholder=" "/>
                                         </div>
 
                                         <button type="submit" class="btn btn-primary">Adauga post</button>
