@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import services.AplicantService;
 import utility.Processing;
+import utility.gmailSendEmailSSL;
 
 /**
  *
@@ -64,16 +65,23 @@ public class AplicantServlet extends HttpServlet {
             processing = new Processing(request, response, sesiune, null, null, aplicanti);
 
             if ("aplica".equals(action)) {
-                int idPost = Integer.parseInt(request.getParameter("id_post"));
+                int id = Integer.parseInt(request.getParameter("id_post"));
                 Users user = (Users) sesiune.getAttribute("user");
-                if (processing.processAplicant(service.findPostByID(idPost), service.existaAplicantByIdUser(user, idPost))) {
+                Posturi post = service.findPostByID(id);
+                if (processing.processAplicant(post, service.existaAplicantByIdUserIdPost(user, post))) {
                     service.addAplicant(processing.getAplicantData());
                 }
             }
 
             if ("deleteaplicant".equals(action)) {
                 int id = Integer.parseInt(request.getParameter("id"));
+                aplicant = service.findByID(id);
                 service.removeAplicant(id);
+                String mesaj = "Din pacate, " + aplicant.getIdUser().getFirstname() + " " + aplicant.getIdUser().getLastname() + ",\n"
+                        + "Oferta dumneavoastra pentru postul " + aplicant.getIdPost().getDenumire() + " a fost refuzata,\n\n"
+                        + "O zi buna!";
+                gmailSendEmailSSL sendemail = new gmailSendEmailSSL();
+                sendemail.sendMail(aplicant.getIdUser().getEmail(), "Oferta job", mesaj);
                 alert[0] = "Aplicantul a fost refuzat pentru acest post!";
                 alert[1] = "alert alert-danger";
                 sesiune.setAttribute("appAlert", alert);
@@ -83,7 +91,7 @@ public class AplicantServlet extends HttpServlet {
 
             if ("acceptAplicant".equals(action)) {
                 int id = Integer.parseInt(request.getParameter("id"));
-                processing.processAcceptAplicant(service.existaUserByAplicantByID(id), service.findByID(id));
+                processing.processAcceptAplicant(service.findByID(id));
                 service.removeAplicant(id);
                 sesiune.setAttribute("aplicants", service.getAllAplicants());
                 response.sendRedirect(request.getServletContext() + "/../dashboard.jspx#posturi");

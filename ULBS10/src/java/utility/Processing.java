@@ -549,25 +549,21 @@ public class Processing {
      * Accepta un utilizator care a aplicat la un post si se trimite un email
      * catre acel utilizator pentru a-l
      *
-     * @param userSearch Utilizatorul care a fost acceptat
      * @param aplicantSearch Aplicantul ale caror detalii se vor trimite prin
      * email
      */
-    public void processAcceptAplicant(Users userSearch, Aplicanti aplicantSearch) {
-        if (userSearch != null) {
-            try {
-                post = aplicantSearch.getIdPost();
-                String mesaj = "Felicitari " + userSearch.getFirstname() + " " + userSearch.getLastname() + ",\n"
-                        + "Ati fost acceptat pentru postul " + post.getDenumire() + ",\n\n"
-                        + "O zi buna!";
-                gmailSendEmailSSL sendemail = new gmailSendEmailSSL();
-                sendemail.sendMail(userSearch.getEmail(), "Oferta job", mesaj);
-                alert[0] = "Aplicantul a fost acceptat pentru acest post!";
-                alert[1] = "alert alert-success";
-                sesiune.setAttribute("appAlert", alert);
-            } catch (MessagingException ex) {
-                Logger.getLogger(Processing.class.getName()).log(Level.SEVERE, null, ex);
-            }
+    public void processAcceptAplicant(Aplicanti aplicantSearch) {
+        try {
+            String mesaj = "Felicitari " + aplicantSearch.getIdUser().getFirstname() + " " + aplicantSearch.getIdUser().getLastname() + ",\n"
+                    + "Ati fost acceptat pentru postul " + aplicantSearch.getIdPost().getDenumire() + ",\n\n"
+                    + "O zi buna!";
+            gmailSendEmailSSL sendemail = new gmailSendEmailSSL();
+            sendemail.sendMail(aplicantSearch.getIdUser().getEmail(), "Oferta job", mesaj);
+            alert[0] = "Aplicantul a fost acceptat pentru acest post!";
+            alert[1] = "alert alert-success";
+            sesiune.setAttribute("appAlert", alert);
+        } catch (MessagingException ex) {
+            Logger.getLogger(Processing.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

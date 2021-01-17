@@ -108,20 +108,20 @@ public class AplicantService {
      *  Adica verifica daca exista un aplicant care are utilizatorul si postul specifici
      *
      * @param idUser    Utilizatorul care se cauta in Aplicanti
-     * @param id    ID-ul care se v-a cauta in Posturi, post ce v-a fi cautat in Aplicanti
+     * @param idPost    Postul care se cauta in Aplicanti
      * @return      <code>true</code> daca s-a gasit un rezultat in baza de date dupa specificatiile
      *              pe care le-am vrut;
      *              <code>false</code> daca nu s-a gasit.
      */
     @Transactional
-    public boolean existaAplicantByIdUser(Users idUser, int id) {
+    public boolean existaAplicantByIdUserIdPost(Users idUser, Posturi idPost) {
         logger.log(Level.INFO, "Verifica daca utilizatorul {0} - {1} a mai aplicat ", new Object[]{idUser.getId(), idUser.getFirstname()});
         try {
-            Posturi idPost = em.find(Posturi.class, id);
-            Aplicanti aplicant_user = (Aplicanti) em.createNamedQuery("Aplicanti.findByIdUser").setParameter("idUser", idUser).getSingleResult();
-            Aplicanti aplicant_post = (Aplicanti) em.createNamedQuery("Aplicanti.findByIdPost").setParameter("idPost", idPost).getSingleResult();
+            Aplicanti aplicant = (Aplicanti) em.createNamedQuery("Aplicanti.findByIdPostAndIDUser").
+                    setParameter("idUser", idUser).setParameter("idPost", idPost).getSingleResult();
 
         } catch (Exception ex) {
+            //Daca in baza de date, nu avem un aplicant (nu exista un utilizator idUser care a aplicat la post-ul ID)
             return false;
         }
 
@@ -145,30 +145,6 @@ public class AplicantService {
             throw new EJBException(ex);
         }
         return post;
-    }
-
-    /**
-     *  Executa un query pentru a cauta in baza de date un Aplicant dupa ID si un querry care
-     * cauta in baza de date un utilizator dupa id-ul utilizatorului care exista in aplicantul
-     * primului querry
-     *
-     * @param id    ID-ul dupa care se v-a cauta Aplicantul in baza de date
-     * @return  Utilizatorul care are ID-ul specific;
-     *          <code>null</code> daca nu exista.
-     */
-    @Transactional
-    public Users existaUserByAplicantByID(int id) {
-        logger.log(Level.INFO, "Verifica daca exista un utilizatorator dupa id-ul {0} din aplicantii bazei de date",
-                new Object[]{id});
-        Users user;
-        try {
-            Aplicanti aplicant = em.find(Aplicanti.class, id);
-            user = (Users) em.createNamedQuery("Users.findById").setParameter("id", aplicant.getIdUser().getId()).getSingleResult();
-        } catch (Exception ex) {
-            return null;
-        }
-        //returneaza user daca exista, null daca nu
-        return user;
     }
 
     /**
