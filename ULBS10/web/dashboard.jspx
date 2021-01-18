@@ -238,8 +238,8 @@
                         </section>
 
                         <!-- Edit user -->
-                        <c:if test="${user.getStatut() == 'generalDirector' || user.getStatut() == 'administrator'}">
-                            <section data-tab="edit-user" class="content-section">
+                        <section data-tab="edit-user" class="content-section">
+                            <c:if test="${user.getStatut() == 'generalDirector' || user.getStatut() == 'administrator'}">
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <h2 class="content-title mb-lg-5">Editeaza utilizator</h2>
@@ -266,7 +266,7 @@
                                                 <label class="form-label">Statut</label>
                                                 <select name="statut" class="form-select edit-user-form-statut">
                                                     <option value="generalDirector">Director General</option>
-                                                    <option value="departamanetDirector">Director Departament</option>
+                                                    <option value="departmentDirector">Director Departament</option>
                                                     <option value="humanResourcesDirector">Director Resurse Umane</option>
                                                     <option value="recruiter">Recrutor</option>
                                                     <option value="administrator">Administrator</option>
@@ -278,13 +278,11 @@
                                         </form>
                                     </div>
                                 </div>
-                            </section>
-                        </c:if>
-                        <c:if test="${!user.getStatut().equals('generalDirector') || !user.getStatut().equals('administrator')}">
-                            <div class="alert alert-danger mt-lg-5">Nu ai acces la aceasta sectiune!</div>
-                        </c:if>
-
-
+                            </c:if>
+                            <c:if test="${user.getStatut() != 'generalDirector' || user.getStatut() != 'administrator'}">
+                                <div class="alert alert-danger alert-section">Nu ai acces la aceasta sectiune!</div>
+                            </c:if>
+                        </section>
 
                         <!-- Posturi -->
                         <section data-tab="posturi" class="content-section">
@@ -308,7 +306,7 @@
                                                 </a>
                                             </div>
                                         </c:when>
-                                        <c:when test="${user.getStatut() == 'humanResourceDirector'}">
+                                        <c:when test="${user.getStatut() == 'humanResourcesDirector'}">
                                             <div style="text-align: right;">
                                                 <a class="add-post-link" href="#adauga-post">
                                                     <button class="btn btn-primary"><span class="material-icons">add</span> Adauga post</button>
@@ -376,7 +374,7 @@
                                                                 <fmt:formatDate value="${p.getDataLimAplic()}" pattern="yyyy-MM-dd" var="dateFormatted" />
                                                                 <a href="#edit-post" data-post-id="${p.getId()}" data-post-denumire="${p.getDenumire()}" data-post-cerinte-minime="${p.getCerinteMinime()}" data-post-cerinte-optionale="${p.getCerinteOptionale()}" data-post-data-limita="${dateFormatted}" class="edit-post-link">Editeaza</a>
                                                             </c:when>
-                                                            <c:when test="${user.getStatut() == 'humanResourceDirector'}">
+                                                            <c:when test="${user.getStatut() == 'humanResourcesDirector'}">
                                                                 |
                                                                 <fmt:formatDate value="${p.getDataLimAplic()}" pattern="yyyy-MM-dd" var="dateFormatted" />
                                                                 <a href="#edit-post" data-post-id="${p.getId()}" data-post-denumire="${p.getDenumire()}" data-post-cerinte-minime="${p.getCerinteMinime()}" data-post-cerinte-optionale="${p.getCerinteOptionale()}" data-post-data-limita="${dateFormatted}" class="edit-post-link">Editeaza</a>
@@ -435,31 +433,36 @@
 
                         <!-- Edit post -->
                         <section data-tab="edit-post" class="content-section">
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <h2 class="content-title mb-lg-5">Editeaza post</h2>
-                                    <form action="./post?action=editpost&amp;id=0" method="post" class="edit-post-form">
-                                        <div class="mb-lg-3">
-                                            <label class="form-label">Denumire</label>
-                                            <input type="text" name="denumire" class="form-control edit-post-form-denumire" placeholder="Denumire" />
-                                        </div>
-                                        <div class="mb-lg-3">
-                                            <label class="form-label">Cerinte minime</label>
-                                            <textarea name="cerinteMinime" class="form-control edit-post-form-cerinte-minime" placeholder="Cerinte minime" rows="5"><jsp:text /></textarea>
-                                        </div>
-                                        <div class="mb-lg-3">
-                                            <label class="form-label">Cerinte optionale</label>
-                                            <textarea name="cerinteOptionale" class="form-control edit-post-form-cerinte-optionale" placeholder="Cerinte optionale" rows="5"><jsp:text /></textarea>
-                                        </div>
-                                        <div class="mb-lg-4">
-                                            <label class="form-label">Data limita</label>
-                                            <input type="date" name="dataLimita" class="form-control edit-post-form-data-limita" placeholder="Data limita" />
-                                        </div>
+                            <c:if test="${user.getStatut() == 'generalDirector' || user.getStatut() == 'departmentDirector' || user.getStatut() == 'humanResourcesDirector' || user.getStatut() == 'recruiter'}">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <h2 class="content-title mb-lg-5">Editeaza post</h2>
+                                        <form action="./post?action=editpost&amp;id=0" method="post" class="edit-post-form">
+                                            <div class="mb-lg-3">
+                                                <label class="form-label">Denumire</label>
+                                                <input type="text" name="denumire" class="form-control edit-post-form-denumire" placeholder="Denumire" />
+                                            </div>
+                                            <div class="mb-lg-3">
+                                                <label class="form-label">Cerinte minime</label>
+                                                <textarea name="cerinteMinime" class="form-control edit-post-form-cerinte-minime" placeholder="Cerinte minime" rows="5"><jsp:text /></textarea>
+                                            </div>
+                                            <div class="mb-lg-3">
+                                                <label class="form-label">Cerinte optionale</label>
+                                                <textarea name="cerinteOptionale" class="form-control edit-post-form-cerinte-optionale" placeholder="Cerinte optionale" rows="5"><jsp:text /></textarea>
+                                            </div>
+                                            <div class="mb-lg-4">
+                                                <label class="form-label">Data limita</label>
+                                                <input type="date" name="dataLimita" class="form-control edit-post-form-data-limita" placeholder="Data limita" />
+                                            </div>
 
-                                        <button type="submit" class="btn btn-primary">Editeaza post</button>
-                                    </form>
+                                            <button type="submit" class="btn btn-primary">Editeaza post</button>
+                                        </form>
+                                    </div>
                                 </div>
-                            </div>
+                            </c:if>
+                            <c:if test="${user.getStatut() == 'administrator' || user.getStatut() == 'viewer'}">
+                                <div class="alert alert-danger alert-section">Nu ai acces la aceasta sectiune!</div>
+                            </c:if>
                         </section>
 
                         <!-- Profil -->

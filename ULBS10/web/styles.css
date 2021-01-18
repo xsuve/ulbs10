@@ -99,6 +99,9 @@ a {
     z-index: 9990;
     right: -500px;
 }
+.alert.alert-section {
+    display: inline-block;
+}
 
 /* Sidebar */
 .sidebar {
