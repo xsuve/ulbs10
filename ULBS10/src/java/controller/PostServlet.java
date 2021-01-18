@@ -43,7 +43,7 @@ public class PostServlet extends HttpServlet {
     RequestDispatcher dispatcher = null;
     Processing processing;
     String[] alert = new String[2];
-    
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -60,45 +60,64 @@ public class PostServlet extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
 
             HttpSession sesiune = request.getSession();
-            Users u = (Users) sesiune.getAttribute("user");
+            Users user = (Users) sesiune.getAttribute("user");
             String action = request.getParameter("action");
             posturi = service.getAllPosts();
             processing = new Processing(request, response, sesiune, null, posturi, null);
 
-            if ("newpost".equals(action)) {                
-                service.addPost(processing.processNewPost(service.getAllPosts(), ""));
-                processing.processNewPost(service.getAllPosts(), "redirect");
+            if ("newpost".equals(action)) {
+                if ("generalDirector".equals(user.getStatut()) || "departamanetDirector".equals(user.getStatut()) || "humanResourcesDirector".equals(user.getStatut()) || "recruiter".equals(user.getStatut())) {
+                    service.addPost(processing.processNewPost(service.getAllPosts(), ""));
+                    processing.processNewPost(service.getAllPosts(), "redirect");
+                } else {
+                    alert[0] = "Nu ai acces pentru aceasta actiune!";
+                    alert[1] = "alert alert-danger";
+                    sesiune.setAttribute("appAlert", alert);
+                    response.sendRedirect(request.getServletContext() + "/../dashboard.jspx#posturi");
+                }
             }
 
             if ("deletepost".equals(action)) {
-                int id = Integer.parseInt(request.getParameter("id"));
-                posturi = (List<Posturi>) sesiune.getAttribute("posts");
-                posturi.stream().filter((item) -> (item.getId() == id)).forEachOrdered((item) -> {
-                    service.removePost(item);
-                });
-                sesiune.setAttribute("posts", service.getAllPosts());
-                alert[0] = "Post sters cu succes!";
-                alert[1] = "alert alert-success";
-                sesiune.setAttribute("appAlert", alert);
-                response.sendRedirect(request.getServletContext() + "/../dashboard.jspx#posturi");
+                if ("generalDirector".equals(user.getStatut())) {
+                    int id = Integer.parseInt(request.getParameter("id"));
+                    posturi = (List<Posturi>) sesiune.getAttribute("posts");
+                    service.removePost(id);
+                    sesiune.setAttribute("posts", service.getAllPosts());
+                    alert[0] = "Post sters cu succes!";
+                    alert[1] = "alert alert-success";
+                    sesiune.setAttribute("appAlert", alert);
+                    response.sendRedirect(request.getServletContext() + "/../dashboard.jspx#posturi");
+                } else {
+                    alert[0] = "Nu ai acces pentru aceasta actiune!";
+                    alert[1] = "alert alert-danger";
+                    sesiune.setAttribute("appAlert", alert);
+                    response.sendRedirect(request.getServletContext() + "/../dashboard.jspx#posturi");
+                }
             }
 
             if ("editpost".equals(action)) {
-                int id = Integer.parseInt(request.getParameter("id"));
-                DateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd");
-                Date date1 = originalFormat.parse(request.getParameter("dataLimita"));
+                if ("generalDirector".equals(user.getStatut()) || "departamanetDirector".equals(user.getStatut()) || "humanResourcesDirector".equals(user.getStatut()) || "recruiter".equals(user.getStatut())) {
+                    int id = Integer.parseInt(request.getParameter("id"));
+                    DateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    Date date1 = originalFormat.parse(request.getParameter("dataLimita"));
 
-                String cerinteMinime = request.getParameter("cerinteMinime");
-                cerinteMinime = cerinteMinime.replaceAll("\n", "<br />");
-                String cerinteOptionale = request.getParameter("cerinteOptionale");
-                cerinteOptionale = cerinteOptionale.replaceAll("\n", "<br />");
+                    String cerinteMinime = request.getParameter("cerinteMinime");
+                    cerinteMinime = cerinteMinime.replaceAll("\n", "<br />");
+                    String cerinteOptionale = request.getParameter("cerinteOptionale");
+                    cerinteOptionale = cerinteOptionale.replaceAll("\n", "<br />");
 
-                service.editPost(id, request.getParameter("denumire"), cerinteMinime, cerinteOptionale, date1);
-                alert[0] = "Post modificat cu succes!";
-                alert[1] = "alert alert-success";
-                sesiune.setAttribute("appAlert", alert);
-                sesiune.setAttribute("posts", service.getAllPosts());
-                response.sendRedirect(request.getServletContext() + "/../dashboard.jspx#posturi");
+                    service.editPost(id, request.getParameter("denumire"), cerinteMinime, cerinteOptionale, date1);
+                    alert[0] = "Post modificat cu succes!";
+                    alert[1] = "alert alert-success";
+                    sesiune.setAttribute("appAlert", alert);
+                    sesiune.setAttribute("posts", service.getAllPosts());
+                    response.sendRedirect(request.getServletContext() + "/../dashboard.jspx#posturi");
+                } else {
+                    alert[0] = "Nu ai acces pentru aceasta actiune!";
+                    alert[1] = "alert alert-danger";
+                    sesiune.setAttribute("appAlert", alert);
+                    response.sendRedirect(request.getServletContext() + "/../dashboard.jspx#posturi");
+                }
             }
 
             if ("getAllPosts".equals(action)) {

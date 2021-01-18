@@ -64,6 +64,7 @@ public class UserServlet extends HttpServlet {
             /* TODO output your page here. You may use following sample code. */
             String action = request.getParameter("action");
             HttpSession sesiune = request.getSession();
+            Users user = (Users) sesiune.getAttribute("user");
 
             users = service.getAllUsers();
             processing = new Processing(request, response, sesiune, users, null, null);
@@ -86,40 +87,60 @@ public class UserServlet extends HttpServlet {
             }
 
             if ("edituser".equals(action)) {
-                int id = Integer.parseInt(request.getParameter("id"));
-                String email = request.getParameter("email");
-                String firstname = request.getParameter("firstName");
-                String lastname = request.getParameter("lastName");
-                String statut = request.getParameter("statut");
+                if ("generalDirector".equals(user.getStatut()) || "administrator".equals(user.getStatut())) {
+                    int id = Integer.parseInt(request.getParameter("id"));
+                    String email = request.getParameter("email");
+                    String firstname = request.getParameter("firstName");
+                    String lastname = request.getParameter("lastName");
+                    String statut = request.getParameter("statut");
 
-                service.editUser(id, email, firstname, lastname, statut);
-                users = service.getAllUsers();
-                processing.processEditUser(id, email, firstname, lastname, statut, users);
+                    service.editUser(id, email, firstname, lastname, statut);
+                    users = service.getAllUsers();
+                    processing.processEditUser(id, email, firstname, lastname, statut, users);
+                } else {
+                    alert[0] = "Nu ai acces pentru aceasta actiune!";
+                    alert[1] = "alert alert-danger";
+                    sesiune.setAttribute("appAlert", alert);
+                    response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx#utilizatori");
+                }
             }
 
             if ("deleteuser".equals(action)) {
-                Users user = (Users) sesiune.getAttribute("user");
-                int id = Integer.parseInt(request.getParameter("id"));
-                if (!user.getId().equals(id)) {
+                if ("generalDirector".equals(user.getStatut()) || "administrator".equals(user.getStatut())) {
+                    int id = Integer.parseInt(request.getParameter("id"));
+                    if (!user.getId().equals(id)) {
 
-                    users = service.getAllUsers();
-                    service.removeUser(id);
-                    processing.processRemoveUser(users);
+                        users = service.getAllUsers();
+                        service.removeUser(id);
+                        processing.processRemoveUser(users);
+                    } else {
+                        alert[0] = "Utilizatorul nu a fost sters!";
+                        alert[1] = "alert alert-danger";
+                        sesiune.setAttribute("appAlert", alert);
+                        response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx#utilizatori");
+                    }
                 } else {
-                    alert[0] = "Utilizatorul nu a fost sters!";
+                    alert[0] = "Nu ai acces pentru aceasta actiune!";
                     alert[1] = "alert alert-danger";
                     sesiune.setAttribute("appAlert", alert);
                     response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx#utilizatori");
                 }
             }
             if ("newuser".equals(action)) {
-                if (processing.processSignup(action)) {
-                    service.addUser(processing.getUserData());
-                    List<Users> u = (List<Users>) service.getAllUsers();
-                    alert[0] = "Utilizator adaugat cu succes!";
-                    alert[1] = "alert alert-success";
+                if ("generalDirector".equals(user.getStatut()) || "administrator".equals(user.getStatut())) {
+                    if (processing.processSignup(action)) {
+                        service.addUser(processing.getUserData());
+                        List<Users> u = (List<Users>) service.getAllUsers();
+                        alert[0] = "Utilizator adaugat cu succes!";
+                        alert[1] = "alert alert-success";
+                        sesiune.setAttribute("appAlert", alert);
+                        sesiune.setAttribute("users", u);
+                    }
+                } else {
+                    alert[0] = "Nu ai acces pentru aceasta actiune!";
+                    alert[1] = "alert alert-danger";
                     sesiune.setAttribute("appAlert", alert);
-                    sesiune.setAttribute("users", u);
+                    response.sendRedirect(request.getServletContext() + "./../../dashboard.jspx#utilizatori");
                 }
             }
         }

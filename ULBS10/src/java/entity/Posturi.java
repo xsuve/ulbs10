@@ -38,6 +38,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Posturi.findByCerinteMinime", query = "SELECT p FROM Posturi p WHERE p.cerinteMinime = :cerinteMinime")
     , @NamedQuery(name = "Posturi.findByCerinteOptionale", query = "SELECT p FROM Posturi p WHERE p.cerinteOptionale = :cerinteOptionale")
     , @NamedQuery(name = "Posturi.findByDataLimAplic", query = "SELECT p FROM Posturi p WHERE p.dataLimAplic = :dataLimAplic")
+    , @NamedQuery(name = "Posturi.findByDeschisDe", query = "SELECT p FROM Posturi p WHERE p.deschisDe = :deschisDe")
     , @NamedQuery(name = "Posturi.findByDenumire", query = "SELECT p FROM Posturi p WHERE p.denumire = :denumire")})
 public class Posturi implements Serializable {
 

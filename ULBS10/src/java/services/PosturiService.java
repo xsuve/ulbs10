@@ -85,18 +85,18 @@ public class PosturiService {
 
     /**
      *  Executa un query pentru a cauta in baza de date aplicantii care au aplicat la un post,
-     * apoi sterge fiecare aplicant care a aplicat la acel post si postul.
+     * apoi sterge fiecare aplicant care a aplicat la acel post si postul aferent.
      *
-     * @param post  Postul care v-a fi sters din baza de date, si aplicantii corespunzatori postului
+     * @param id id-ul postului care v-a fi sters din baza de date, si aplicantii aferenti
      */
     @Transactional
-    public void removePost(Posturi post) {
-        logger.log(Level.INFO, "Sterge postul {0} - {1} din baza de date", new Object[]{post.getId(), post.getDenumire()});
+    public void removePost(int id) {
+        logger.log(Level.INFO, "Sterge postul {0} din baza de date", new Object[]{id});
         try {
+            Posturi post = em.find(Posturi.class, id);
             List<Aplicanti> aplicanti = (List<Aplicanti>) em.createNamedQuery("Aplicanti.findByIdPost").setParameter("idPost", post).getResultList();
-            aplicanti.stream().filter((aplicant) -> (Objects.equals(aplicant.getIdPost().getId(), post.getId()))).forEachOrdered(em::remove);
-            Posturi removePost = em.find(Posturi.class, post.getId());
-            em.remove(removePost);
+            aplicanti.forEach(em::remove);
+            em.remove(post);
         } catch (Exception ex) {
             throw new EJBException(ex);
         }

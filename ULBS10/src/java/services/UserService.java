@@ -122,7 +122,7 @@ public class UserService {
     }
 
     /**
-     *  Sterge un utilizator din baza de date dupa id
+     *  Sterge un utilizator din baza de date dupa id, si sterge posurile aferente utilizatorului
      *
      * @param id    ID-ul dupa care se v-a sterge utilizatorul din baza de date
      */
@@ -131,6 +131,8 @@ public class UserService {
         logger.log(Level.INFO, "Sterge utilizatorul cu id-ul {0} din baza de date", id);
         try {
             Users user = em.find(Users.class, id);
+            List<Posturi> posturi = em.createNamedQuery("Posturi.findByDeschisDe").setParameter("deschisDe", user).getResultList();
+             posturi.forEach(em::remove);
             em.remove(user);
         } catch (Exception ex) {
             throw new EJBException(ex);
