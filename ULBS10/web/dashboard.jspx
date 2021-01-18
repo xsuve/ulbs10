@@ -238,46 +238,51 @@
                         </section>
 
                         <!-- Edit user -->
-                        <section data-tab="edit-user" class="content-section">
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <h2 class="content-title mb-lg-5">Editeaza utilizator</h2>
-                                    <form action="./login/user?action=edituser&amp;id=0" method="post" class="edit-user-form">
-                                        <div class="row mb-lg-3">
-                                            <div class="col-lg-6">
-                                                <div>
-                                                    <label class="form-label">Nume</label>
-                                                    <input type="text" name="firstName" class="form-control edit-user-form-first-name" placeholder="Nume" />
+                        <c:if test="${user.getStatut() == 'generalDirector' || user.getStatut() == 'administrator'}">
+                            <section data-tab="edit-user" class="content-section">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <h2 class="content-title mb-lg-5">Editeaza utilizator</h2>
+                                        <form action="./login/user?action=edituser&amp;id=0" method="post" class="edit-user-form">
+                                            <div class="row mb-lg-3">
+                                                <div class="col-lg-6">
+                                                    <div>
+                                                        <label class="form-label">Nume</label>
+                                                        <input type="text" name="firstName" class="form-control edit-user-form-first-name" placeholder="Nume" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div>
+                                                        <label class="form-label">Prenume</label>
+                                                        <input type="text" name="lastName" class="form-control edit-user-form-last-name" placeholder="Prenume" />
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-6">
-                                                <div>
-                                                    <label class="form-label">Prenume</label>
-                                                    <input type="text" name="lastName" class="form-control edit-user-form-last-name" placeholder="Prenume" />
-                                                </div>
+                                            <div class="mb-lg-3">
+                                                <label class="form-label">Email</label>
+                                                <input type="email" name="email" class="form-control edit-user-form-email" placeholder="Email" />
                                             </div>
-                                        </div>
-                                        <div class="mb-lg-3">
-                                            <label class="form-label">Email</label>
-                                            <input type="email" name="email" class="form-control edit-user-form-email" placeholder="Email" />
-                                        </div>
-                                        <div class="mb-lg-4">
-                                            <label class="form-label">Statut</label>
-                                            <select name="statut" class="form-select edit-user-form-statut">
-                                                <option value="generalDirector">Director General</option>
-                                                <option value="departamanetDirector">Director Departament</option>
-                                                <option value="humanResourcesDirector">Director Resurse Umane</option>
-                                                <option value="recruiter">Recrutor</option>
-                                                <option value="administrator">Administrator</option>
-                                                <option value="viewer">Vizitator</option>
-                                            </select>
-                                        </div>
+                                            <div class="mb-lg-4">
+                                                <label class="form-label">Statut</label>
+                                                <select name="statut" class="form-select edit-user-form-statut">
+                                                    <option value="generalDirector">Director General</option>
+                                                    <option value="departamanetDirector">Director Departament</option>
+                                                    <option value="humanResourcesDirector">Director Resurse Umane</option>
+                                                    <option value="recruiter">Recrutor</option>
+                                                    <option value="administrator">Administrator</option>
+                                                    <option value="viewer">Vizitator</option>
+                                                </select>
+                                            </div>
 
-                                        <button type="submit" class="btn btn-primary">Editeaza utilizator</button>
-                                    </form>
+                                            <button type="submit" class="btn btn-primary">Editeaza utilizator</button>
+                                        </form>
+                                    </div>
                                 </div>
-                            </div>
-                        </section>
+                            </section>
+                        </c:if>
+                        <c:if test="${!user.getStatut().equals('generalDirector') || !user.getStatut().equals('administrator')}">
+                            <div class="alert alert-danger mt-lg-5">Nu ai acces la aceasta sectiune!</div>
+                        </c:if>
 
 
 

@@ -61,40 +61,61 @@ public class AplicantServlet extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             String action = request.getParameter("action");
             HttpSession sesiune = request.getSession();
+            Users user = (Users) sesiune.getAttribute("user");
             aplicanti = service.getAllAplicants();
             processing = new Processing(request, response, sesiune, null, null, aplicanti);
 
             if ("aplica".equals(action)) {
-                int id = Integer.parseInt(request.getParameter("id_post"));
-                Users user = (Users) sesiune.getAttribute("user");
-                Posturi post = service.findPostByID(id);
-                if (processing.processAplicant(post, service.existaAplicantByIdUserIdPost(user, post))) {
-                    service.addAplicant(processing.getAplicantData());
+                if ("viewer".equals(user.getStatut())) {
+                    int id = Integer.parseInt(request.getParameter("id_post"));
+                    Posturi post = service.findPostByID(id);
+                    if (processing.processAplicant(post, service.existaAplicantByIdUserIdPost(user, post))) {
+                        service.addAplicant(processing.getAplicantData());
+                    }
+                } else {
+                    alert[0] = "Nu ai acces pentru aceasta actiune!";
+                    alert[1] = "alert alert-danger";
+                    sesiune.setAttribute("appAlert", alert);
+                    response.sendRedirect(request.getServletContext() + "./../dashboard.jspx#posturi");
                 }
             }
 
             if ("deleteaplicant".equals(action)) {
-                int id = Integer.parseInt(request.getParameter("id"));
-                aplicant = service.findByID(id);
-                service.removeAplicant(id);
-                String mesaj = "Din pacate, " + aplicant.getIdUser().getFirstname() + " " + aplicant.getIdUser().getLastname() + ",\n"
-                        + "Oferta dumneavoastra pentru postul " + aplicant.getIdPost().getDenumire() + " a fost refuzata,\n\n"
-                        + "O zi buna!";
-                gmailSendEmailSSL sendemail = new gmailSendEmailSSL();
-                sendemail.sendMail(aplicant.getIdUser().getEmail(), "Oferta job", mesaj);
-                alert[0] = "Aplicantul a fost refuzat pentru acest post!";
-                alert[1] = "alert alert-danger";
-                sesiune.setAttribute("appAlert", alert);
-                sesiune.setAttribute("aplicants", service.getAllAplicants());
-                response.sendRedirect(request.getServletContext() + "/../dashboard.jspx#posturi");
+                if ("generalDirector".equals(user.getStatut())) {
+                    int id = Integer.parseInt(request.getParameter("id"));
+                    aplicant = service.findByID(id);
+                    service.removeAplicant(id);
+                    String mesaj = "Din pacate, " + aplicant.getIdUser().getFirstname() + " " + aplicant.getIdUser().getLastname() + ",\n"
+                            + "Oferta dumneavoastra pentru postul " + aplicant.getIdPost().getDenumire() + " a fost refuzata,\n\n"
+                            + "O zi buna!";
+                    gmailSendEmailSSL sendemail = new gmailSendEmailSSL();
+                    sendemail.sendMail(aplicant.getIdUser().getEmail(), "Oferta job", mesaj);
+                    alert[0] = "Aplicantul a fost refuzat pentru acest post!";
+                    alert[1] = "alert alert-danger";
+                    sesiune.setAttribute("appAlert", alert);
+                    sesiune.setAttribute("aplicants", service.getAllAplicants());
+                    response.sendRedirect(request.getServletContext() + "/../dashboard.jspx#posturi");
+                } else {
+                    alert[0] = "Nu ai acces pentru aceasta actiune!";
+                    alert[1] = "alert alert-danger";
+                    sesiune.setAttribute("appAlert", alert);
+                    response.sendRedirect(request.getServletContext() + "/../dashboard.jspx#posturi");
+                }
             }
 
             if ("acceptAplicant".equals(action)) {
-                int id = Integer.parseInt(request.getParameter("id"));
-                processing.processAcceptAplicant(service.findByID(id));
-                service.removeAplicant(id);
-                sesiune.setAttribute("aplicants", service.getAllAplicants());
-                response.sendRedirect(request.getServletContext() + "/../dashboard.jspx#posturi");
+                if ("generalDirector".equals(user.getStatut()) || "administrator".equals(user.getStatut())) {
+                    int id = Integer.parseInt(request.getParameter("id"));
+                    processing.processAcceptAplicant(service.findByID(id));
+                    service.removeAplicant(id);
+                    sesiune.setAttribute("aplicants", service.getAllAplicants());
+                    response.sendRedirect(request.getServletContext() + "/../dashboard.jspx#posturi");
+                } else {
+                    alert[0] = "Nu ai acces pentru aceasta actiune!";
+                    alert[1] = "alert alert-danger";
+                    sesiune.setAttribute("appAlert", alert);
+                    response.sendRedirect(request.getServletContext() + "/../dashboard.jspx#posturi");
+                }
             }
 
         }

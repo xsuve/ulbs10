@@ -102,10 +102,7 @@ public class AplicantService {
     }
 
     /**
-     *  Executa un query pentru a cauta in baza de date un Post din baza de date dupa un ID,
-     * un querry pentru a cauta in baza de date un Aplicant dupa un utilizator si inca un 
-     * querry pentru a cauta in baza de date un Aplicant dupa Post-ul din primul querry
-     *  Adica verifica daca exista un aplicant care are utilizatorul si postul specifici
+     *  Executa un query pentru a cauta in baza de date un aplicant dupa idPost si idUser
      *
      * @param idUser    Utilizatorul care se cauta in Aplicanti
      * @param idPost    Postul care se cauta in Aplicanti

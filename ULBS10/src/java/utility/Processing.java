@@ -177,22 +177,23 @@ public class Processing {
         } else {
             //Daca nu sunt goale, verific daca nu exista deja in baza de date
             if (!existInDB) {
-                alert[0] = "Te-ai inregistrat cu succes!";
-                alert[1] = "alert alert-success";
-                request.setAttribute("alert", alert);
-
-                gmailSendEmailSSL gmail = new gmailSendEmailSSL();
-                String mesaj = "Bine ai venit " + firstName + " " + lastName + ",\n" + "V-ati inregistrat cu succes, va dorim "
-                        + "mult noroc si o cariera de succes!";
-                try {
-                    gmail.sendMail(email, "Inregistrare platforma ULBS10", mesaj);
-                } catch (MessagingException ex) {
-                    Logger.getLogger(Processing.class.getName()).log(Level.SEVERE, null, ex);
-                }
                 if ("signup".equals(type)) {
+                    alert[0] = "Te-ai inregistrat cu succes!";
+                    alert[1] = "alert alert-success";
+                    request.setAttribute("alert", alert);
+                    gmailSendEmailSSL gmail = new gmailSendEmailSSL();
+                    String mesaj = "Bine ai venit " + firstName + " " + lastName + ",\n" + "V-ati inregistrat cu succes, va dorim "
+                            + "mult noroc si o cariera de succes!";
+                    try {
+                        gmail.sendMail(email, "Inregistrare platforma ULBS10", mesaj);
+                    } catch (MessagingException ex) {
+                        Logger.getLogger(Processing.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     dispatcher = request.getServletContext().getRequestDispatcher("/login/login.jspx");
                     dispatcher.forward(request, response);
                 } else {
+                    alert[0] = "Ai adaugat cu succes!";
+                    alert[1] = "alert alert-success";
                     statut = request.getParameter("statut");
                     response.sendRedirect(request.getServletContext() + "/../../dashboard.jspx#utilizatori");
                 }
@@ -444,7 +445,6 @@ public class Processing {
                 if (!allPosts.isEmpty()) {
                     lastID = allPosts.get(allPosts.size() - 1).getId();
                 }
-                request.setAttribute("posturi", allPosts);
 
                 //Se ia parametrii din formularul pentru un nou Post
                 Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("dataLimita"));
