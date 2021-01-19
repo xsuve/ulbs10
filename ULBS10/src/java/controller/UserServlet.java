@@ -5,6 +5,8 @@
  */
 package controller;
 
+import entity.Aplicanti;
+import entity.Posturi;
 import entity.Users;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -110,6 +112,10 @@ public class UserServlet extends HttpServlet {
                     int id = Integer.parseInt(request.getParameter("id"));
                     if (!user.getId().equals(id)) {
                         service.removeUser(id);
+
+                        sesiune.setAttribute("aplicants", service.getAllAplicants());                      
+                        sesiune.setAttribute("posts", service.getAllPosts());
+                        
                         users = service.getAllUsers();
                         processing.processRemoveUser(users, user);
                     } else {

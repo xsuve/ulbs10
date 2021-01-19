@@ -133,9 +133,19 @@ public class UserService {
             Users user = em.find(Users.class, id);
             List<Aplicanti> aplicanti = em.createNamedQuery("Aplicanti.findByIdUser").setParameter("idUser", user).getResultList();
                 aplicanti.forEach(em::remove);
+                
             List<Posturi> posturi = em.createNamedQuery("Posturi.findByDeschisDe").setParameter("deschisDe", user).getResultList();
-                posturi.forEach(em::remove);
-            em.remove(user);
+                
+            if(posturi.size() > 0){
+                for(Posturi post : posturi) {
+                     List<Aplicanti> aplicantiPost = em.createNamedQuery("Aplicanti.findByIdPost").setParameter("idPost", post).getResultList();
+                        aplicantiPost.forEach(em::remove);
+                } 
+            }
+            
+            posturi.forEach(em::remove);
+            
+                em.remove(user);
         } catch (Exception ex) {
             throw new EJBException(ex);
         }
