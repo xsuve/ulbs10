@@ -239,7 +239,7 @@
 
                         <!-- Edit user -->
                         <section data-tab="edit-user" class="content-section">
-                            <c:if test="${user.getStatut() == 'generalDirector' || user.getStatut() == 'administrator'}">
+                            <c:if test="${(user.getStatut().equals('generalDirector')) || (user.getStatut().equals('administrator'))}">
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <h2 class="content-title mb-lg-5">Editeaza utilizator</h2>
@@ -279,7 +279,7 @@
                                     </div>
                                 </div>
                             </c:if>
-                            <c:if test="${user.getStatut() != 'generalDirector' || user.getStatut() != 'administrator'}">
+                            <c:if test="${(user.getStatut().equals('departmentDirector')) || (user.getStatut().equals('humanResourcesDirector')) || (user.getStatut().equals('recruiter')) || (user.getStatut().equals('viewer'))}">
                                 <div class="alert alert-danger alert-section">Nu ai acces la aceasta sectiune!</div>
                             </c:if>
                         </section>
@@ -433,7 +433,7 @@
 
                         <!-- Edit post -->
                         <section data-tab="edit-post" class="content-section">
-                            <c:if test="${user.getStatut() == 'generalDirector' || user.getStatut() == 'departmentDirector' || user.getStatut() == 'humanResourcesDirector' || user.getStatut() == 'recruiter'}">
+                            <c:if test="${(user.getStatut().equals('generalDirector')) || (user.getStatut().equals('departmentDirector')) || (user.getStatut().equals('humanResourcesDirector')) || (user.getStatut().equals('recruiter'))}">
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <h2 class="content-title mb-lg-5">Editeaza post</h2>
@@ -460,7 +460,7 @@
                                     </div>
                                 </div>
                             </c:if>
-                            <c:if test="${user.getStatut() == 'administrator' || user.getStatut() == 'viewer'}">
+                            <c:if test="${(user.getStatut().equals('administrator')) || (user.getStatut().equals('viewer'))}">
                                 <div class="alert alert-danger alert-section">Nu ai acces la aceasta sectiune!</div>
                             </c:if>
                         </section>
