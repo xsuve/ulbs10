@@ -152,7 +152,7 @@
                                                     <c:if test="${u.getStatut() != null}">
                                                         <c:choose>
                                                             <c:when test="${u.getStatut() == 'generalDirector'}">Director General</c:when>
-                                                            <c:when test="${u.getStatut() == 'departamanetDirector'}">Director Departament</c:when>
+                                                            <c:when test="${u.getStatut() == 'departmentDirector'}">Director Departament</c:when>
                                                             <c:when test="${u.getStatut() == 'humanResourcesDirector'}">Director Resurse Umane</c:when>
                                                             <c:when test="${u.getStatut() == 'recruiter'}">Recrutor</c:when>
                                                             <c:when test="${u.getStatut() == 'administrator'}">Administrator</c:when>
@@ -223,7 +223,7 @@
                                             <label class="form-label">Statut</label>
                                             <select name="statut" class="form-select">
                                                 <option value="generalDirector">Director General</option>
-                                                <option value="departamanetDirector">Director Departament</option>
+                                                <option value="departmentDirector">Director Departament</option>
                                                 <option value="humanResourcesDirector">Director Resurse Umane</option>
                                                 <option value="recruiter">Recrutor</option>
                                                 <option value="administrator">Administrator</option>
