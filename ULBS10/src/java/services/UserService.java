@@ -131,8 +131,10 @@ public class UserService {
         logger.log(Level.INFO, "Sterge utilizatorul cu id-ul {0} din baza de date", id);
         try {
             Users user = em.find(Users.class, id);
+            List<Aplicanti> aplicanti = em.createNamedQuery("Aplicanti.findByIdUser").setParameter("idUser", user).getResultList();
+                aplicanti.forEach(em::remove);
             List<Posturi> posturi = em.createNamedQuery("Posturi.findByDeschisDe").setParameter("deschisDe", user).getResultList();
-             posturi.forEach(em::remove);
+                posturi.forEach(em::remove);
             em.remove(user);
         } catch (Exception ex) {
             throw new EJBException(ex);

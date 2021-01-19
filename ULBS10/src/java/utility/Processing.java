@@ -358,7 +358,7 @@ public class Processing {
      *
      * @param users Lista utilizatorilor actualizata dupa stergere
      */
-    public void processRemoveUser(List<Users> users) {
+    public void processRemoveUser(List<Users> users, Users user) {
         try {
             //Ia locatia servletului (build/web)
             String appPath = request.getServletContext().getRealPath("");

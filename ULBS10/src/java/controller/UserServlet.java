@@ -109,10 +109,9 @@ public class UserServlet extends HttpServlet {
                 if ("generalDirector".equals(user.getStatut()) || "administrator".equals(user.getStatut())) {
                     int id = Integer.parseInt(request.getParameter("id"));
                     if (!user.getId().equals(id)) {
-
-                        users = service.getAllUsers();
                         service.removeUser(id);
-                        processing.processRemoveUser(users);
+                        users = service.getAllUsers();
+                        processing.processRemoveUser(users, user);
                     } else {
                         alert[0] = "Utilizatorul nu a fost sters!";
                         alert[1] = "alert alert-danger";
