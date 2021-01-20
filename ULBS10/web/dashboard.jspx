@@ -474,7 +474,7 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-lg-6">
+                                <div class="col-lg-3">
                                     <form method="POST" enctype="multipart/form-data" action="./login/user?action=pdf">
                                         <div class="mb-lg-4">
                                             <label class="form-label d-block mb-lg-3">Incarca CV</label>
@@ -489,6 +489,11 @@
 
                                         <button type="submit" class="btn btn-primary">Incarca CV</button>
                                     </form>
+                                </div>
+                                <div class="col-lg-9">
+                                    <c:if test="${user.getCV() != '#'}">
+                                        <iframe src="${user.getCV()}" class="profil-cv"></iframe>
+                                    </c:if>
                                 </div>
                             </div>
                         </section>
