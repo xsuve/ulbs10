@@ -72,6 +72,13 @@ public class Users implements Serializable {
     public Users() {
     }
 
+    public Users(String stEmail, String stPassword, String stFirstName, String stLastName, String stStatut) {
+        email = stEmail;
+        password = stPassword;
+        firstname = stFirstName;
+        lastname = stLastName;
+        statut = stStatut;
+    }
 
     public Users(int inID, String stEmail, String stPassword, String stFirstName, String stLastName, String stStatut) {
         id = inID;

@@ -80,7 +80,6 @@ public class PostServlet extends HttpServlet {
             if ("deletepost".equals(action)) {
                 if ("generalDirector".equals(user.getStatut())) {
                     int id = Integer.parseInt(request.getParameter("id"));
-                    posturi = (List<Posturi>) sesiune.getAttribute("posts");
                     service.removePost(id);
                     sesiune.setAttribute("posts", service.getAllPosts());
                     alert[0] = "Post sters cu succes!";
