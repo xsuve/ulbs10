@@ -224,6 +224,10 @@ a {
     top: 0px;
     z-index: 1;
 }
+.profil-cv {
+    width: 100%;
+    height: 600px;
+}
 
 
 
