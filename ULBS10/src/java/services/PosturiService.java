@@ -69,7 +69,7 @@ public class PosturiService {
     }
 
     /**
-     * Adauga un post in baza de date avant ca parametru un post
+     * Adauga un post in baza de date avand ca parametru un post
      *
      * @param postData  Post-ul ce v-a fi adaugat in baza de date
      */

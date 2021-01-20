@@ -31,12 +31,13 @@ public class UserService {
      * Creeaza un user nou cu ajutorul parametriilor si apoi il introduce in
      * baza de date
      *
-     * @param inID  ID-ul utilizatorului ce v-a fi salvat in baza de date
-     * @param stEmail   Email-ul ce v-a fi salvat in baza de date
-     * @param stPassword    Parola ce v-a fi salvata in baza de date
-     * @param stFirstName   Numele ce v-a fi salvat in baza de date
-     * @param stLastName    Prenumele ce v-a fi salvat in baza de date
-     * @param stStatut  Statutul ce v-a fi salvat in baza de date, implicit Viewer
+     * @param inID ID-ul utilizatorului ce v-a fi salvat in baza de date
+     * @param stEmail Email-ul ce v-a fi salvat in baza de date
+     * @param stPassword Parola ce v-a fi salvata in baza de date
+     * @param stFirstName Numele ce v-a fi salvat in baza de date
+     * @param stLastName Prenumele ce v-a fi salvat in baza de date
+     * @param stStatut Statutul ce v-a fi salvat in baza de date, implicit
+     * Viewer
      */
     @Transactional
     public void addUser(int inID, String stEmail, String stPassword, String stFirstName, String stLastName, String stStatut) {
@@ -69,11 +70,11 @@ public class UserService {
     /**
      * Adauga un user in baza de date cu EntityManager persist
      *
-     * @param userData  Utilizatorul ce v-a fi salvat in baza de date
+     * @param userData Utilizatorul ce v-a fi salvat in baza de date
      */
     @Transactional
     public void addUser(Users userData) {
-        logger.log(Level.INFO, "Adauga utilizatorul {0} - {1} in baza de date", 
+        logger.log(Level.INFO, "Adauga utilizatorul {0} - {1} in baza de date",
                 new Object[]{userData.getId(), userData.getFirstname()});
         try {
             Users user = userData;
@@ -100,21 +101,21 @@ public class UserService {
     }
 
     /**
-     *  Actualizeaza un utilizator din baza de date
+     * Actualizeaza un utilizator din baza de date
      *
-     * @param id    ID-ul utilizatorului
-     * @param email     Email-ul nou ce v-a fi modificat in baza de date
-     * @param firstname     Numele nou ce v-a fi modificat in baza de date
-     * @param lastname      Prenumele nou ce v-a fi modificat in baza de date  
-     * @param statut    Statutul nou ce v-a fi modificat in baza de date
+     * @param id ID-ul utilizatorului
+     * @param email Email-ul nou ce v-a fi modificat in baza de date
+     * @param firstname Numele nou ce v-a fi modificat in baza de date
+     * @param lastname Prenumele nou ce v-a fi modificat in baza de date
+     * @param statut Statutul nou ce v-a fi modificat in baza de date
      */
     @Transactional
     public void editUser(int id, String email, String firstname, String lastname, String statut) {
-        Users user = em.find(Users.class, id);  
-        
-        logger.log(Level.INFO, "Editeaza utilizatorul{0} cu datele {1}-{2}-{3}-{4} in : {5}{6}{7}{8}", 
+        Users user = em.find(Users.class, id);
+
+        logger.log(Level.INFO, "Editeaza utilizatorul{0} cu datele {1}-{2}-{3}-{4} in : {5}{6}{7}{8}",
                 new Object[]{id, user.getEmail(), user.getFirstname(), user.getLastname(), user.getStatut(), email, firstname, lastname, statut});
-        
+
         user.setEmail(email);
         user.setFirstname(firstname);
         user.setLastname(lastname);
@@ -122,39 +123,38 @@ public class UserService {
     }
 
     /**
-     *  Sterge un utilizator din baza de date dupa id, si sterge posurile aferente utilizatorului
+     * Sterge un utilizator din baza de date dupa id, si sterge posturile si
+     * aplicarile aferente utilizatorului
      *
-     * @param id    ID-ul dupa care se v-a sterge utilizatorul din baza de date
+     * @param id ID-ul dupa care se v-a sterge utilizatorul din baza de date
      */
     @Transactional
-    public void removeUser(int id) {        
+    public void removeUser(int id) {
         logger.log(Level.INFO, "Sterge utilizatorul cu id-ul {0} din baza de date", id);
         try {
             Users user = em.find(Users.class, id);
             List<Aplicanti> aplicanti = em.createNamedQuery("Aplicanti.findByIdUser").setParameter("idUser", user).getResultList();
-                aplicanti.forEach(em::remove);
-                
+            aplicanti.forEach(em::remove);
+
             List<Posturi> posturi = em.createNamedQuery("Posturi.findByDeschisDe").setParameter("deschisDe", user).getResultList();
-                
-            if(posturi.size() > 0){
-                for(Posturi post : posturi) {
-                     List<Aplicanti> aplicantiPost = em.createNamedQuery("Aplicanti.findByIdPost").setParameter("idPost", post).getResultList();
-                        aplicantiPost.forEach(em::remove);
-                } 
+
+            for (Posturi post : posturi) {
+                List<Aplicanti> aplicantiPost = em.createNamedQuery("Aplicanti.findByIdPost").setParameter("idPost", post).getResultList();
+                aplicantiPost.forEach(em::remove);
             }
-            
+
             posturi.forEach(em::remove);
-            
-                em.remove(user);
+
+            em.remove(user);
         } catch (Exception ex) {
             throw new EJBException(ex);
         }
     }
 
     /**
-     *  Executa un query care cauta in baza de date toti aplicantii
+     * Executa un query care cauta in baza de date toti aplicantii
      *
-     * @return      O lista cu toti aplicantii din baza de date
+     * @return O lista cu toti aplicantii din baza de date
      */
     @Transactional
     public List<Aplicanti> getAllAplicants() {

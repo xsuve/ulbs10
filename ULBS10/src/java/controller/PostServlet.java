@@ -66,7 +66,7 @@ public class PostServlet extends HttpServlet {
             processing = new Processing(request, response, sesiune, null, posturi, null);
 
             if ("newpost".equals(action)) {
-                if ("generalDirector".equals(user.getStatut()) || "departamanetDirector".equals(user.getStatut()) || "humanResourcesDirector".equals(user.getStatut()) || "recruiter".equals(user.getStatut())) {
+                if ("generalDirector".equals(user.getStatut()) || "departmentDirector".equals(user.getStatut()) || "humanResourcesDirector".equals(user.getStatut()) || "recruiter".equals(user.getStatut())) {
                     service.addPost(processing.processNewPost(service.getAllPosts(), ""));
                     processing.processNewPost(service.getAllPosts(), "redirect");
                 } else {
@@ -96,7 +96,7 @@ public class PostServlet extends HttpServlet {
             }
 
             if ("editpost".equals(action)) {
-                if ("generalDirector".equals(user.getStatut()) || "departamanetDirector".equals(user.getStatut()) || "humanResourcesDirector".equals(user.getStatut()) || "recruiter".equals(user.getStatut())) {
+                if ("generalDirector".equals(user.getStatut()) || "departmentDirector".equals(user.getStatut()) || "humanResourcesDirector".equals(user.getStatut()) || "recruiter".equals(user.getStatut())) {
                     int id = Integer.parseInt(request.getParameter("id"));
                     DateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd");
                     Date date1 = originalFormat.parse(request.getParameter("dataLimita"));
