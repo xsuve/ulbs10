@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJBException;
+import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
@@ -20,6 +21,7 @@ import javax.transaction.Transactional;
  *
  * @author Razvan
  */
+@Stateful
 public class UserService {
 
     private static final Logger logger = Logger.getLogger(

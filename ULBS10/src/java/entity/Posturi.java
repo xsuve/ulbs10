@@ -167,11 +167,7 @@ public class Posturi implements Serializable {
      */
     public Boolean isValabil() {
         Date todayDate = new Date();
-        if(dataLimAplic.after(todayDate)){
-            return true;
-        }else{
-            return false;
-        }
+        return dataLimAplic.after(todayDate);
     }
 
     @XmlTransient
