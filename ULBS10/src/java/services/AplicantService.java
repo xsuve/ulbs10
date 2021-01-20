@@ -51,7 +51,7 @@ public class AplicantService {
     }
 
     /**
-     *  Executa un query care returneaza toti aplicantii din baza de date
+     *  Executa un query care returneaza o lista cu toti aplicantii din baza de date
      *
      * @return  Lista cu aplicantii din baza de date
      */
